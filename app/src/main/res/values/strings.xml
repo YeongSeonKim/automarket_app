@@ -1,3 +1,13 @@
 <resources>
     <string name="app_name">automarket_app</string>
+
+    <!-- 로그인 -->
+    <string name="Email_hint">Email</string>
+    <string name="Password_hint">Password</string>
+    <string name="login">로그인</string>
+
+    <!-- 회원가입 -->
+    <string name="join">가입</string>
+    <string name="cancel">취소</string>
+    <string name="register">회원가입</string>
 </resources>
