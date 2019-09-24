@@ -7,7 +7,11 @@
     <string name="login">로그인</string>
 
     <!-- 회원가입 -->
+    <string name="Name_hint">이름</string>
     <string name="join">가입</string>
     <string name="cancel">취소</string>
     <string name="register">회원가입</string>
+
+    <!-- 주문하기 -->
+    <string name="order">주문하기</string>
 </resources>
