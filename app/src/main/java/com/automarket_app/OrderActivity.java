@@ -2,7 +2,9 @@ package com.automarket_app;
 
 import androidx.appcompat.app.AppCompatActivity;
 
+import android.content.Intent;
 import android.os.Bundle;
+import android.view.View;
 import android.widget.ImageButton;
 import android.widget.TabHost;
 
@@ -44,5 +46,14 @@ public class OrderActivity extends AppCompatActivity {
         // 여섯 번째 Tab. (탭 표시 텍스트:"유제품"), (페이지 뷰:"tab6")
         TabHost.TabSpec tab6 = tabHost.newTabSpec("6").setContent(R.id.tab6).setIndicator("유제품") ;
         tabHost.addTab(tab6) ;
+
+        // btnBack
+        btnBack.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent intent = new Intent(getApplicationContext(), MainActivity.class);
+                startActivity(intent);
+            }
+        });
     }
 }

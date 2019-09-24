@@ -14,4 +14,23 @@
 
     <!-- 주문하기 -->
     <string name="order">주문하기</string>
+
+    <!-- 캐시충전하기 -->
+    <string name="cash">캐시충전</string>
+    <string name="cash_now">현재잔액</string>
+    <string name="cash_won">원</string>
+    <string name="cash_history">충전내역</string>
+    <string name="cash_hint">충전금액(원) 입력</string>
+
+
+    <!-- 내 정보 -->
+    <string name="information">내 정보</string>
+    <string name="Email">이메일</string>
+    <string name="Email_nim">님</string>
+    <string name="order_history">주문내역</string>
+
+    <!-- 알림 -->
+    <string name="notice">알림</string>
+
+
 </resources>
