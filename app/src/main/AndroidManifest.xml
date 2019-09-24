@@ -12,8 +12,10 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/Theme.AppCompat.NoActionBar">
-        <activity android:name=".OrderActivity"></activity>
-        <!-- 타이틀바 없애기 -->
+        <activity android:name=".NoticeActivity"></activity>
+        <activity android:name=".InformationActivity" />
+        <activity android:name=".CashActivity" />
+        <activity android:name=".OrderActivity" /> <!-- 타이틀바 없애기 -->
         <activity android:name=".IntroActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />

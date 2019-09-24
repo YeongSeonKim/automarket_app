@@ -40,17 +40,11 @@
 
     </LinearLayout>
 
-
-    <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content">
-
-
-    </LinearLayout>
-
     <TabHost
         android:layout_width="match_parent"
-        android:layout_height="match_parent">
+        android:layout_height="match_parent"
+        android:id="@+id/tabHost"
+        android:background="#A6A6A6">
 
         <LinearLayout
             android:layout_width="match_parent"
@@ -72,6 +66,7 @@
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
                     android:orientation="vertical">
+                    
 
                 </LinearLayout>
 
