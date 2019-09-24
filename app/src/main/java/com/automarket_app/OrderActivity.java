@@ -31,6 +31,16 @@ public class OrderActivity extends AppCompatActivity {
             }
         });
 
+        // btnCart
+        btnCart.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent intent = new Intent(getApplicationContext(), CartActivity.class);
+                startActivity(intent);
+                finish();
+            }
+        });
+
         TabHost tabHost = (TabHost) findViewById(R.id.tabHost) ;
         tabHost.setup() ;
 

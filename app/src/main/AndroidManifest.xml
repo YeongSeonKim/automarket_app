@@ -12,6 +12,7 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/Theme.AppCompat.NoActionBar">
+        <activity android:name=".CartActivity"></activity>
         <activity android:name=".InformationActivity" />
         <activity android:name=".CashActivity" />
         <activity android:name=".OrderActivity" /> <!-- 타이틀바 없애기 -->
