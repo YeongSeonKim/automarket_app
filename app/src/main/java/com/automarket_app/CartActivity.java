@@ -2,7 +2,10 @@ package com.automarket_app;
 
 import androidx.appcompat.app.AppCompatActivity;
 
+import android.content.Intent;
 import android.os.Bundle;
+import android.view.View;
+import android.widget.ImageButton;
 
 public class CartActivity extends AppCompatActivity {
 
@@ -10,5 +13,17 @@ public class CartActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_cart);
+
+        ImageButton btnBack = (ImageButton)findViewById(R.id.btnBack);
+
+        // btnBack
+        btnBack.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent intent = new Intent(getApplicationContext(), OrderActivity.class);
+                startActivity(intent);
+                finish();
+            }
+        });
     }
 }
