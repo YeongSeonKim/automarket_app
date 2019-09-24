@@ -2,6 +2,7 @@ package com.automarket_app;
 
 import androidx.appcompat.app.AppCompatActivity;
 
+import android.app.AlertDialog;
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
@@ -51,7 +52,10 @@ public class MainActivity extends AppCompatActivity {
         btnNotice.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+                AlertDialog.Builder dialog = new AlertDialog.Builder(MainActivity.this);
+                dialog.setTitle("차량이 도착했습니다.");
 
+                dialog.show();
             }
         });
 

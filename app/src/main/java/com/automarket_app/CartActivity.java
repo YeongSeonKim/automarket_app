@@ -2,6 +2,7 @@ package com.automarket_app;
 
 import androidx.appcompat.app.AppCompatActivity;
 
+import android.app.AlertDialog;
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
@@ -39,5 +40,18 @@ public class CartActivity extends AppCompatActivity {
 
         // 주문하기
         Button btnOrder = (Button)findViewById(R.id.btnOrder);
+
+        btnOrder.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+
+                AlertDialog.Builder dialog = new AlertDialog.Builder(CartActivity.this);
+                dialog.setTitle("차량선택");
+
+                dialog.show();
+            }
+        });
+
+
     }
 }
