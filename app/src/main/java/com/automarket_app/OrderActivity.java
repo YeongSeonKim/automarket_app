@@ -2,9 +2,12 @@ package com.automarket_app;
 
 import androidx.appcompat.app.AppCompatActivity;
 
+import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
+import android.widget.BaseAdapter;
+import android.widget.GridView;
 import android.widget.ImageButton;
 import android.widget.TabHost;
 
@@ -17,6 +20,16 @@ public class OrderActivity extends AppCompatActivity {
 
         ImageButton btnBack = (ImageButton)findViewById(R.id.btnBack);
         ImageButton btnCart = (ImageButton)findViewById(R.id.btnCart);
+
+        // btnBack
+        btnBack.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent intent = new Intent(getApplicationContext(), MainActivity.class);
+                startActivity(intent);
+                finish();
+            }
+        });
 
         TabHost tabHost = (TabHost) findViewById(R.id.tabHost) ;
         tabHost.setup() ;
@@ -47,13 +60,8 @@ public class OrderActivity extends AppCompatActivity {
         TabHost.TabSpec tab6 = tabHost.newTabSpec("6").setContent(R.id.tab6).setIndicator("유제품") ;
         tabHost.addTab(tab6) ;
 
-        // btnBack
-        btnBack.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                Intent intent = new Intent(getApplicationContext(), MainActivity.class);
-                startActivity(intent);
-            }
-        });
+        GridView gridView = (GridView)findViewById(R.id.tab1GridView);
+
+
     }
 }
