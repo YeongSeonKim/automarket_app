@@ -84,9 +84,10 @@
                 android:layout_height="wrap_content"
                 android:hint="@string/cash_hint"/>
 
-            <ImageButton
+            <Button
                 android:layout_width="wrap_content"
-                android:layout_height="wrap_content" />
+                android:layout_height="wrap_content"
+                android:text="@string/do_cash"/>
         </LinearLayout>
 
 
