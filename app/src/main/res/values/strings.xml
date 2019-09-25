@@ -1,6 +1,9 @@
 <resources>
     <string name="app_name">automarket_app</string>
 
+    <!-- Server_URL -->
+    <string name="Server_URL">http://localhost:8080</string>
+
     <!-- 로그인 -->
     <string name="Email_hint">Email</string>
     <string name="Password_hint">Password</string>
