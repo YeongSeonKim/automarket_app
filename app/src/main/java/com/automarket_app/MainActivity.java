@@ -3,6 +3,7 @@ package com.automarket_app;
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.app.AlertDialog;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
@@ -23,7 +24,7 @@ public class MainActivity extends AppCompatActivity {
         ImageButton btnOrder = (ImageButton)findViewById(R.id.btnOrder);
         ImageButton btnCash = (ImageButton)findViewById(R.id.btnCash);
         ImageButton btnInformation = (ImageButton)findViewById(R.id.btnInformation);
-        ImageButton btnNotice = (ImageButton)findViewById(R.id.btnNotice);
+        ImageButton btnAlarm = (ImageButton)findViewById(R.id.btnAlarm);
 
         btnOrder.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -49,11 +50,18 @@ public class MainActivity extends AppCompatActivity {
             }
         });
 
-        btnNotice.setOnClickListener(new View.OnClickListener() {
+        btnAlarm.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 AlertDialog.Builder dialog = new AlertDialog.Builder(MainActivity.this);
                 dialog.setTitle("차량이 도착했습니다.");
+
+                dialog.setNegativeButton("취소", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialogInterface, int i) {
+                        // 취소버튼을 눌렀을때 수행할 코드 작성
+                    }
+                });
 
                 dialog.show();
             }

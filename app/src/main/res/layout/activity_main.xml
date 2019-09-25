@@ -23,6 +23,7 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:gravity="bottom|center"
+        android:layout_marginBottom="10dp"
         android:weightSum="4">
 
         <ImageButton
@@ -30,6 +31,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_weight="1"
+            android:background="#00FFFFFF"
             android:src="@drawable/order_btn" />
 
         <ImageButton
@@ -37,21 +39,23 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_weight="1"
+            android:background="#00FFFFFF"
             android:src="@drawable/cash_btn" />
 
         <ImageButton
             android:id="@+id/btnInformation"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_weight="1"
+            android:background="#00FFFFFF"
             android:src="@drawable/information_btn" />
 
         <ImageButton
-            android:id="@+id/btnNotice"
+            android:id="@+id/btnAlarm"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_weight="1"
-            android:src="@drawable/notice_btn" />
+            android:background="#00FFFFFF"
+            android:src="@drawable/alarm_btn" />
 
     </LinearLayout>
 
