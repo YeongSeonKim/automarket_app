@@ -43,7 +43,7 @@
     <TabHost
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:id="@+id/tabHost"
+        android:id="@+id/tabHost1"
         android:background="#A6A6A6">
 
         <LinearLayout
@@ -51,18 +51,21 @@
             android:layout_height="match_parent"
             android:orientation="vertical">
 
+            <!-- TabWidget의 id값이 반드시 "tabs"로 지정되어야 함. -->
             <TabWidget
                 android:id="@android:id/tabs"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content" />
 
+            <!-- FrameLayout의 id값이 반드시 "tabcontent"로 지정되어야 함. -->
             <FrameLayout
                 android:id="@android:id/tabcontent"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent">
 
+                <!-- 첫 번째 페이지. content1 -->
                 <LinearLayout
-                    android:id="@+id/tab1"
+                    android:id="@+id/content1"
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
                     android:orientation="vertical">
@@ -76,40 +79,45 @@
 
                 </LinearLayout>
 
+                <!-- 두 번째 페이지. content2 -->
                 <LinearLayout
-                    android:id="@+id/tab2"
+                    android:id="@+id/content2"
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
                     android:orientation="vertical">
 
                 </LinearLayout>
 
+                <!-- 세 번째 페이지. content3 -->
                 <LinearLayout
-                    android:id="@+id/tab3"
+                    android:id="@+id/content3"
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
                     android:orientation="vertical">
 
                 </LinearLayout>
 
+                <!-- 네 번째 페이지. content4 -->
                 <LinearLayout
-                    android:id="@+id/tab4"
+                    android:id="@+id/content4"
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
                     android:orientation="vertical">
 
                 </LinearLayout>
 
+                <!-- 다섯 번째 페이지. content5 -->
                 <LinearLayout
-                    android:id="@+id/tab5"
+                    android:id="@+id/content5"
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
                     android:orientation="vertical">
 
                 </LinearLayout>
 
+                <!-- 여섯 번째 페이지. content6 -->
                 <LinearLayout
-                    android:id="@+id/tab6"
+                    android:id="@+id/content6"
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
                     android:orientation="vertical">
