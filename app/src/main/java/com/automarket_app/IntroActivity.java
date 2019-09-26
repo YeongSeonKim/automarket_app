@@ -21,7 +21,7 @@ public class IntroActivity extends AppCompatActivity {
             intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
 
             startActivity(intent); // 다음화면으로 넘어가기
-           //finish(); // Activity 화면 제거
+            finish(); // Activity 화면 제거
         }
     };
     @Override
