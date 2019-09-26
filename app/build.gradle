@@ -30,4 +30,5 @@ dependencies {
     implementation files('libs/jackson-annotations-2.8.1.jar')
     implementation files('libs/jackson-core-2.8.1.jar')
     implementation files('libs/jackson-databind-2.8.1.jar')
+    implementation 'androidx.recyclerview:recyclerview:1.0.0'
 }

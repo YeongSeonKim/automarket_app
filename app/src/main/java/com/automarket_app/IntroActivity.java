@@ -15,8 +15,13 @@ public class IntroActivity extends AppCompatActivity {
         public void run() {
 // 4초뒤에 다음화면(MainActivity)으로 넘어가기 Handler 사용
             Intent intent = new Intent(getApplicationContext(), LoginActivity.class);
+
+            intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+            intent.addFlags(Intent.FLAG_ACTIVITY_SINGLE_TOP);
+            intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+
             startActivity(intent); // 다음화면으로 넘어가기
-            finish(); // Activity 화면 제거
+           //finish(); // Activity 화면 제거
         }
     };
     @Override

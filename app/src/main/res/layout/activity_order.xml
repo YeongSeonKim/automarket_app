@@ -43,7 +43,7 @@
     <TabHost
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:id="@+id/tabHost1"
+        android:id="@+id/tabHost"
         android:background="#A6A6A6">
 
         <LinearLayout
@@ -61,7 +61,7 @@
             <FrameLayout
                 android:id="@android:id/tabcontent"
                 android:layout_width="match_parent"
-                android:layout_height="match_parent">
+                android:layout_height="wrap_content">
 
                 <!-- 첫 번째 페이지. content1 -->
                 <LinearLayout
@@ -70,12 +70,10 @@
                     android:layout_height="match_parent"
                     android:orientation="vertical">
 
-                    <GridView
+                    <ListView
                         android:layout_width="match_parent"
-                        android:layout_height="match_parent"
-                        android:gravity="center"
-                        android:numColumns="4"
-                        android:id="@+id/tab1GridView"/>
+                        android:layout_height="wrap_content"
+                        android:id="@+id/listView1"/>
 
                 </LinearLayout>
 

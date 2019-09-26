@@ -26,8 +26,13 @@ public class CartActivity extends AppCompatActivity {
             @Override
             public void onClick(View view) {
                 Intent intent = new Intent(getApplicationContext(), OrderActivity.class);
+
+                intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+                intent.addFlags(Intent.FLAG_ACTIVITY_SINGLE_TOP);
+                intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+
                 startActivity(intent);
-                finish();
+                //finish();
             }
         });
 
@@ -37,6 +42,11 @@ public class CartActivity extends AppCompatActivity {
             @Override
             public void onClick(View view) {
                 Intent intent = new Intent(getApplicationContext(), CashActivity.class);
+
+                intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+                intent.addFlags(Intent.FLAG_ACTIVITY_SINGLE_TOP);
+                intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+
                 startActivity(intent);
             }
         });
@@ -56,6 +66,11 @@ public class CartActivity extends AppCompatActivity {
                     public void onClick(DialogInterface dialogInterface, int i) {
                         // 다른 Activity를 호출하는 code
                         Intent intent = new Intent(getApplicationContext(), CartActivity.class);
+
+                        intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+                        intent.addFlags(Intent.FLAG_ACTIVITY_SINGLE_TOP);
+                        intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+
                         startActivity(intent);
 
                     }

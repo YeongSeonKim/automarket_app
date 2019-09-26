@@ -30,6 +30,11 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public void onClick(View view) {
                 Intent intent = new Intent(getApplicationContext(), OrderActivity.class);
+
+                intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+                intent.addFlags(Intent.FLAG_ACTIVITY_SINGLE_TOP);
+                intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+
                 startActivity(intent);
             }
         });
@@ -38,6 +43,11 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public void onClick(View view) {
                 Intent intent = new Intent(getApplicationContext(), CashActivity.class);
+
+                intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+                intent.addFlags(Intent.FLAG_ACTIVITY_SINGLE_TOP);
+                intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+
                 startActivity(intent);
             }
         });
@@ -46,6 +56,11 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public void onClick(View view) {
                 Intent intent = new Intent(getApplicationContext(), InformationActivity.class);
+
+                intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+                intent.addFlags(Intent.FLAG_ACTIVITY_SINGLE_TOP);
+                intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+
                 startActivity(intent);
             }
         });
@@ -69,3 +84,9 @@ public class MainActivity extends AppCompatActivity {
 
     }
 }
+
+/*
+* mReceiveIntent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+* mReceiveIntent.addFlags(Intent.FLAG_ACTIVITY_SINGLE_TOP);
+* mReceiveIntent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+* */
