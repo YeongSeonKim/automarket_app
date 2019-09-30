@@ -125,7 +125,7 @@
             android:layout_height="wrap_content"
             android:layout_weight="1"
             android:text="@string/cash"
-            android:id="@+id/btnAddCash"/>
+            android:id="@+id/btnAddCash_Page"/>
 
         <Button
             android:layout_width="wrap_content"
