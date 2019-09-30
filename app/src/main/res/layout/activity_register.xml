@@ -39,7 +39,8 @@
             android:inputType="textPersonName"
             android:ems="10"
             android:hint="@string/Name_hint"
-            android:id="@+id/etName" />
+            android:id="@+id/etName"
+            android:textColor="#000000"/>
 
     </LinearLayout>
 
@@ -59,7 +60,8 @@
             android:inputType="textEmailAddress"
             android:ems="10"
             android:hint="@string/Email_hint"
-            android:id="@+id/etEmail" />
+            android:id="@+id/etEmail"
+            android:textColor="#000000"/>
 
     </LinearLayout>
 
@@ -79,7 +81,8 @@
             android:inputType="textPassword"
             android:ems="10"
             android:hint="@string/Password_hint"
-            android:id="@+id/etPassword" />
+            android:id="@+id/etPassword"
+            android:textColor="#000000"/>
 
     </LinearLayout>
 
