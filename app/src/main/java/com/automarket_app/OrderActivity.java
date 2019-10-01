@@ -84,14 +84,7 @@ import java.util.List;
             productList.add(new ProductVO("1","과일","http://localhost:8082/automarket/upload/apple.jpg","1000011","사과",5000,10));
             productList.add(new ProductVO("1","과일","http://localhost:8082/automarket/upload/be.jpg","1000022","배",10000,10));
 
-           // Bitmap imgmap;
             for(ProductVO vo : productList){
-//                try {
-//                    imgmap = CommLib.getbmpfromURL(vo.getImgPath());
-//                    vo.setImgBitmap(imgmap);
-//                } catch (Exception e) {
-//                    e.printStackTrace();
-//                }
                 vo.byteFromURL();
                 adapter.addItem(vo);
             }

@@ -3,6 +3,8 @@ package com.automarket_app.VO;
 import android.graphics.Bitmap;
 import android.util.Log;
 
+import com.automarket_app.CommLib;
+
 import java.io.ByteArrayOutputStream;
 import java.io.InputStream;
 import java.net.URL;
@@ -35,7 +37,7 @@ public class ProductVO {
     public  void byteFromURL(){
         byte[] d= null;
         try{
-            this.thumbnailimg = recoverImageFromUrl(imgPath);
+            this.thumbnailimg = CommLib.recoverImageFromUrl(imgPath);
 
         }catch (Exception e){
             Log.e("automarket_app",e.toString());
@@ -44,21 +46,6 @@ public class ProductVO {
 
     public byte[] getImgByte() {
         return thumbnailimg;
-    }
-    public byte[] recoverImageFromUrl(String urlText) {
-        ByteArrayOutputStream output = new ByteArrayOutputStream();
-        try {
-            URL url = new URL(urlText);
-            InputStream inputStream = url.openStream();
-            int n = 0;
-            byte[] buffer = new byte[1024];
-            while ((n = inputStream.read(buffer))!= -1) {
-                output.write(buffer, 0, n);
-            }
-        }catch (Exception e){
-            Log.e("automarket_app","recoverImageFromUrl>>"+e.toString());
-        }
-        return output.toByteArray();
     }
 
     public byte[] getThumbnailimg() {
