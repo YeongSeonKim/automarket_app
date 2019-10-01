@@ -1,4 +1,4 @@
-package com.automarket_app;
+package com.automarket_app.adapter;
 
 import android.content.Context;
 import android.graphics.Bitmap;
@@ -13,6 +13,7 @@ import android.widget.Toast;
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.automarket_app.R;
 import com.automarket_app.VO.ProductVO;
 
 import java.net.URL;

@@ -40,6 +40,9 @@
     <!-- 장바구니 -->
     <string name="cart">장바구니</string>
     <string name="total_price">총금액</string>
+    <string name="minus">-</string>
+    <string name="plus">+</string>
+    <string name="delete">X</string>
 
 
 

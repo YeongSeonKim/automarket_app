@@ -48,7 +48,8 @@
 
         <ListView
             android:layout_width="match_parent"
-            android:layout_height="match_parent"/>
+            android:layout_height="match_parent"
+            android:id="@+id/cart_list" />
 
     </LinearLayout>
 
@@ -71,6 +72,7 @@
             android:layout_height="wrap_content"
             android:textSize="20dp"
             android:layout_weight="6"
+            android:id="@+id/cart_total_price"
             android:textColor="#000000"/>
 
         <TextView
@@ -102,6 +104,7 @@
             android:layout_height="wrap_content"
             android:textSize="20dp"
             android:layout_weight="6"
+            android:id="@+id/cart_cash_now"
             android:textColor="#0054FF"/>
 
         <TextView

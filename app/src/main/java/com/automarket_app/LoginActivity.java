@@ -4,6 +4,7 @@ import androidx.appcompat.app.AppCompatActivity;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
@@ -31,6 +32,8 @@ public class LoginActivity extends AppCompatActivity {
                 intent.addFlags(Intent.FLAG_ACTIVITY_SINGLE_TOP);
                 intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
 
+                Log.i("register", "회원가입 하기이이!");
+
                 startActivity(intent);
             }
         });
@@ -44,6 +47,7 @@ public class LoginActivity extends AppCompatActivity {
                 intent.addFlags(Intent.FLAG_ACTIVITY_SINGLE_TOP);
                 intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
 
+                Log.i("login", "로그인 성공ㅇㅇ!");
                 startActivity(intent);
             }
         });
