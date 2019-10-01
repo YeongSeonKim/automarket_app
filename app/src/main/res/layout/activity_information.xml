@@ -64,7 +64,7 @@
                 android:layout_weight="1"
                 android:textAlignment="center"
                 android:textSize="20dp"
-                android:id="@+id/nowCash"/>
+                android:id="@+id/nowEmail"/>
 
             <TextView
                 android:layout_width="wrap_content"
@@ -83,7 +83,8 @@
             <Button
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="@string/logout"/>
+                android:text="@string/logout"
+                android:id="@+id/btnLogout"/>
 
         </LinearLayout>
 

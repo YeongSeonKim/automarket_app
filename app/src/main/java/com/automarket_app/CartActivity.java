@@ -37,8 +37,8 @@ public class CartActivity extends AppCompatActivity {
         });
 
         // 캐시충전
-        Button btnAddCash = (Button)findViewById(R.id.btnAddCash);
-        btnAddCash.setOnClickListener(new View.OnClickListener() {
+        Button btnAddCash_Page = (Button)findViewById(R.id.btnAddCash_Page);
+        btnAddCash_Page.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 Intent intent = new Intent(getApplicationContext(), CashActivity.class);

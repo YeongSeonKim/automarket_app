@@ -6,6 +6,7 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
+import android.widget.EditText;
 
 public class RegisterActivity extends AppCompatActivity {
 
@@ -13,6 +14,12 @@ public class RegisterActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_register);
+
+        EditText etName_register = (EditText)findViewById(R.id.etName_register);
+        EditText etEmail_register = (EditText)findViewById(R.id.etEmail_register);
+        EditText etPassword_register = (EditText)findViewById(R.id.etPassword_register);
+
+
 
         Button btnDone = (Button)findViewById(R.id.btnDone);
         Button btnCancel = (Button)findViewById(R.id.btnCancel);
