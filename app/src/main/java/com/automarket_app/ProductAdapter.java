@@ -56,8 +56,8 @@ public class ProductAdapter extends BaseAdapter {
 
         ProductVO vo = list.get(position);
 
-        txtProdNm.setText(vo.getProdNm());
-        txtProdPrice.setText(String.valueOf(vo.getProdPrice()));
+        txtProdNm.setText(vo.getProdnm());
+        txtProdPrice.setText(String.valueOf(vo.getProdprice()));
 
         if(vo.getThumbnailimg() !=null){
             Bitmap bitmap = BitmapFactory.decodeByteArray(vo.getThumbnailimg(), 0, vo.getThumbnailimg().length);
@@ -68,7 +68,7 @@ public class ProductAdapter extends BaseAdapter {
             @Override
             public void onClick(View view) {
 
-                Toast.makeText(context, "You Clicked "+list.get(position).getProdNm(), Toast.LENGTH_LONG).show();
+                Toast.makeText(context, "You Clicked "+list.get(position).getProdnm(), Toast.LENGTH_LONG).show();
 
             }
         });

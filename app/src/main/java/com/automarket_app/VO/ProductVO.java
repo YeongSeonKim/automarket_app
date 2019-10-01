@@ -1,6 +1,8 @@
 package com.automarket_app.VO;
 
 import android.graphics.Bitmap;
+import android.os.Parcel;
+import android.os.Parcelable;
 import android.util.Log;
 
 import com.automarket_app.CommLib;
@@ -10,40 +12,67 @@ import java.io.InputStream;
 import java.net.URL;
 
 // 상품상세조회
-public class ProductVO {
+public class ProductVO implements Parcelable {
 
-    private  String cateId;
-    private String cateNm;
-    private String imgPath;
-    private String prodId;
-    private String prodNm;
-    private int prodPrice;
-    private int prodCnt;
-    //private Bitmap imgBitmap;
+    private  String cateid;
+    //private String cateNm;
+    private String imgpath;
+    private String prodid;
+    private String prodnm;
+    private int prodprice;
+    private int prodcnt;
     private byte[] thumbnailimg;
     public ProductVO() {
     }
 
-    public ProductVO(String cateId, String cateNm, String imgPath, String prodId, String prodNm, int prodPrice, int prodCnt) {
-        this.cateId = cateId;
-        this.cateNm = cateNm;
-        this.imgPath = imgPath;
-        this.prodId = prodId;
-        this.prodNm = prodNm;
-        this.prodPrice = prodPrice;
-        this.prodCnt = prodCnt;
+
+    protected ProductVO(Parcel in) {
+        cateid = in.readString();
+        prodnm = in.readString();
+        imgpath = in.readString();
+        prodid = in.readString();
+        prodnm = in.readString();
+        prodprice = in.readInt();
+        prodcnt = in.readInt();
+        thumbnailimg = in.createByteArray();
     }
+
+    public static final Creator<ProductVO> CREATOR = new Creator<ProductVO>() {
+        @Override
+        public ProductVO createFromParcel(Parcel in) {
+            return new ProductVO(in);
+        }
+
+        @Override
+        public ProductVO[] newArray(int size) {
+            return new ProductVO[size];
+        }
+    };
 
     public  void byteFromURL(){
         byte[] d= null;
         try{
-            this.thumbnailimg = CommLib.recoverImageFromUrl(imgPath);
+            this.thumbnailimg = recoverImageFromUrl(imgpath);
 
         }catch (Exception e){
             Log.e("automarket_app",e.toString());
         }
     }
-
+    public byte[] recoverImageFromUrl(String urlText) {
+        ByteArrayOutputStream output = new ByteArrayOutputStream();
+        try {
+            URL url = new URL(urlText);
+            InputStream inputStream = url.openStream();
+            int n = 0;
+            byte[] buffer = new byte[1024];
+            while ((n = inputStream.read(buffer))!= -1) {
+                output.write(buffer, 0, n);
+            }
+        }catch (Exception e){
+            Log.e("automarket_app","recoverImageFromUrl>>"+e.toString());
+        }
+        return output.toByteArray();
+    }
     public byte[] getImgByte() {
         return thumbnailimg;
     }
@@ -56,72 +85,72 @@ public class ProductVO {
         this.thumbnailimg = thumbnailimg;
     }
 
-    public String getCateId() {
-        return cateId;
+    public String getCateid() {
+        return cateid;
     }
 
-    public void setCateId(String cateId) {
-        this.cateId = cateId;
+    public void setCateid(String cateid) {
+        this.cateid = cateid;
     }
 
-    public String getCateNm() {
-        return cateNm;
+    public String getImgpath() {
+        return imgpath;
     }
 
-    public void setCateNm(String cateNm) {
-        this.cateNm = cateNm;
+    public void setImgpath(String imgpath) {
+        this.imgpath = imgpath;
     }
 
-    public String getImgPath() {
-        return imgPath;
+    public String getProdid() {
+        return prodid;
     }
 
-    public void setImgPath(String imgPath) {
-        this.imgPath = imgPath;
+    public void setProdid(String prodid) {
+        this.prodid = prodid;
     }
 
-    public String getProdId() {
-        return prodId;
+    public String getProdnm() {
+        return prodnm;
     }
 
-    public void setProdId(String prodId) {
-        this.prodId = prodId;
+    public void setProdnm(String prodnm) {
+        this.prodnm = prodnm;
     }
 
-    public String getProdNm() {
-        return prodNm;
+    public int getProdprice() {
+        return prodprice;
     }
 
-    public void setProdNm(String prodNm) {
-        this.prodNm = prodNm;
+    public void setProdprice(int prodprice) {
+        this.prodprice = prodprice;
     }
 
-    public int getProdPrice() {
-        return prodPrice;
+    public int getProdcnt() {
+        return prodcnt;
     }
 
-    public void setProdPrice(int prodPrice) {
-        this.prodPrice = prodPrice;
-    }
-
-    public int getProdCnt() {
-        return prodCnt;
-    }
-
-    public void setProdCnt(int prodCnt) {
-        this.prodCnt = prodCnt;
+    public void setProdcnt(int prodcnt) {
+        this.prodcnt = prodcnt;
     }
 
     @Override
-    public String toString() {
-        return "ProductVO{" +
-                "cateId='" + cateId + '\'' +
-                ", cateNm='" + cateNm + '\'' +
-                ", imgPath='" + imgPath + '\'' +
-                ", prodId='" + prodId + '\'' +
-                ", prodNm='" + prodNm + '\'' +
-                ", prodPrice=" + prodPrice +
-                ", prodCnt=" + prodCnt +
-                '}';
+    public int describeContents() {
+        return 0;
+    }
+
+    @Override
+    public void writeToParcel(Parcel parcel, int i) {
+        try{
+            parcel.writeString(cateid);
+            //parcel.writeString(catenm);
+            parcel.writeString(imgpath);
+            parcel.writeString(prodid);
+            parcel.writeString(prodnm);
+            parcel.writeInt(prodprice);
+            parcel.writeInt(prodcnt);
+            parcel.writeByteArray(thumbnailimg);
+        }catch (Exception e){
+            Log.e("automarket_app",e.toString());
+        }
     }
 }

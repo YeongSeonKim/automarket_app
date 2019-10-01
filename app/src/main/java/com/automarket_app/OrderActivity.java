@@ -4,6 +4,7 @@ import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.RecyclerView;
 
+import android.content.ComponentName;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
@@ -77,22 +78,12 @@ import java.util.List;
 
             ///////////////////////////////////////////////////////////////////////////////////
 
-
-            gridView = (GridView) findViewById(R.id.griview);
-            ProductAdapter adapter = new ProductAdapter();
-
-            productList.add(new ProductVO("1","과일","http://localhost:8082/automarket/upload/apple.jpg","1000011","사과",5000,10));
-            productList.add(new ProductVO("1","과일","http://localhost:8082/automarket/upload/be.jpg","1000022","배",10000,10));
-
-            for(ProductVO vo : productList){
-                vo.byteFromURL();
-                adapter.addItem(vo);
-            }
-
-
-            gridView.setAdapter(adapter);
-
-
+            Intent i = new Intent();
+            //명시적 Intent사용
+            ComponentName cname = new ComponentName("com.automarket_app","com.automarket_app.service.ProductService");
+            i.setComponent(cname);
+            i.putExtra("searchKeyword","1");
+            startService(i);
 
             TabHost tabHost = (TabHost) findViewById(R.id.tabHost);
             tabHost.setup();
@@ -122,4 +113,33 @@ import java.util.List;
 
 
         }
+
+     @Override
+     protected void onNewIntent(Intent intent) {
+         super.onNewIntent(intent);
+         Log.i("automarket_app","데이터가 Activity에 도달");
+         ArrayList<ProductVO> productList = intent.getParcelableArrayListExtra("resultData");
+
+//         ListView bookLv = findViewById(R.id.bookListView);
+//         bookLv.setAdapter(adapter);
+//         // adapter에 그려야하는 데이터를 세팅
+//         for(KAKAOBookVO vo : list){
+//             adapter.addItem(vo);
+//         }
+
+         gridView = (GridView) findViewById(R.id.griview);
+         ProductAdapter adapter = new ProductAdapter();
+
+//         productList.add(new ProductVO("1","과일","http://localhost:8082/automarket/upload/apple.jpg","1000011","사과",5000,10));
+//         productList.add(new ProductVO("1","과일","http://localhost:8082/automarket/upload/be.jpg","1000022","배",10000,10));
+
+         for(ProductVO vo : productList){
+             vo.byteFromURL();
+             adapter.addItem(vo);
+         }
+
+
+         gridView.setAdapter(adapter);
+
+     }
     }
