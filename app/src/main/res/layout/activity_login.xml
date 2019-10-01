@@ -34,7 +34,7 @@
             android:textColor="#000000" />
 
         <EditText
-        android:id="@+id/edEmail"
+        android:id="@+id/edEmail_login"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:ems="10"
@@ -55,7 +55,7 @@
             android:textColor="#000000" />
 
         <EditText
-            android:id="@+id/edPassword"
+            android:id="@+id/edPassword_login"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:ems="10"
