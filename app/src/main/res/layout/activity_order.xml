@@ -70,10 +70,13 @@
                     android:layout_height="match_parent"
                     android:orientation="vertical">
 
-                    <ListView
+                    <GridView
+                        android:id="@+id/griview"
+                        android:numColumns="auto_fit"
+                        android:gravity="center"
+                        android:columnWidth="100dp"
                         android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:id="@+id/listView1"/>
+                        android:layout_height="match_parent"/>
 
                 </LinearLayout>
 
@@ -83,7 +86,10 @@
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
                     android:orientation="vertical">
-
+                    <TextView
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:text="Tab2"/>
                 </LinearLayout>
 
                 <!-- 세 번째 페이지. content3 -->
@@ -92,7 +98,10 @@
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
                     android:orientation="vertical">
-
+                    <TextView
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:text="Tab3"/>
                 </LinearLayout>
 
                 <!-- 네 번째 페이지. content4 -->

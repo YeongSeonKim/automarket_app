@@ -5,21 +5,21 @@ import java.util.List;
 // 상품목록조회
 public class ProdListVO {
 
-    private List<ProdDtailVO> prodList; // prodList : List
+    private List<ProductVO> prodList; // prodList : List
 
     // alt + insert
     public ProdListVO(){
     }
 
-    public ProdListVO(List<ProdDtailVO> prodList) {
+    public ProdListVO(List<ProductVO> prodList) {
         this.prodList = prodList;
     }
 
-    public List<ProdDtailVO> getProdList() {
+    public List<ProductVO> getProdList() {
         return prodList;
     }
 
-    public void setProdList(List<ProdDtailVO> prodList) {
+    public void setProdList(List<ProductVO> prodList) {
         this.prodList = prodList;
     }
 
