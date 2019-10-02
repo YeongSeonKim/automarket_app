@@ -15,6 +15,7 @@
     <string name="cancel">취소</string>
     <string name="register">회원가입</string>
     <string name="RepeatPassword_hint">Repeat\nPassword</string>
+    <string name="check">중복체크</string>
 
     <!-- 주문하기 -->
     <string name="order">주문하기</string>
@@ -44,6 +45,9 @@
     <string name="minus">-</string>
     <string name="plus">+</string>
     <string name="delete">X</string>
+    <string name="prod_price">상품가격</string>
+    <string name="prod_name">상품이름</string>
+
 
 
 

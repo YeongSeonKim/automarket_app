@@ -5,7 +5,7 @@
     android:orientation="vertical"
     android:gravity="center"
     xmlns:android="http://schemas.android.com/apk/res/android"
-    android:background="#FFFFFF">
+    android:background="@color/bg_color">
 
     <ImageView
         android:layout_width="wrap_content"
@@ -18,20 +18,24 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:text="@string/login"
-        android:textSize="30dp"
-        android:textColor="#000000"
+        android:textSize="30sp"
+        android:textColor="@color/colorBlack"
         android:gravity="center"
         android:layout_marginBottom="20dp"/>
 
     <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="wrap_content">
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="10dp"
+        android:layout_marginRight="10dp"
+        android:layout_marginBottom="10dp"
+        android:background="@color/et_bg">
 
         <TextView
             android:layout_width="70dp"
             android:layout_height="wrap_content"
             android:text="@string/Email_hint"
-            android:textColor="#000000"
+            android:textColor="@color/colorBlack"
             android:textAlignment="center"/>
 
         <EditText
@@ -41,19 +45,25 @@
         android:ems="10"
         android:inputType="textEmailAddress"
         android:hint="@string/Email_hint"
-        android:textColor="#000000"/>
+        android:textColor="@color/colorBlack"
+        android:layout_marginRight="10dp"/>
+
 
     </LinearLayout>
 
     <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="wrap_content">
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="10dp"
+        android:layout_marginRight="10dp"
+        android:layout_marginBottom="10dp"
+        android:background="@color/et_bg">
 
         <TextView
             android:layout_width="70dp"
             android:layout_height="wrap_content"
             android:text="@string/Password_hint"
-            android:textColor="#000000"
+            android:textColor="@color/colorBlack"
             android:textAlignment="center"/>
 
         <EditText
@@ -63,7 +73,8 @@
             android:ems="10"
             android:inputType="textPassword"
             android:hint="@string/Password_hint"
-            android:textColor="#000000"/>
+            android:textColor="@color/colorBlack"
+            android:layout_marginRight="10dp"/>
 
     </LinearLayout>
 

@@ -21,22 +21,22 @@ import java.util.Map;
 
 public class RegisterService extends Service {
 
-    // http://localhost:8080/automarket/register.do
     // post로 넘기기
 
+    private String api_url;
     class RegisterRunnable implements Runnable {
 
         @Override
         public void run() {
 
+            // http://localhost:8080/automarket/register.do
             //  String url = "http://localhost:8080/automarket/register.do";
-            String url = "http://70.12.115.56:8080/automarket/register.do";
+            String url = api_url + "/register.do";
 
             try{
                 URL urlObj = new URL(url);
                 HttpURLConnection con = (HttpURLConnection) urlObj.openConnection();
                 con.setRequestMethod("POST");
-                //con.setRequestProperty("Authorization","KakaoAK "+mykey);
 
                 //기본적으로 stream은 bufferedReader형태로 생성
                 BufferedReader br = new BufferedReader(new InputStreamReader(con.getInputStream()));
@@ -103,8 +103,9 @@ public class RegisterService extends Service {
         Log.i("automarket_app","onStartCommand 호출됬어요!!!");
         // 전달된 키워드를 이용해서 외부 네트워크 접속을 위한
         // Thread를 하나 생성해야 한다.
-        String keyword = intent.getExtras().getString("searchKeyword");
+        //String keyword = intent.getExtras().getString("searchKeyword");
         // Thread를 만들기 위한 Runnable 객체부터 생성
+        api_url = intent.getExtras().getString("api_url");
         RegisterRunnable runnable = new RegisterRunnable();
         Thread t = new Thread(runnable);
         t.start();

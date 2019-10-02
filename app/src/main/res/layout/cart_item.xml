@@ -29,10 +29,10 @@
         <TextView
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="상품이름"
+            android:text="@string/prod_name"
             android:id="@+id/cart_prodNm"
-            android:textSize="24dp"
-            android:textColor="#000000" />
+            android:textSize="24sp"
+            android:textColor="@color/colorBlack" />
         </LinearLayout>
 
     <LinearLayout
@@ -43,18 +43,18 @@
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="상품가격"
+            android:text="@string/prod_price"
             android:id="@+id/cart_prodPrice"
-            android:textSize="20dp"
-            android:textColor="#666666" />
+            android:textSize="20sp"
+            android:textColor="@color/colorGray" />
 
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="@string/cash_won"
-            android:textSize="20dp"
+            android:textSize="20sp"
             android:layout_marginLeft="5dp"
-            android:textColor="#666666"/>
+            android:textColor="@color/colorGray"/>
 
     </LinearLayout>
 
@@ -90,7 +90,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginLeft="10dp"
-        android:layout_gravity="right">
+        android:layout_gravity="end">
 
         <Button
             android:layout_width="wrap_content"
