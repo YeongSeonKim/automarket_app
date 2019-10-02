@@ -7,8 +7,8 @@
 
     <ImageView
         android:id="@+id/imageview"
-        android:layout_width="60dp"
-        android:layout_height="60dp" />
+        android:layout_width="90dp"
+        android:layout_height="90dp" />
     <TextView
         android:id="@+id/txtProdNm"
         android:gravity="center"

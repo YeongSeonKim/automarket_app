@@ -99,6 +99,13 @@ import java.util.List;
             // 여섯 번째 Tab. (탭 표시 텍스트:"유제품"), (페이지 뷰:"tab6")
             tabHost.addTab(tabHost.newTabSpec("6").setContent(R.id.content3).setIndicator("유제품"));
 
+            tabHost.setOnTabChangedListener(new TabHost.OnTabChangeListener() {
+                @Override
+                public void onTabChanged(String s) {
+                    System.out.println(s);
+                }
+            });
+
 
         }
 
