@@ -38,7 +38,7 @@ public class ProductService extends Service {
                 URL urlObj = new URL(url);
                 HttpURLConnection con = (HttpURLConnection) urlObj.openConnection();
                 con.setRequestMethod("GET");
-                //con.setRequestProperty("Authorization","KakaoAK "+mykey);
+                //con.setRequestProperty("Authorization","");
 
                 //기본적으로 stream은 bufferedReader형태로 생성
                 BufferedReader br = new BufferedReader(new InputStreamReader(con.getInputStream()));
@@ -51,15 +51,9 @@ public class ProductService extends Service {
 
                 //jackson library를 이용하여 json데이터 처리
                 ObjectMapper mapper = new ObjectMapper();
-                ArrayList<Map<String, Object>> maplist = mapper.readValue(sb.toString(), new TypeReference<List<Map<String,Object>>>() {});
-                //ArrayList<ProductVO> maplist = mapper.readValue(sb.toString(), new TypeReference<List<ProductVO>>() {});
+                ArrayList<ProductVO> maplist = mapper.readValue(sb.toString(), new TypeReference<List<ProductVO>>() {});
 
-                String resultJsonData = mapper.writeValueAsString(maplist);
-
-                Log.i("automarket_app","resultJsonData>>"+resultJsonData);
-                ArrayList<ProductVO> myObject = mapper.readValue(resultJsonData,new TypeReference<ArrayList<ProductVO>>(){});
-
-                for(ProductVO vo: myObject){
+                for(ProductVO vo: maplist){
                     vo.byteFromURL();
                 }
 
@@ -71,9 +65,7 @@ public class ProductService extends Service {
 
                 //전달되는 데이터는 직렬화가 가능한 형태로 구성되어야 함
                 //컴포넌트간 객체전달 마셜링 작업필요
-                //parcelable interface를 구현한 객체를 붙이기 위해서 method를 putParcelableArrayListExtra로 교체
-                //i.putExtra("resultData",myObject);
-                i.putParcelableArrayListExtra("resultData",myObject);
+                i.putParcelableArrayListExtra("resultData",maplist);
                 startActivity(i);
 
             }catch (Exception e){
@@ -93,7 +85,6 @@ public class ProductService extends Service {
     }
     @Override
     public IBinder onBind(Intent intent) {
-        // TODO: Return the communication channel to the service.
         throw new UnsupportedOperationException("Not yet implemented");
     }
     @Override

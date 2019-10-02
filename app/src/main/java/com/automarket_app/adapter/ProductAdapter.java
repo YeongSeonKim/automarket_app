@@ -17,6 +17,8 @@ import com.automarket_app.R;
 import com.automarket_app.VO.ProductVO;
 
 import java.net.URL;
+import java.text.DecimalFormat;
+import java.text.NumberFormat;
 import java.util.ArrayList;
 
 public class ProductAdapter extends BaseAdapter {
@@ -58,7 +60,9 @@ public class ProductAdapter extends BaseAdapter {
         ProductVO vo = list.get(position);
 
         txtProdNm.setText(vo.getProdnm());
-        txtProdPrice.setText(String.valueOf(vo.getProdprice()));
+        NumberFormat formatter = new DecimalFormat("#,###");
+        String prodPrice = formatter.format(vo.getProdprice());
+        txtProdPrice.setText(prodPrice);
 
         if(vo.getThumbnailimg() !=null){
             Bitmap bitmap = BitmapFactory.decodeByteArray(vo.getThumbnailimg(), 0, vo.getThumbnailimg().length);
