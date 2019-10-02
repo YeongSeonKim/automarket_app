@@ -8,8 +8,8 @@
         <item name="colorAccent">@color/colorAccent</item>
     </style>
     <style name="TabTheme">
-        <item name="android:textColor">@color/colorBlue</item>
-        <item name="android:background">@color/colorSky</item>
+        <item name="android:textColor">@color/colorSky</item>
+        <item name="android:background">@color/colorBlack</item>
     </style>
     <style name="ProdListTheme">
         <item name="android:textColor">@color/colorBlack</item>
