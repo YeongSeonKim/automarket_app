@@ -4,7 +4,8 @@
     android:layout_height="match_parent"
     android:orientation="vertical"
     xmlns:android="http://schemas.android.com/apk/res/android"
-    android:background="@color/bg_color">
+    android:background="@color/bg_color"
+    android:id="@+id/linearLayout_order">
 
     <LinearLayout
         android:layout_width="match_parent"
