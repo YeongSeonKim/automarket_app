@@ -34,6 +34,9 @@
         <activity android:name=".LoginActivity" />
         <activity android:name=".RegisterActivity" />
         <activity android:name=".MainActivity" />
+
+        <meta-data android:name="api_url" android:value="http://70.12.115.69:8082/automarket"/>
+        <meta-data android:name="api_key" android:value=""/>
     </application>
 
 </manifest>

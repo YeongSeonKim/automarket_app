@@ -13,6 +13,7 @@ import android.widget.TabHost;
 
 import com.automarket_app.VO.ProductVO;
 import com.automarket_app.adapter.ProductAdapter;
+import com.automarket_app.util.Helper;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -21,11 +22,13 @@ import java.util.List;
         //RecyclerView recyclerView;
         GridView gridView;
         List<ProductVO> productList=new ArrayList<ProductVO>();
+        String api_url ="";
         @Override
         protected void onCreate(Bundle savedInstanceState) {
             super.onCreate(savedInstanceState);
             setContentView(R.layout.activity_order);
 
+            api_url = Helper.getMetaData(this, "api_url");
 
             ImageButton btnBack = (ImageButton) findViewById(R.id.btnBack);
             ImageButton btnCart = (ImageButton) findViewById(R.id.btnCart);
@@ -66,7 +69,8 @@ import java.util.List;
             //명시적 Intent사용
             ComponentName cname = new ComponentName("com.automarket_app","com.automarket_app.service.ProductService");
             i.setComponent(cname);
-            i.putExtra("searchKeyword","1");
+            i.putExtra("categoryid","1");
+            i.putExtra("api_url",api_url);
             startService(i);
 
             TabHost tabHost = (TabHost) findViewById(R.id.tabHost);
@@ -104,13 +108,6 @@ import java.util.List;
          Log.i("automarket_app","데이터가 Activity에 도달");
          ArrayList<ProductVO> productList = intent.getParcelableArrayListExtra("resultData");
 
-//         ListView bookLv = findViewById(R.id.bookListView);
-//         bookLv.setAdapter(adapter);
-//         // adapter에 그려야하는 데이터를 세팅
-//         for(KAKAOBookVO vo : list){
-//             adapter.addItem(vo);
-//         }
-
          gridView = (GridView) findViewById(R.id.griview);
          ProductAdapter adapter = new ProductAdapter();
 
@@ -118,7 +115,6 @@ import java.util.List;
 //         productList.add(new ProductVO("1","과일","http://localhost:8082/automarket/upload/be.jpg","1000022","배",10000,10));
 
          for(ProductVO vo : productList){
-             vo.byteFromURL();
              adapter.addItem(vo);
          }
 

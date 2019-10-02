@@ -1,17 +1,16 @@
 package com.automarket_app.VO;
 
-import android.graphics.Bitmap;
 import android.os.Parcel;
 import android.os.Parcelable;
 import android.util.Log;
 
-import com.automarket_app.CommLib;
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 
 import java.io.ByteArrayOutputStream;
 import java.io.InputStream;
 import java.net.URL;
 
-// 상품상세조회
+@JsonIgnoreProperties(ignoreUnknown = true)
 public class ProductVO implements Parcelable {
 
     private  String cateid;
@@ -21,22 +20,40 @@ public class ProductVO implements Parcelable {
     private String prodnm;
     private int prodprice;
     private int prodcnt;
+    private int costprice;
     private byte[] thumbnailimg;
+    private int discount;
     public ProductVO() {
     }
 
 
     protected ProductVO(Parcel in) {
         cateid = in.readString();
-        prodnm = in.readString();
         imgpath = in.readString();
         prodid = in.readString();
         prodnm = in.readString();
         prodprice = in.readInt();
         prodcnt = in.readInt();
+        costprice = in.readInt();
+        discount = in.readInt();
         thumbnailimg = in.createByteArray();
     }
-
+    @Override
+    public void writeToParcel(Parcel parcel, int i) {
+        try{
+            parcel.writeString(cateid);
+            parcel.writeString(imgpath);
+            parcel.writeString(prodid);
+            parcel.writeString(prodnm);
+            parcel.writeInt(prodprice);
+            parcel.writeInt(prodcnt);
+            parcel.writeInt(costprice);
+            parcel.writeInt(discount);
+            parcel.writeByteArray(thumbnailimg);
+        }catch (Exception e){
+            Log.e("automarket_app",e.toString());
+        }
+    }
     public static final Creator<ProductVO> CREATOR = new Creator<ProductVO>() {
         @Override
         public ProductVO createFromParcel(Parcel in) {
@@ -49,10 +66,15 @@ public class ProductVO implements Parcelable {
         }
     };
 
+    public static Creator<ProductVO> getCREATOR() {
+        return CREATOR;
+    }
+
     public  void byteFromURL(){
         byte[] d= null;
         try{
-            this.thumbnailimg = recoverImageFromUrl(imgpath);
+            if(imgpath!=null)
+                this.thumbnailimg = recoverImageFromUrl(imgpath);
 
         }catch (Exception e){
             Log.e("automarket_app",e.toString());
@@ -73,6 +95,23 @@ public class ProductVO implements Parcelable {
         }
         return output.toByteArray();
     }
+
+    public int getDiscount() {
+        return discount;
+    }
+
+    public void setDiscount(int discount) {
+        this.discount = discount;
+    }
+
+    public int getCostprice() {
+        return costprice;
+    }
+
+    public void setCostprice(int costprice) {
+        this.costprice = costprice;
+    }
+
     public byte[] getImgByte() {
         return thumbnailimg;
     }
@@ -138,19 +177,5 @@ public class ProductVO implements Parcelable {
         return 0;
     }
 
-    @Override
-    public void writeToParcel(Parcel parcel, int i) {
-        try{
-            parcel.writeString(cateid);
-            //parcel.writeString(catenm);
-            parcel.writeString(imgpath);
-            parcel.writeString(prodid);
-            parcel.writeString(prodnm);
-            parcel.writeInt(prodprice);
-            parcel.writeInt(prodcnt);
-            parcel.writeByteArray(thumbnailimg);
-        }catch (Exception e){
-            Log.e("automarket_app",e.toString());
-        }
-    }
+
 }

@@ -2,7 +2,7 @@ package com.automarket_app.VO;
 
 import android.util.Log;
 
-import com.automarket_app.CommLib;
+import com.automarket_app.util.Helper;
 
 import java.util.Arrays;
 
@@ -61,7 +61,7 @@ public class CartVO {
     public  void byteFromURL(){
         byte[] d= null;
         try{
-            this.thumbnailimg = CommLib.recoverImageFromUrl(imgpath);
+            this.thumbnailimg = Helper.recoverImageFromUrl(imgpath);
 
         }catch (Exception e){
             Log.e("automarket_app",e.toString());

@@ -7,6 +7,7 @@ import android.util.Log;
 
 import com.automarket_app.OrderActivity;
 import com.automarket_app.VO.ProductVO;
+import com.automarket_app.util.Helper;
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
@@ -15,20 +16,23 @@ import java.io.InputStreamReader;
 import java.net.HttpURLConnection;
 import java.net.URL;
 import java.util.ArrayList;
+import java.util.List;
 import java.util.Map;
 
 import javax.net.ssl.HttpsURLConnection;
 
 public class ProductService extends Service {
-
+    private String api_url;
     class ProductListRunnable implements Runnable{
         String categoryid;
+
         public ProductListRunnable(String categoryid){
             this.categoryid = categoryid;
         }
         @Override
         public void run() {
-            String url = "http://localhost:8082/automarket/api/prod/list.do?cid="+categoryid;
+
+            String url = api_url+ "/api/prod/list.do?cid="+categoryid;
             String mykey = "";
             try{
                 URL urlObj = new URL(url);
@@ -47,9 +51,10 @@ public class ProductService extends Service {
 
                 //jackson library를 이용하여 json데이터 처리
                 ObjectMapper mapper = new ObjectMapper();
-                Map<String, Object> map = mapper.readValue(sb.toString(), new TypeReference<Map<String,Object>>() {});
-                Object obj = map.get("documents");
-                String resultJsonData = mapper.writeValueAsString(obj);
+                ArrayList<Map<String, Object>> maplist = mapper.readValue(sb.toString(), new TypeReference<List<Map<String,Object>>>() {});
+                //ArrayList<ProductVO> maplist = mapper.readValue(sb.toString(), new TypeReference<List<ProductVO>>() {});
+
+                String resultJsonData = mapper.writeValueAsString(maplist);
 
                 Log.i("automarket_app","resultJsonData>>"+resultJsonData);
                 ArrayList<ProductVO> myObject = mapper.readValue(resultJsonData,new TypeReference<ArrayList<ProductVO>>(){});
@@ -97,7 +102,8 @@ public class ProductService extends Service {
         //로직처리는 onStartCommand() 진행
         Log.i("automarket_app","onStartCommand 호출");
         //외부 네트워크 접속을 위한 thread를 생성
-        String keyword = intent.getExtras().getString("searchKeyword");
+        String keyword = intent.getExtras().getString("categoryid");
+        api_url = intent.getExtras().getString("api_url");
         ProductListRunnable runnable =new ProductListRunnable(keyword);
         Thread t = new Thread(runnable);
         t.start();
