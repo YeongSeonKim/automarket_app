@@ -32,7 +32,7 @@ public class LoginActivity extends AppCompatActivity {
         btnRegister.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Intent intent = new Intent(getApplicationContext(), RegisterActivity.class);
+                Intent intent = new Intent(LoginActivity.this, RegisterActivity.class);
 
                 intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
                 intent.addFlags(Intent.FLAG_ACTIVITY_SINGLE_TOP);
@@ -40,7 +40,7 @@ public class LoginActivity extends AppCompatActivity {
 
                 Log.i("register", "회원가입 하기이이!");
 
-                startActivity(intent);
+                LoginActivity.this.startActivity(intent);
             }
         });
 
