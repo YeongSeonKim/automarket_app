@@ -28,10 +28,11 @@
         android:layout_height="wrap_content">
 
         <TextView
-            android:layout_width="wrap_content"
+            android:layout_width="70dp"
             android:layout_height="wrap_content"
             android:text="@string/Email_hint"
-            android:textColor="#000000" />
+            android:textColor="#000000"
+            android:textAlignment="center"/>
 
         <EditText
         android:id="@+id/edEmail_login"
@@ -49,10 +50,11 @@
         android:layout_height="wrap_content">
 
         <TextView
-            android:layout_width="wrap_content"
+            android:layout_width="70dp"
             android:layout_height="wrap_content"
             android:text="@string/Password_hint"
-            android:textColor="#000000" />
+            android:textColor="#000000"
+            android:textAlignment="center"/>
 
         <EditText
             android:id="@+id/edPassword_login"
