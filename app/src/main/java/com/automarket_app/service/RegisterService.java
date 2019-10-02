@@ -8,7 +8,7 @@ import android.util.Log;
 import androidx.annotation.Nullable;
 
 import com.automarket_app.RegisterActivity;
-import com.automarket_app.VO.ProductVO;
+import com.automarket_app.VO.UserVO;
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
@@ -54,12 +54,11 @@ public class RegisterService extends Service {
                 String resultJsonData = mapper.writeValueAsString(obj);
 
                 Log.i("automarket_app","resultJsonData>>"+resultJsonData);
-                ArrayList<ProductVO> myObject = mapper.readValue(resultJsonData,new TypeReference<ArrayList<ProductVO>>(){});
+                ArrayList<UserVO> myObject = mapper.readValue(resultJsonData,new TypeReference<ArrayList<UserVO>>(){});
 
-                for(ProductVO vo: myObject){
-                    vo.byteFromURL();
-                }
-
+//            for(UserVO vo: myObject){
+//                vo.byteFromURL();
+//            }
                 //intent를 통해 activity에 전달
                 Intent i = new Intent(getApplicationContext(), RegisterActivity.class);
                 i.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
@@ -70,7 +69,7 @@ public class RegisterService extends Service {
                 //컴포넌트간 객체전달 마셜링 작업필요
                 //parcelable interface를 구현한 객체를 붙이기 위해서 method를 putParcelableArrayListExtra로 교체
                 //i.putExtra("resultData",myObject);
-                i.putParcelableArrayListExtra("resultData",myObject);
+                //i.putParcelableArrayListExtra("resultData",myObject);
                 startActivity(i);
 
             }catch (Exception e){

@@ -17,11 +17,12 @@ import java.io.InputStreamReader;
 import java.net.HttpURLConnection;
 import java.net.URL;
 import java.util.ArrayList;
+import java.util.List;
 import java.util.Map;
 
 public class LoginService extends Service {
 
-    // http://localhost:8080/automarket/api/login.do?email=test07@gmail.com
+    private String api_url;
 
     class LoginRunnable implements Runnable {
 
@@ -36,14 +37,14 @@ public class LoginService extends Service {
         @Override
     public void run() {
 
+        // http://localhost:8080/automarket/api/login.do?email=test07@gmail.com
         // String url = "http://localhost:8080/automarket/api/login.do?email=" + useremail + password ;
-        String url = "http://70.12.115.56:8080/automarket/api/login.do?email=" + useremail + password ;
+        String url = api_url + "/api/login.do?email=" + useremail + password ;
 
-        try{
+        try {
             URL urlObj = new URL(url);
             HttpURLConnection con = (HttpURLConnection) urlObj.openConnection();
             con.setRequestMethod("GET");
-            //con.setRequestProperty("Authorization","KakaoAK "+mykey);
 
             //기본적으로 stream은 bufferedReader형태로 생성
             BufferedReader br = new BufferedReader(new InputStreamReader(con.getInputStream()));
@@ -56,9 +57,10 @@ public class LoginService extends Service {
 
             //jackson library를 이용하여 json데이터 처리
             ObjectMapper mapper = new ObjectMapper();
-            Map<String, Object> map = mapper.readValue(sb.toString(), new TypeReference<Map<String,Object>>() {});
-            Object obj = map.get("documents");
-            String resultJsonData = mapper.writeValueAsString(obj);
+            ArrayList<Map<String, Object>> maplist = mapper.readValue(sb.toString(), new TypeReference<List<Map<String,Object>>>() {});
+            //ArrayList<ProductVO> maplist = mapper.readValue(sb.toString(), new TypeReference<List<ProductVO>>() {});
+
+            String resultJsonData = mapper.writeValueAsString(maplist);
 
             Log.i("automarket_app","resultJsonData>>"+resultJsonData);
             ArrayList<UserVO> myObject = mapper.readValue(resultJsonData,new TypeReference<ArrayList<UserVO>>(){});
@@ -89,21 +91,42 @@ public class LoginService extends Service {
     @Nullable
     @Override
     public IBinder onBind(Intent intent) {
-        return null;
+
+        throw new UnsupportedOperationException("Not yet implemented");
     }
 
     @Override
     public void onCreate() {
+        //서비스 객체가 만들어지는 시점에 한번 호출
+        //사용할 resource를 준비하는 과정
         super.onCreate();
+        Log.i("automarket_app", "onCreate 호출");
     }
 
     @Override
     public int onStartCommand(Intent intent, int flags, int startId) {
+        // onCreate()후에 자동적으로 호출되며
+        // startService()에 의해서 호출된다.!!
+        // 실제 로직처리는 onStartCommand()에서 진행
+        Log.i("automarket_app","onStartCommand 호출");
+        // 전달된 키워드를 이용해서 외부 네트워크 접속을 위한
+        // Thread를 하나 생성해야 한다.
+        String keyword = intent.getExtras().getString("useremail");
+        String keyword1 = intent.getExtras().getString("password");
+        api_url = intent.getExtras().getString("api_url");
+        // Thread를 만들기 위한 Runnable 객체부터 생성
+        LoginRunnable runnable = new LoginRunnable(keyword,keyword1);
+        Thread t = new Thread(runnable);
+        t.start();
+
         return super.onStartCommand(intent, flags, startId);
     }
 
     @Override
     public void onDestroy() {
+        //서비스 객체가 메모리상에서 삭제될때 한번 호출
+        //사용한 리소스를 정리하는 과정
+        Log.i("automarket_app","onDestroy 호출");
         super.onDestroy();
     }
 }

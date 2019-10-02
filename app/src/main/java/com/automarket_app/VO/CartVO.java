@@ -3,9 +3,13 @@ package com.automarket_app.VO;
 import android.util.Log;
 
 import com.automarket_app.util.Helper;
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 
 import java.util.Arrays;
 
+// 장바구니
+
+@JsonIgnoreProperties(ignoreUnknown = true)
 public class CartVO {
 
     private String imgpath; // 상품이미지
