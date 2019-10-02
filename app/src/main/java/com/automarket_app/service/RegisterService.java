@@ -103,7 +103,7 @@ public class RegisterService extends Service {
         Log.i("automarket_app","onStartCommand 호출됬어요!!!");
         // 전달된 키워드를 이용해서 외부 네트워크 접속을 위한
         // Thread를 하나 생성해야 한다.
-        //String keyword = intent.getExtras().getString("searchKeyword");
+        // String keyword = intent.getExtras().getString("searchKeyword");
         // Thread를 만들기 위한 Runnable 객체부터 생성
         api_url = intent.getExtras().getString("api_url");
         RegisterRunnable runnable = new RegisterRunnable();

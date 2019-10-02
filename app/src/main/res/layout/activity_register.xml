@@ -134,7 +134,7 @@
             android:layout_height="wrap_content"
             android:inputType="textPassword"
             android:ems="10"
-            android:hint="@string/Password_hint"
+            android:hint="@string/RepeatPassword_hint_"
             android:id="@+id/etRepeatPassword_register"
             android:textColor="@color/colorBlack"
             android:layout_marginRight="10dp"/>

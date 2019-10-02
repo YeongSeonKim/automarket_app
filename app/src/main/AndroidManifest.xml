@@ -5,6 +5,7 @@
     <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
     <uses-permission android:name="android.permission.INTERNET" />
 
+    <!-- 타이틀바 없애기 -->
     <application
         android:allowBackup="true"
         android:fullBackupContent="true"
@@ -14,7 +15,7 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.AppCompat.NoActionBar"
         android:usesCleartextTraffic="true">
-        <activity android:name=".OrderPopupActivity"></activity>
+        <activity android:name=".OrderPopupActivity"/>
 
         <service
             android:name=".service.ProductService"
@@ -24,7 +25,7 @@
         <activity android:name=".CartActivity" />
         <activity android:name=".InformationActivity" />
         <activity android:name=".CashActivity" />
-        <activity android:name=".OrderActivity" /> <!-- 타이틀바 없애기 -->
+        <activity android:name=".OrderActivity" />
         <activity android:name=".IntroActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
@@ -39,7 +40,10 @@
 
         <meta-data
             android:name="api_url"
-            android:value="http://70.12.115.69:8082/automarket" />
+            android:value="http://70.12.115.56:8080/automarket"/>
+        <!--<meta-data
+            android:name="api_url"
+            android:value="http://70.12.115.69:8082/automarket" />-->
         <meta-data
             android:name="api_key"
             android:value="" />
