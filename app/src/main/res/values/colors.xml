@@ -7,6 +7,8 @@
     <color name="colorBlack">#000000</color>
     <color name="colorSky">#D9E5FF</color>
     <color name="colorGray">#666666</color>
+    <color name="colorLightGray">#EAEAEA</color>
+    <color name="colorWhite">#FFFFFF</color>
     <color name="et_bg">#D5D5D5</color>
     <color name="bg_color">#FFFFFF</color>
     <color name="btn_bg">#00FFFFFF</color>
