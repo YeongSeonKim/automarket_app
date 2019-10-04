@@ -18,9 +18,6 @@ import java.util.HashMap;
 public class RegisterActivity extends AppCompatActivity {
 
     String api_url ="";
-    private String UserEmail;
-    private String name;
-    private String Pwd;
     private AlertDialog dialog;
     private boolean validate = false;
 
@@ -46,8 +43,6 @@ public class RegisterActivity extends AppCompatActivity {
         Button btnDone = (Button)findViewById(R.id.btnDone);
         Button btnCancel = (Button)findViewById(R.id.btnCancel);
 
-
-
         // 이메일 중복체크버튼
         btn_email_check.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -68,6 +63,8 @@ public class RegisterActivity extends AppCompatActivity {
             }
         });
 
+
+
         // 가입버튼
         btnDone.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -77,15 +74,37 @@ public class RegisterActivity extends AppCompatActivity {
                 String UserEmail = etEmail_register.getText().toString();
                 String name = etName_register.getText().toString();
                 String Pwd = etPassword_register.getText().toString();
+                String RepeatPwd = etRepeatPassword_register.getText().toString();
                 //String DeviceId = ;
 
-                String result =  UserEmail + name + Pwd;
-                HashMap<String,String> map  = new HashMap<String,String>();
+                // Email 중복체크 했는지 확인
+//                if (!validate){
+//                    AlertDialog.Builder builder = new AlertDialog.Builder(RegisterActivity.this);
+//                    dialog = builder.setMessage("First Check Email please")
+//                            .setNegativeButton("OK", null)
+//                            .create();
+//                    dialog.show();
+//                    return;
+//                }
+
+                // 입력 칸 한칸이라도 비어있을 경우
+                if(UserEmail.equals("")||name.equals("")||Pwd.equals("")||RepeatPwd.equals("")){
+                    AlertDialog.Builder builder = new AlertDialog.Builder(RegisterActivity.this);
+                    dialog = builder.setMessage("빈칸을 채워서 입력해주세요!!!")
+                            .setNegativeButton("OK", null)
+                            .create();
+                    dialog.show();
+                    return;
+                }
+
+                // 비밀번호 입력이랑 비밀번호 재입력 한게 같은지 확인
 
 
+                String result =  UserEmail + "\n" + name + "\n" + Pwd + "\n" + RepeatPwd;
+                //HashMap<String,String> map  = new HashMap<String,String>();
                 Log.i("automarket_app_register",result);
 
-
+                // 회원가입 시작
                 //Intent intent = new Intent(getApplicationContext(), LoginActivity.class);
                 //startActivity(intent);
                 Intent intent = new Intent();

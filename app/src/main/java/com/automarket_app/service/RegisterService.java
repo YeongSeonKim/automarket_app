@@ -17,6 +17,7 @@ import java.io.InputStreamReader;
 import java.net.HttpURLConnection;
 import java.net.URL;
 import java.util.ArrayList;
+import java.util.List;
 import java.util.Map;
 
 public class RegisterService extends Service {
@@ -55,16 +56,13 @@ public class RegisterService extends Service {
 
                 //jackson library를 이용하여 json데이터 처리
                 ObjectMapper mapper = new ObjectMapper();
-                Map<String, Object> map = mapper.readValue(sb.toString(), new TypeReference<Map<String,Object>>() {});
-                Object obj = map.get("documents");
-                String resultJsonData = mapper.writeValueAsString(obj);
+                ArrayList<UserVO> maplist = mapper.readValue(sb.toString(), new TypeReference<List<UserVO>>() {});
 
-                Log.i("automarket_app_register","resultJsonData>>"+resultJsonData);
-                ArrayList<UserVO> myObject = mapper.readValue(resultJsonData,new TypeReference<ArrayList<UserVO>>(){});
+                for(UserVO vo: maplist){
+                    String result = vo.getEmail() + vo.getName() + vo.getPwd();
 
-//            for(UserVO vo: myObject){
-//                vo.byteFromURL();
-//            }
+                    Log.i("automarket_app_register", result);
+                }
                 //intent를 통해 activity에 전달
                 Intent i = new Intent(getApplicationContext(), RegisterActivity.class);
                 i.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
