@@ -10,6 +10,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseAdapter;
+import android.widget.Button;
 import android.widget.EditText;
 import android.widget.GridView;
 import android.widget.ImageView;
@@ -95,10 +96,39 @@ public class ProductAdapter extends BaseAdapter {
                 TextView pop_txtProdNm = (TextView)popupview.findViewById(R.id.pop_txtProdNm);
                 TextView pop_txtProdPrice = (TextView)popupview.findViewById(R.id.pop_txtProdPrice);
                 ImageView pop_txtProdImg = (ImageView)popupview.findViewById(R.id.pop_txtProdImg);
+                Button pop_btnMinus = (Button)popupview.findViewById(R.id.pop_btnMinus);
+                Button pop_btnPlus = (Button)popupview.findViewById(R.id.pop_btnPlus);
+                Button pop_btnAddCart = (Button)popupview.findViewById(R.id.pop_btnAddCart);
+                final EditText pop_edtProdCnt = (EditText)popupview.findViewById(R.id.pop_edtProdCnt);
 
                 et_selid.setText(vo.getProdid());
                 pop_txtProdNm.setText(vo.getProdnm());
                 pop_txtProdPrice.setText(String.valueOf(vo.getProdprice()));
+
+                pop_btnMinus.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View view) {
+                        System.out.println("pop_btnMinus22");
+                        Integer cnt = Integer.parseInt(pop_edtProdCnt.getText().toString());
+                        cnt -= 1;
+                        pop_edtProdCnt.setText(String.valueOf(cnt));
+                    }
+                });
+                pop_btnPlus.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View view) {
+                        System.out.println("pop_btnPlus22");
+                        Integer cnt = Integer.parseInt(pop_edtProdCnt.getText().toString());
+                        cnt += 1;
+                        pop_edtProdCnt.setText(String.valueOf(cnt));
+                    }
+                });
+                pop_btnAddCart.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View view) {
+
+                    }
+                });
 
                 if(vo.getThumbnailimg() !=null){
                     Bitmap bitmap = BitmapFactory.decodeByteArray(vo.getThumbnailimg(), 0, vo.getThumbnailimg().length);

@@ -80,18 +80,16 @@
                 android:text="@string/plus"/>
 
         </LinearLayout>
-
-
-        <TextView
+        <Button
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_centerInParent="true"
-            android:layout_margin="25dp"
-            android:textSize="22sp"
-            android:id="@+id/tv_selid"/>
+            android:id="@+id/pop_btnAddCart"
+            android:text="@string/card_add"/>
+
         <EditText
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:visibility="visible"
             android:id="@+id/et_selid"/>
     </LinearLayout>
 

@@ -24,7 +24,6 @@ import java.util.ArrayList;
 import java.util.List;
 
  public class OrderActivity extends AppCompatActivity {
-        //RecyclerView recyclerView;
         GridView gridView;
         List<ProductVO> productList=new ArrayList<ProductVO>();
         String api_url ="";
