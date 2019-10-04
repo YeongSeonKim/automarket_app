@@ -10,4 +10,5 @@
     <color name="et_bg">#D5D5D5</color>
     <color name="bg_color">#FFFFFF</color>
     <color name="btn_bg">#00FFFFFF</color>
+    <color name="popup_bg">#D5D5D5</color>
 </resources>

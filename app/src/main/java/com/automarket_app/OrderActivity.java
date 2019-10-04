@@ -1,5 +1,6 @@
 package com.automarket_app;
 
+import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.content.ComponentName;
@@ -124,9 +125,12 @@ import java.util.List;
              adapter.addItem(vo);
          }
 
-
          gridView.setAdapter(adapter);
+     }
 
+     @Override
+     protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
+         super.onActivityResult(requestCode, resultCode, data);
 
      }
-    }
+ }
