@@ -98,7 +98,14 @@ public class RegisterActivity extends AppCompatActivity {
                     return;
                 }
 
-
+                // 비밀번호 입력이랑 비밀번호 재입력 한게 같은지 확인
+                if (Pwd.equals(RepeatPwd)){
+                    etPassword_register.setTextColor(getColor(R.color.colorGreen));
+                    etRepeatPassword_register.setTextColor(getColor(R.color.colorGreen));
+                } else {
+                    etPassword_register.setTextColor(getColor(R.color.colorRed));
+                    etRepeatPassword_register.setTextColor(getColor(R.color.colorRed));
+                }
 
                 String result =  UserEmail + "\n" + name + "\n" + Pwd + "\n" + RepeatPwd;
                 //HashMap<String,String> map  = new HashMap<String,String>();
