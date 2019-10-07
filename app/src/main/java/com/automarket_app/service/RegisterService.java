@@ -25,7 +25,6 @@ public class RegisterService extends Service {
     // post로 넘기기
 
     private String api_url;
-    private Map<String,String> parameters;
 
     class RegisterRunnable implements Runnable {
 

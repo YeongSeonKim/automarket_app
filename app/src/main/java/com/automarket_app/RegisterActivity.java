@@ -5,6 +5,7 @@ import androidx.appcompat.app.AppCompatActivity;
 import android.app.AlertDialog;
 import android.content.ComponentName;
 import android.content.Intent;
+import android.graphics.Color;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
@@ -97,7 +98,6 @@ public class RegisterActivity extends AppCompatActivity {
                     return;
                 }
 
-                // 비밀번호 입력이랑 비밀번호 재입력 한게 같은지 확인
 
 
                 String result =  UserEmail + "\n" + name + "\n" + Pwd + "\n" + RepeatPwd;
