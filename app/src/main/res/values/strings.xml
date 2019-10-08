@@ -20,6 +20,7 @@
 
     <!-- 주문하기 -->
     <string name="order">주문하기</string>
+    <string name="proddetail">상품상세</string>
 
     <!-- 캐시충전하기 -->
     <string name="cash">캐시충전</string>
@@ -50,6 +51,8 @@
     <string name="prod_name">상품이름</string>
     <string name="card_add">장바구니 담기</string>
 
+    <!--공통-->
+    <string name="card_close">닫기</string>
 
 
 </resources>

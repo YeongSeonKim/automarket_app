@@ -2,95 +2,151 @@
 <LinearLayout
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:orientation="horizontal"
+    android:orientation="vertical"
     xmlns:android="http://schemas.android.com/apk/res/android"
-    android:theme="@style/PopupTheme">
-
-    <ImageView
-        android:layout_width="80dp"
-        android:layout_height="80dp"
-        android:id="@+id/pop_txtProdImg" />
+    android:background="@color/bg_color"
+    android:id="@+id/linearLayout_order">
 
     <LinearLayout
-        android:orientation="vertical"
-        android:layout_width="wrap_content"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:weightSum="8"
+        android:orientation="horizontal">
+
+        <ImageButton
+            android:id="@+id/btnBack"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:layout_weight="2"
+            android:background="@color/btn_bg" />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/proddetail"
+            android:textSize="30sp"
+            android:textColor="@color/colorBlack"
+            android:textAlignment="center"
+            android:layout_marginTop="10dp"
+            android:layout_marginBottom="10dp"
+            android:layout_weight="4"/>
+
+        <ImageButton
+            android:id="@+id/btnClose"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:background="@color/btn_bg"
+            android:src="@drawable/cancel"
+            android:layout_weight="2"/>
+
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center_vertical"
         android:layout_marginLeft="10dp"
-        android:layout_gravity="center_vertical">
+        android:orientation="vertical">
+
 
         <LinearLayout
             android:layout_width="match_parent"
-            android:layout_height="wrap_content">
+            android:layout_height="wrap_content"
+            android:orientation="horizontal">
+            <ImageView
+                android:id="@+id/pop_txtProdImg"
+                android:layout_width="120dp"
+                android:layout_height="120dp" />
 
-            <TextView
+            <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:text="@string/prod_name"
-                android:id="@+id/pop_txtProdNm"
-                android:textSize="24sp"
-                android:textColor="@color/colorBlack" />
+                android:orientation="vertical">
+                <TextView
+                    android:id="@+id/pop_txtProdNm"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="@string/prod_name"
+                    android:textColor="@color/colorBlack"
+                    android:textSize="24sp" />
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal"
+                    android:layout_marginTop="5dp">
+
+                    <TextView
+                        android:id="@+id/pop_txtProdPrice"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="@string/prod_price"
+                        android:textColor="@color/colorGray"
+                        android:textSize="20sp" />
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginLeft="5dp"
+                        android:text="@string/cash_won"
+                        android:textColor="@color/colorGray"
+                        android:textSize="20sp" />
+
+                </LinearLayout>
+                <LinearLayout
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="5dp"
+                    android:gravity="center"
+                    android:orientation="horizontal">
+
+                    <Button
+                        android:id="@+id/pop_btnMinus"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="@string/minus" />
+
+                    <EditText
+                        android:id="@+id/pop_edtProdCnt"
+                        android:layout_width="25dp"
+                        android:layout_height="wrap_content"
+                        android:textColor="@color/colorBlack"
+                        android:text="1" />
+
+                    <Button
+                        android:id="@+id/pop_btnPlus"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="@string/plus" />
+
+                </LinearLayout>
+
+            </LinearLayout>
+
         </LinearLayout>
+
+
 
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginTop="5dp">
+            android:orientation="horizontal">
 
-            <TextView
-                android:layout_width="wrap_content"
+            <Button
+                android:id="@+id/pop_btnAddCart"
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:text="@string/prod_price"
-                android:id="@+id/pop_txtProdPrice"
-                android:textSize="20sp"
-                android:textColor="@color/colorGray" />
+                android:text="@string/card_add" />
 
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="@string/cash_won"
-                android:textSize="20sp"
-                android:layout_marginLeft="5dp"
-                android:textColor="@color/colorGray"/>
 
         </LinearLayout>
 
-        <LinearLayout
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:orientation="horizontal"
-            android:gravity="center"
-            android:layout_marginTop="5dp">
-
-            <Button
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:id="@+id/pop_btnMinus"
-                android:text="@string/minus"/>
-
-            <EditText
-                android:layout_width="25dp"
-                android:layout_height="wrap_content"
-                android:id="@+id/pop_edtProdCnt"
-                android:text="1"/>
-
-            <Button
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:id="@+id/pop_btnPlus"
-                android:text="@string/plus"/>
-
-        </LinearLayout>
-        <Button
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:id="@+id/pop_btnAddCart"
-            android:text="@string/card_add"/>
 
         <EditText
+            android:id="@+id/et_selid"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:visibility="visible"
-            android:id="@+id/et_selid"/>
+            android:layout_height="wrap_content" />
     </LinearLayout>
 
 </LinearLayout>

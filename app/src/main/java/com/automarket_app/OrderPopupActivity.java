@@ -2,10 +2,18 @@ package com.automarket_app;
 
 import androidx.appcompat.app.AppCompatActivity;
 
+import android.content.Intent;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.ImageButton;
+import android.widget.ImageView;
+import android.widget.TextView;
+
+import com.automarket_app.VO.ProductVO;
 
 public class OrderPopupActivity extends AppCompatActivity {
 
@@ -13,6 +21,59 @@ public class OrderPopupActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_order_popup);
+
+        Intent i = getIntent();
+        ProductVO vo = (ProductVO)i.getExtras().get("selData");
+
+        ImageButton btnClose = (ImageButton)findViewById(R.id.btnClose);
+        TextView pop_txtProdNm = (TextView)findViewById(R.id.pop_txtProdNm);
+        TextView pop_txtProdPrice = (TextView)findViewById(R.id.pop_txtProdPrice);
+        ImageView pop_txtProdImg = (ImageView)findViewById(R.id.pop_txtProdImg);
+        Button pop_btnMinus = (Button)findViewById(R.id.pop_btnMinus);
+        Button pop_btnPlus = (Button)findViewById(R.id.pop_btnPlus);
+        Button pop_btnAddCart = (Button)findViewById(R.id.pop_btnAddCart);
+        final EditText pop_edtProdCnt = (EditText)findViewById(R.id.pop_edtProdCnt);
+
+        pop_txtProdNm.setText(vo.getProdnm());
+        pop_txtProdPrice.setText(String.valueOf(vo.getProdprice()));
+
+        btnClose.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                finish();
+            }
+        });
+        pop_btnMinus.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                System.out.println("pop_btnMinus22");
+                Integer cnt = Integer.parseInt(pop_edtProdCnt.getText().toString());
+                cnt -= 1;
+                pop_edtProdCnt.setText(String.valueOf(cnt));
+            }
+        });
+        pop_btnPlus.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                System.out.println("pop_btnPlus22");
+                Integer cnt = Integer.parseInt(pop_edtProdCnt.getText().toString());
+                cnt += 1;
+                pop_edtProdCnt.setText(String.valueOf(cnt));
+            }
+        });
+        pop_btnAddCart.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                //장바구니 담기
+
+            }
+        });
+
+        if(vo.getThumbnailimg() !=null){
+            Bitmap bitmap = BitmapFactory.decodeByteArray(vo.getThumbnailimg(), 0, vo.getThumbnailimg().length);
+            pop_txtProdImg.setImageBitmap(bitmap);
+        }
+
 
     }
 }

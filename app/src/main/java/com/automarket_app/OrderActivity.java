@@ -9,6 +9,7 @@ import android.os.Bundle;
 import android.util.Log;
 import android.view.Gravity;
 import android.view.View;
+import android.widget.AdapterView;
 import android.widget.GridView;
 import android.widget.ImageButton;
 import android.widget.LinearLayout;
@@ -112,7 +113,7 @@ import java.util.List;
      protected void onNewIntent(Intent intent) {
          super.onNewIntent(intent);
          Log.i("automarket_app","데이터가 Activity에 도달");
-         ArrayList<ProductVO> productList = intent.getParcelableArrayListExtra("resultData");
+         final ArrayList<ProductVO> productList = intent.getParcelableArrayListExtra("resultData");
 
          gridView = (GridView) findViewById(R.id.griview);
          ProductAdapter adapter = new ProductAdapter();
@@ -125,6 +126,24 @@ import java.util.List;
          }
 
          gridView.setAdapter(adapter);
+
+         gridView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+             @Override
+             public void onItemClick(AdapterView<?> parent, View v,
+                                     int position, long id) {
+
+                 // DO something
+                //System.out.println("gridview click!!!");
+                 Intent intent = new Intent();
+                 ComponentName cname=new ComponentName("com.automarket_app","com.automarket_app.OrderPopupActivity");
+                 intent.setComponent(cname);
+                 //intent.putExtra("sendMsg",productList.get(position).getProdid());
+                 intent.putExtra("selData",productList.get(position));
+                 startActivity(intent);
+
+             }
+         });
+
      }
 
      @Override

@@ -84,10 +84,10 @@ public class ProductAdapter extends BaseAdapter {
         final PopupWindow pw = new PopupWindow(
                 inflater.inflate(R.layout.activity_order_popup, null, false),
                 LinearLayout.LayoutParams.MATCH_PARENT,
-                450,
+                550,
                 true);
 
-        final View popupview = pw.getContentView();
+        /*final View popupview = pw.getContentView();
         view.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -142,7 +142,7 @@ public class ProductAdapter extends BaseAdapter {
                     pw.dismiss();
 
             }
-        });
+        });*/
 
         return view;
     }
