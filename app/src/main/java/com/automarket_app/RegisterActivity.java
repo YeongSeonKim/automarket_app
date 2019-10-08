@@ -101,9 +101,9 @@ public class RegisterActivity extends AppCompatActivity {
             public void onClick(View view) {
 
                 // 입력 회원정보 가져오기
-                String UserEmail = etEmail_register.getText().toString();
+                String email = etEmail_register.getText().toString();
                 String name = etName_register.getText().toString();
-                String Pwd = etPassword_register.getText().toString();
+                String pwd = etPassword_register.getText().toString();
                 String RepeatPwd = etRepeatPassword_register.getText().toString();
                 //String DeviceId = ;
 
@@ -118,7 +118,7 @@ public class RegisterActivity extends AppCompatActivity {
                 }
 
                 // 입력 칸 한칸이라도 비어있을 경우
-                if(UserEmail.equals("")||name.equals("")||Pwd.equals("")||RepeatPwd.equals("")){
+                if(email.equals("")||name.equals("")||pwd.equals("")||RepeatPwd.equals("")){
                     AlertDialog.Builder builder = new AlertDialog.Builder(RegisterActivity.this);
                     dialog = builder.setMessage("빈칸을 채워서 입력해주세요!!!")
                             .setNegativeButton("OK", null)
@@ -129,7 +129,7 @@ public class RegisterActivity extends AppCompatActivity {
 
 
 
-                String result =  UserEmail + "\n" + name + "\n" + Pwd + "\n" + RepeatPwd;
+                String result =  email + "\n" + name + "\n" + pwd + "\n" + RepeatPwd;
                 //HashMap<String,String> map  = new HashMap<String,String>();
                 Log.i("automarket_app_register",result);
 

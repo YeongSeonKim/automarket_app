@@ -18,7 +18,7 @@ import java.net.HttpURLConnection;
 import java.net.URL;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Map;
+
 
 public class LoginService extends Service {
 
@@ -57,17 +57,12 @@ public class LoginService extends Service {
 
             //jackson library를 이용하여 json데이터 처리
             ObjectMapper mapper = new ObjectMapper();
-            ArrayList<Map<String, Object>> maplist = mapper.readValue(sb.toString(), new TypeReference<List<Map<String,Object>>>() {});
-            //ArrayList<ProductVO> maplist = mapper.readValue(sb.toString(), new TypeReference<List<ProductVO>>() {});
+            ArrayList<UserVO> maplist = mapper.readValue(sb.toString(), new TypeReference<List<UserVO>>() {});
 
-            String resultJsonData = mapper.writeValueAsString(maplist);
-
-            Log.i("automarket_app","resultJsonData>>"+resultJsonData);
-            ArrayList<UserVO> myObject = mapper.readValue(resultJsonData,new TypeReference<ArrayList<UserVO>>(){});
-
-//            for(UserVO vo: myObject){
-//                vo.byteFromURL();
-//            }
+            for(UserVO vo: maplist){
+                String email = vo.getEmail();
+                String pwd = vo.getPwd();
+            }
 
             //intent를 통해 activity에 전달
             Intent i = new Intent(getApplicationContext(), LoginActivity.class);

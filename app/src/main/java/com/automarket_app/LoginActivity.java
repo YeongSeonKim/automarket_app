@@ -2,18 +2,23 @@ package com.automarket_app;
 
 import androidx.appcompat.app.AppCompatActivity;
 
+import android.app.AlertDialog;
 import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.Toast;
 
+import com.automarket_app.VO.UserListVO;
+import com.automarket_app.VO.UserVO;
 import com.automarket_app.util.Helper;
 
 public class LoginActivity extends AppCompatActivity {
 
     String api_url ="";
+    private AlertDialog dialog;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -48,8 +53,21 @@ public class LoginActivity extends AppCompatActivity {
             @Override
             public void onClick(View view) {
 
-                String UserEmail = edEmail_login.getText().toString();
-                String Pw = edPassword_login.getText().toString();
+                String email = edEmail_login.getText().toString();
+                String pwd = edPassword_login.getText().toString();
+
+
+                // email이랑 pwd가 db에있는 정보와 같은지 확인
+                // 같으면 로그인되고 안되면 다시 입력하라고 알려주기
+                if (email.equals("")||pwd.equals("")){
+                    AlertDialog.Builder builder = new AlertDialog.Builder(LoginActivity.this);
+                    dialog = builder.setMessage("입력하신 정보가 일치하지 않습니다. 다시 입력해 주세요!!")
+                            .setNegativeButton("OK", null)
+                            .create();
+                    dialog.show();
+                    return;
+                    //Toast.makeText(getApplicationContext(),"입력하신정보가 틀립니다.다시입력해주세요",Toast.LENGTH_SHORT).show();
+                }
 
 
 
