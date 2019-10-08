@@ -5,8 +5,9 @@ import androidx.appcompat.app.AppCompatActivity;
 import android.app.AlertDialog;
 import android.content.ComponentName;
 import android.content.Intent;
-import android.graphics.Color;
 import android.os.Bundle;
+import android.text.Editable;
+import android.text.TextWatcher;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
@@ -14,7 +15,6 @@ import android.widget.EditText;
 
 import com.automarket_app.util.Helper;
 
-import java.util.HashMap;
 
 public class RegisterActivity extends AppCompatActivity {
 
@@ -44,7 +44,8 @@ public class RegisterActivity extends AppCompatActivity {
         Button btnDone = (Button)findViewById(R.id.btnDone);
         Button btnCancel = (Button)findViewById(R.id.btnCancel);
 
-        // 이메일 중복체크버튼
+
+        // 1. 이메일 중복체크버튼
         btn_email_check.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -55,7 +56,7 @@ public class RegisterActivity extends AppCompatActivity {
                 //ID 값을 입력하지 않았다면
                 if(UserEmail.equals("")){
                     AlertDialog.Builder builder = new AlertDialog.Builder(RegisterActivity.this);
-                    dialog = builder.setMessage("Email is empty")
+                    dialog = builder.setMessage("이메일 입력칸이 비었습니다.")
                             .setPositiveButton("OK", null)
                             .create();
                     dialog.show();
@@ -64,6 +65,34 @@ public class RegisterActivity extends AppCompatActivity {
             }
         });
 
+
+        // 2. 비밀번호 일치 검사 ( 비밀번호 입력이랑 비밀번호 재입력 한게 같은지 확인 )
+        etRepeatPassword_register.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+
+            }
+
+            @Override
+            public void onTextChanged(CharSequence s, int start, int before, int count) {
+                String Pwd = etPassword_register.getText().toString();
+                String RepeatPwd = etRepeatPassword_register.getText().toString();
+
+                // 비밀번호 입력이랑 비밀번호 재입력 한게 같은지 확인
+                if (Pwd.equals(RepeatPwd)) {
+                    etPassword_register.setTextColor(getColor(R.color.colorGreen));
+                    etRepeatPassword_register.setTextColor(getColor(R.color.colorGreen));
+                } else {
+                    etPassword_register.setTextColor(getColor(R.color.colorRed));
+                    etRepeatPassword_register.setTextColor(getColor(R.color.colorRed));
+                }
+            }
+
+            @Override
+            public void afterTextChanged(Editable s) {
+
+            }
+        });
 
 
         // 가입버튼
@@ -79,14 +108,14 @@ public class RegisterActivity extends AppCompatActivity {
                 //String DeviceId = ;
 
                 // Email 중복체크 했는지 확인
-//                if (!validate){
-//                    AlertDialog.Builder builder = new AlertDialog.Builder(RegisterActivity.this);
-//                    dialog = builder.setMessage("First Check Email please")
-//                            .setNegativeButton("OK", null)
-//                            .create();
-//                    dialog.show();
-//                    return;
-//                }
+                if (!validate){
+                    AlertDialog.Builder builder = new AlertDialog.Builder(RegisterActivity.this);
+                    dialog = builder.setMessage("이메일 중복체크를 해주세용~~")
+                            .setNegativeButton("OK", null)
+                            .create();
+                    dialog.show();
+                    return;
+                }
 
                 // 입력 칸 한칸이라도 비어있을 경우
                 if(UserEmail.equals("")||name.equals("")||Pwd.equals("")||RepeatPwd.equals("")){
@@ -98,14 +127,7 @@ public class RegisterActivity extends AppCompatActivity {
                     return;
                 }
 
-                // 비밀번호 입력이랑 비밀번호 재입력 한게 같은지 확인
-                if (Pwd.equals(RepeatPwd)){
-                    etPassword_register.setTextColor(getColor(R.color.colorGreen));
-                    etRepeatPassword_register.setTextColor(getColor(R.color.colorGreen));
-                } else {
-                    etPassword_register.setTextColor(getColor(R.color.colorRed));
-                    etRepeatPassword_register.setTextColor(getColor(R.color.colorRed));
-                }
+
 
                 String result =  UserEmail + "\n" + name + "\n" + Pwd + "\n" + RepeatPwd;
                 //HashMap<String,String> map  = new HashMap<String,String>();
@@ -128,13 +150,14 @@ public class RegisterActivity extends AppCompatActivity {
         btnCancel.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Intent intent = new Intent(getApplicationContext(), LoginActivity.class);
-
-                intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
-                intent.addFlags(Intent.FLAG_ACTIVITY_SINGLE_TOP);
-                intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-
-                startActivity(intent);
+//                Intent intent = new Intent(getApplicationContext(), LoginActivity.class);
+//
+//                intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+//                intent.addFlags(Intent.FLAG_ACTIVITY_SINGLE_TOP);
+//                intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+//
+//                startActivity(intent);
+                finish();
             }
         });
     }
