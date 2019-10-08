@@ -14,6 +14,7 @@ import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.automarket_app.VO.ProductVO;
 import com.automarket_app.database.MySqliteHelper;
@@ -82,15 +83,21 @@ public class OrderPopupActivity extends AppCompatActivity {
                 //helper를 통해서 database에 대한 Handle을 얻어올수 있음
                 db = helper.getWritableDatabase();
 
-                db.execSQL("INSERT INTO cart VALUES (?,?,?,?) ",
-                        new Object[]{vo.getProdid(),vo.getProdcnt(),vo.getProdnm(),vo.getProdprice()});
 
-                Cursor c = db.rawQuery("select * from cart",null);
-                String result = "";
-                System.out.println("=====================");
+                Cursor c = db.rawQuery("select * from cart where prodid=? ", new String[]{vo.getProdid()});
+
+                if(c.getCount()==0){
+                    db.execSQL("INSERT INTO cart VALUES (?,?,?,?) ",
+                            new Object[]{vo.getProdid(),pop_edtProdCnt.getText().toString(),vo.getProdnm(),vo.getProdprice()});
+                }else{
+                    db.execSQL("UPDATE cart SET prodcnt=? where prodid=?",new Object[]{pop_edtProdCnt.getText().toString(),vo.getProdid()});
+                }
+
                 while(c.moveToNext()){
                   System.out.println(c.getString(0)+"/"+c.getString(1));
                 }
+
+                Toast.makeText(OrderPopupActivity.this,"장바구니에 담겼습니다.",Toast.LENGTH_LONG).show();
 
             }
         });
