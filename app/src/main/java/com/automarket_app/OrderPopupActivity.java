@@ -14,6 +14,7 @@ import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.automarket_app.VO.ProductVO;
 import com.automarket_app.database.MySqliteHelper;
@@ -83,7 +84,6 @@ public class OrderPopupActivity extends AppCompatActivity {
                 db = helper.getWritableDatabase();
 
 
-
                 Cursor c = db.rawQuery("select * from cart where prodid=? ", new String[]{vo.getProdid()});
 
                 if(c.getCount()==0){
@@ -96,6 +96,8 @@ public class OrderPopupActivity extends AppCompatActivity {
                 while(c.moveToNext()){
                   System.out.println(c.getString(0)+"/"+c.getString(1));
                 }
+
+                Toast.makeText(OrderPopupActivity.this,"장바구니에 담겼습니다.",Toast.LENGTH_LONG).show();
 
             }
         });
