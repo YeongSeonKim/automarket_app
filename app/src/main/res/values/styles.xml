@@ -17,5 +17,6 @@
     <style name="PopupTheme">
         <item name="android:textColor">@color/colorBlack</item>
         <item name="android:background">@color/popup_bg</item>
+        <item name="android:textSize">20dp</item>
     </style>
 </resources>

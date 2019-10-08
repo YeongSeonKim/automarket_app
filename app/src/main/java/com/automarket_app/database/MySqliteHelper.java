@@ -19,12 +19,7 @@ public class MySqliteHelper extends SQLiteOpenHelper {
         // 일반적으로 초기 데이터베이스 세팅코드가 들어간다.
         // 테이블을 생성하고 초기데이터를 insert하는 작업.
         // execSQL() : resultset을 가져오지 않는 SQL구문을 실행.
-
-        sqLiteDatabase.execSQL("CREATE TABLE IF NOT EXISTS cart (prodName Text, prodPrice INTEGER);");
-
-        sqLiteDatabase.execSQL("INSERT INTO cart VALUES('사과', 1000);");
-        sqLiteDatabase.execSQL("INSERT INTO cart VALUES('딸기', 2000);");
-        sqLiteDatabase.execSQL("INSERT INTO cart VALUES('수박', 5000);");
+        sqLiteDatabase.execSQL("CREATE TABLE IF NOT EXISTS cart (prodId TEXT,prodCnt INTEGER, prodName Text, prodPrice INTEGER);");
 
         Log.i("DatabaseExam", "Helper의 onCreate() 호출!!");
 

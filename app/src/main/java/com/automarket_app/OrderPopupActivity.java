@@ -3,6 +3,8 @@ package com.automarket_app;
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.content.Intent;
+import android.database.Cursor;
+import android.database.sqlite.SQLiteDatabase;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.os.Bundle;
@@ -14,8 +16,10 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.automarket_app.VO.ProductVO;
+import com.automarket_app.database.MySqliteHelper;
 
 public class OrderPopupActivity extends AppCompatActivity {
+    private SQLiteDatabase db;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -23,7 +27,7 @@ public class OrderPopupActivity extends AppCompatActivity {
         setContentView(R.layout.activity_order_popup);
 
         Intent i = getIntent();
-        ProductVO vo = (ProductVO)i.getExtras().get("selData");
+        final ProductVO vo = (ProductVO)i.getExtras().get("selData");
 
         ImageButton btnClose = (ImageButton)findViewById(R.id.btnClose);
         TextView pop_txtProdNm = (TextView)findViewById(R.id.pop_txtProdNm);
@@ -37,6 +41,11 @@ public class OrderPopupActivity extends AppCompatActivity {
         pop_txtProdNm.setText(vo.getProdnm());
         pop_txtProdPrice.setText(String.valueOf(vo.getProdprice()));
 
+        if(vo.getThumbnailimg() !=null){
+            Bitmap bitmap = BitmapFactory.decodeByteArray(vo.getThumbnailimg(), 0, vo.getThumbnailimg().length);
+            pop_txtProdImg.setImageBitmap(bitmap);
+        }
+
         btnClose.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -48,8 +57,11 @@ public class OrderPopupActivity extends AppCompatActivity {
             public void onClick(View view) {
                 System.out.println("pop_btnMinus22");
                 Integer cnt = Integer.parseInt(pop_edtProdCnt.getText().toString());
-                cnt -= 1;
-                pop_edtProdCnt.setText(String.valueOf(cnt));
+                if(cnt>1){
+                    cnt -= 1;
+                    pop_edtProdCnt.setText(String.valueOf(cnt));
+                    vo.setProdcnt(cnt);
+                }
             }
         });
         pop_btnPlus.setOnClickListener(new View.OnClickListener() {
@@ -59,20 +71,29 @@ public class OrderPopupActivity extends AppCompatActivity {
                 Integer cnt = Integer.parseInt(pop_edtProdCnt.getText().toString());
                 cnt += 1;
                 pop_edtProdCnt.setText(String.valueOf(cnt));
+                vo.setProdcnt(cnt);
             }
         });
         pop_btnAddCart.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 //장바구니 담기
+                MySqliteHelper helper =new MySqliteHelper(OrderPopupActivity.this);
+                //helper를 통해서 database에 대한 Handle을 얻어올수 있음
+                db = helper.getWritableDatabase();
+
+                db.execSQL("INSERT INTO cart VALUES (?,?,?,?) ",
+                        new Object[]{vo.getProdid(),vo.getProdcnt(),vo.getProdnm(),vo.getProdprice()});
+
+                Cursor c = db.rawQuery("select * from cart",null);
+                String result = "";
+                System.out.println("=====================");
+                while(c.moveToNext()){
+                  System.out.println(c.getString(0)+"/"+c.getString(1));
+                }
 
             }
         });
-
-        if(vo.getThumbnailimg() !=null){
-            Bitmap bitmap = BitmapFactory.decodeByteArray(vo.getThumbnailimg(), 0, vo.getThumbnailimg().length);
-            pop_txtProdImg.setImageBitmap(bitmap);
-        }
 
 
     }
