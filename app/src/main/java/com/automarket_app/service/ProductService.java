@@ -54,7 +54,7 @@ public class ProductService extends Service {
                 ArrayList<ProductVO> maplist = mapper.readValue(sb.toString(), new TypeReference<List<ProductVO>>() {});
 
                 for(ProductVO vo: maplist){
-                    vo.byteFromURL();
+                    vo.byteFromURL(api_url);
                 }
 
                 //intent를 통해 activity에 전달

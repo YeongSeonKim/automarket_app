@@ -70,12 +70,12 @@ public class ProductVO implements Parcelable {
         return CREATOR;
     }
 
-    public  void byteFromURL(){
+    public  void byteFromURL(String apiurl){
         byte[] d= null;
         try{
 //            if(imgpath!=null)
 //                this.thumbnailimg = recoverImageFromUrl(imgpath);
-            this.thumbnailimg = recoverImageFromUrl("http://70.12.115.69:8082/automarket/upload/apple.jpg");
+            this.thumbnailimg = recoverImageFromUrl(apiurl+ "/upload/apple.jpg");
 
 
         }catch (Exception e){
