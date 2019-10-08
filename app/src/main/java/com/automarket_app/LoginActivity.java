@@ -22,8 +22,8 @@ public class LoginActivity extends AppCompatActivity {
 
         api_url = Helper.getMetaData(this, "api_url");
 
-        EditText edEmail_login = (EditText)findViewById(R.id.edEmail_login);
-        EditText edPassword_login = (EditText)findViewById(R.id.edPassword_login);
+        final EditText edEmail_login = (EditText)findViewById(R.id.edEmail_login);
+        final EditText edPassword_login = (EditText)findViewById(R.id.edPassword_login);
 
 
         Button btnRegister = (Button)findViewById(R.id.btnRegister);
@@ -47,6 +47,12 @@ public class LoginActivity extends AppCompatActivity {
         btnLogin.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+
+                String UserEmail = edEmail_login.getText().toString();
+                String Pw = edPassword_login.getText().toString();
+
+
+
                 Intent intent = new Intent(getApplicationContext(), MainActivity.class);
 
                 intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);

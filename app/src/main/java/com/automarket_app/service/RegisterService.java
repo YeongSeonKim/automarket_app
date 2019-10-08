@@ -58,8 +58,11 @@ public class RegisterService extends Service {
                 ArrayList<UserVO> maplist = mapper.readValue(sb.toString(), new TypeReference<List<UserVO>>() {});
 
                 for(UserVO vo: maplist){
-                    String result = vo.getEmail() + vo.getName() + vo.getPwd();
+                    String email = vo.getEmail();
+                    String name = vo.getName();
 
+
+                    String result = email +"\n" + name;
                     Log.i("automarket_app_register", result);
                 }
                 //intent를 통해 activity에 전달
