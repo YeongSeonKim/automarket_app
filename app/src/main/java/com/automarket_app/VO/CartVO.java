@@ -11,15 +11,22 @@ import java.util.Arrays;
 
 @JsonIgnoreProperties(ignoreUnknown = true)
 public class CartVO {
-
+    private String prodid;
     private String imgpath; // 상품이미지
     private String prodnm; // 상품명
     private int prodprice; // 상품가격
     private int prodcnt;   //  수량
-    //private Bitmap imgBitmap;
     private byte[] thumbnailimg;
 
     public CartVO() {
+    }
+
+    public String getProdid() {
+        return prodid;
+    }
+
+    public void setProdid(String prodid) {
+        this.prodid = prodid;
     }
 
     public String getImgpath() {
@@ -62,10 +69,12 @@ public class CartVO {
         this.thumbnailimg = thumbnailimg;
     }
 
-    public  void byteFromURL(){
+    public  void byteFromURL(String apiurl){
         byte[] d= null;
         try{
-            this.thumbnailimg = Helper.recoverImageFromUrl(imgpath);
+            if(imgpath!=null)
+                this.thumbnailimg = Helper.recoverImageFromUrl(apiurl+ imgpath);
+            //this.thumbnailimg = Helper.recoverImageFromUrl(apiurl+ "/upload/apple.jpg");
 
         }catch (Exception e){
             Log.e("automarket_app",e.toString());

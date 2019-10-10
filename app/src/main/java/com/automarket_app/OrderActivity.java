@@ -42,14 +42,14 @@ import java.util.List;
             btnBack.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
-                    Intent intent = new Intent(getApplicationContext(), MainActivity.class);
-
-                    intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
-                    intent.addFlags(Intent.FLAG_ACTIVITY_SINGLE_TOP);
-                    intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-
-                    startActivity(intent);
-                    //finish();
+//                    Intent intent = new Intent(getApplicationContext(), MainActivity.class);
+//
+//                    intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+//                    intent.addFlags(Intent.FLAG_ACTIVITY_SINGLE_TOP);
+//                    intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+//
+//                    startActivity(intent);
+                    finish();
                 }
             });
 
@@ -117,9 +117,6 @@ import java.util.List;
 
          gridView = (GridView) findViewById(R.id.griview);
          ProductAdapter adapter = new ProductAdapter();
-
-//         productList.add(new ProductVO("1","과일","http://localhost:8082/automarket/upload/apple.jpg","1000011","사과",5000,10));
-//         productList.add(new ProductVO("1","과일","http://localhost:8082/automarket/upload/be.jpg","1000022","배",10000,10));
 
          for(ProductVO vo : productList){
              adapter.addItem(vo);
