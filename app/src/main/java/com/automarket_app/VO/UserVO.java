@@ -18,6 +18,21 @@ public class UserVO implements Parcelable{
     private String deviceid; // 디바이스 mac 주소
     private int cashamt; // 캐시
 
+
+    // CREATOR 라고 불리는 static 상수를 반드시 정의
+    public static final Parcelable.Creator<UserVO> CREATOR = new Parcelable.Creator<UserVO>() {
+        @Override
+        public UserVO createFromParcel(Parcel parcel) {
+            // 마샬링된 데이터를 언마샬링(복원)할 때 사용되는 method
+            return new UserVO(parcel);
+        }
+
+        @Override
+        public UserVO[] newArray(int i) {
+            return new UserVO[i];
+        }
+    };
+
     // default constructor
     public UserVO() {
     }
@@ -37,19 +52,6 @@ public class UserVO implements Parcelable{
         this.cashamt = cashamt;
     }
 
-    // CREATOR 라고 불리는 static 상수를 반드시 정의
-    public static final Parcelable.Creator<UserVO> CREATOR = new Parcelable.Creator<UserVO>() {
-        @Override
-        public UserVO createFromParcel(Parcel parcel) {
-            // 마샬링된 데이터를 언마샬링(복원)할 때 사용되는 method
-            return new UserVO(parcel);
-        }
-
-        @Override
-        public UserVO[] newArray(int i) {
-            return new UserVO[i];
-        }
-    };
 
     // 복원작업 할때 사용되는 생성자.
     // 복원시 제일 신경 써야되는 부분은 순서...
