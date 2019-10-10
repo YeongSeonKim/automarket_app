@@ -84,21 +84,6 @@ public class ProductVO implements Parcelable {
             Log.e("automarket_app",e.toString());
         }
     }
-    /*public byte[] recoverImageFromUrl(String urlText) {
-        ByteArrayOutputStream output = new ByteArrayOutputStream();
-        try {
-            URL url = new URL(urlText);
-            InputStream inputStream = url.openStream();
-            int n = 0;
-            byte[] buffer = new byte[1024];
-            while ((n = inputStream.read(buffer))!= -1) {
-                output.write(buffer, 0, n);
-            }
-        }catch (Exception e){
-            Log.e("automarket_app","recoverImageFromUrl>>"+e.toString());
-        }
-        return output.toByteArray();
-    }*/
 
     public int getDiscount() {
         return discount;

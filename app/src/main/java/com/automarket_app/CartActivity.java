@@ -31,10 +31,10 @@ public class CartActivity extends AppCompatActivity {
     private SQLiteDatabase db;
     List<CartVO> cartList = new ArrayList<CartVO>();
     String api_url="";
-    class ListViewRunnable implements Runnable {
+    class CartDataRunnable implements Runnable {
         private CartAdapter cartAdapter;
-        ListViewRunnable(){}
-        ListViewRunnable(CartAdapter cartAdapter){
+        CartDataRunnable(){}
+        CartDataRunnable(CartAdapter cartAdapter){
             this.cartAdapter = cartAdapter;
         }
         @Override
@@ -43,7 +43,7 @@ public class CartActivity extends AppCompatActivity {
             Cursor c = db.rawQuery("SELECT * FROM cart ", null);
             String result = "" ;
             CartVO vo = new CartVO();
-            Integer cart_sum=0;
+            Integer cart_sum=0,prod_total=0;
             while (c.moveToNext()) {
                 System.out.println("cart >> "+ c.getColumnName(0));
 
@@ -56,8 +56,8 @@ public class CartActivity extends AppCompatActivity {
 
                 vo.byteFromURL(api_url);
                 cartAdapter.addItem(vo);
-
-                cart_sum += c.getInt(3);
+                prod_total = c.getInt(3) * c.getInt(1);
+                cart_sum += prod_total;
             }
 
 
@@ -88,13 +88,15 @@ public class CartActivity extends AppCompatActivity {
             }
         });
 
+        TextView tvTotal=(TextView)findViewById(R.id.cart_total_price);
+
         // 주문하기에서 물건을 담은 장바구니 리스트
-        CartAdapter cartAdapter = new CartAdapter();
+        CartAdapter cartAdapter = new CartAdapter(db,tvTotal);
 
         ListView lv_cartlist = (ListView)findViewById(R.id.lv_cartlist);
         lv_cartlist.setAdapter(cartAdapter);
 
-        ListViewRunnable runnable = new ListViewRunnable(cartAdapter);
+        CartDataRunnable runnable = new CartDataRunnable(cartAdapter);
         Thread t = new Thread(runnable);
         t.start();
 

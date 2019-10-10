@@ -1,6 +1,8 @@
 package com.automarket_app.adapter;
 
 import android.content.Context;
+import android.database.Cursor;
+import android.database.sqlite.SQLiteDatabase;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.view.LayoutInflater;
@@ -8,19 +10,30 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseAdapter;
 import android.widget.Button;
+import android.widget.ImageButton;
 import android.widget.ImageView;
+import android.widget.ListView;
 import android.widget.TextView;
 
+import com.automarket_app.OrderPopupActivity;
 import com.automarket_app.R;
 import com.automarket_app.VO.CartVO;
 import com.automarket_app.VO.ProductVO;
+import com.automarket_app.database.MySqliteHelper;
 
 import java.text.DecimalFormat;
 import java.text.NumberFormat;
 import java.util.ArrayList;
 
 public class CartAdapter extends BaseAdapter {
-   ArrayList<CartVO> cart_list = new ArrayList<CartVO>();
+    ArrayList<CartVO> cart_list = new ArrayList<CartVO>();
+    private SQLiteDatabase db;
+    TextView parent_tv;
+    public CartAdapter(){}
+    public CartAdapter(SQLiteDatabase db,TextView textView){
+        this.db = db;
+        this.parent_tv = textView;
+    }
 
     public void addItem(CartVO vo) {
         cart_list.add(vo);
@@ -41,10 +54,10 @@ public class CartAdapter extends BaseAdapter {
     }
 
     @Override
-    public View getView(final int position, View view, ViewGroup viewGroup) {
+    public View getView(final int position,View view, final ViewGroup viewGroup) {
 
         final Context context = viewGroup.getContext();
-
+        View viewparent=null;
         // 출력할 view 객체를 생성.
         if (view == null){
             LayoutInflater inflater = (LayoutInflater)context.getSystemService(context.LAYOUT_INFLATER_SERVICE);
@@ -55,13 +68,14 @@ public class CartAdapter extends BaseAdapter {
         ImageView cart_prodImg = (ImageView)view.findViewById(R.id.cart_prodImg);
         TextView cart_prodNm = (TextView)view.findViewById(R.id.cart_prodNm);
         TextView cart_prodPrice = (TextView)view.findViewById(R.id.cart_prodPrice);
-        TextView cart_prodCnt = (TextView)view.findViewById(R.id.cart_prodCnt);
+        final TextView cart_prodCnt = (TextView)view.findViewById(R.id.cart_prodCnt);
 
         Button btn_cart_plus = (Button)view.findViewById(R.id.btn_cart_plus);
         Button btn_cart_minus = (Button)view.findViewById(R.id.btn_cart_minus);
-        Button btn_cart_delete = (Button)view.findViewById(R.id.btn_cart_delete);
+        ImageButton btn_cart_delete = (ImageButton)view.findViewById(R.id.btn_cart_delete);
+        final ListView lv_cartlist = (ListView)view.findViewById(R.id.lv_cartlist);
 
-        CartVO vo = cart_list.get(position);
+        final CartVO vo = cart_list.get(position);
 
         if(vo.getThumbnailimg() !=null){
             Bitmap bitmap = BitmapFactory.decodeByteArray(vo.getThumbnailimg(), 0, vo.getThumbnailimg().length);
@@ -69,7 +83,7 @@ public class CartAdapter extends BaseAdapter {
         }
 
         cart_prodNm.setText(vo.getProdnm());
-        NumberFormat formatter = new DecimalFormat("#,###");
+        final NumberFormat formatter = new DecimalFormat("#,###");
         String prodPrice = formatter.format(vo.getProdprice());
         cart_prodPrice.setText(prodPrice);
         cart_prodCnt.setText(String.valueOf(vo.getProdcnt()));
@@ -77,24 +91,64 @@ public class CartAdapter extends BaseAdapter {
         btn_cart_plus.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                Integer prod_total = 0;
+                Integer cnt = Integer.parseInt(cart_prodCnt.getText().toString());
+                cnt += 1;
+                cart_prodCnt.setText(String.valueOf(cnt));
+                vo.setProdcnt(cnt);
+                db.execSQL("UPDATE cart SET prodcnt=?,prodprice=? where prodid=?"
+                        ,new Object[]{cnt,vo.getProdprice(),vo.getProdid()});
 
+                Integer cart_sum = prod_sum();
+                String sumformat = formatter.format(cart_sum);
+                parent_tv.setText(sumformat);
             }
         });
         btn_cart_minus.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                Integer cnt = Integer.parseInt(cart_prodCnt.getText().toString());
+                if(cnt>1){
+                    cnt -= 1;
+                    cart_prodCnt.setText(String.valueOf(cnt));
+                    vo.setProdcnt(cnt);
+                    db.execSQL("UPDATE cart SET prodcnt=?,prodprice=? where prodid=?"
+                            ,new Object[]{cnt,vo.getProdprice(),vo.getProdid()});
 
+                    Integer cart_sum = prod_sum();
+                    String sumformat = formatter.format(cart_sum);
+                    parent_tv.setText(sumformat);
+                }
             }
         });
         btn_cart_delete.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
 
+                db.execSQL("DELETE FROM cart where prodid=?"
+                        ,new Object[]{vo.getProdid()});
+
+                cart_list.remove(position);
+                notifyDataSetChanged();
+
+                Integer cart_sum = prod_sum();
+                String sumformat = formatter.format(cart_sum);
+                parent_tv.setText(sumformat);
             }
         });
 
         return view;
     }
-
+    public Integer prod_sum(){
+        Cursor c = db.rawQuery("SELECT * FROM cart ", null);
+        String result = "" ;
+        CartVO vo = new CartVO();
+        Integer cart_sum=0,prod_total=0;
+        while (c.moveToNext()) {
+            prod_total = c.getInt(3) * c.getInt(1);
+            cart_sum += prod_total;
+        }
+        return  cart_sum;
+    }
 
 }
