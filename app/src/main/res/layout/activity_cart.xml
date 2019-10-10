@@ -51,7 +51,7 @@
         <ListView
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:id="@+id/cart_list" />
+            android:id="@+id/lv_cartlist" />
 
     </LinearLayout>
 
@@ -67,7 +67,8 @@
             android:textAlignment="center"
             android:textSize="20sp"
             android:layout_weight="1"
-            android:textColor="@color/colorBlack"/>
+            android:textColor="@color/colorBlack"
+            />
 
         <TextView
             android:layout_width="wrap_content"
@@ -75,14 +76,15 @@
             android:textSize="20sp"
             android:layout_weight="6"
             android:id="@+id/cart_total_price"
-            android:textColor="@color/colorBlack"/>
+            android:textColor="@color/colorBlack"
+            android:gravity="right"/>
 
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="@string/cash_won"
             android:textSize="20sp"
-            android:layout_weight="1"
+            android:width="50dp"
             android:textColor="@color/colorBlack"/>
 
     </LinearLayout>
@@ -99,7 +101,7 @@
             android:textAlignment="center"
             android:textSize="20sp"
             android:layout_weight="1"
-            android:textColor="#0054FF"/>
+            android:textColor="@color/colorBlue"/>
 
         <TextView
             android:layout_width="wrap_content"
@@ -107,15 +109,17 @@
             android:textSize="20sp"
             android:layout_weight="6"
             android:id="@+id/cart_cash_now"
-            android:textColor="#0054FF"/>
+            android:textColor="@color/colorBlue"
+            android:text="0"
+            android:gravity="right"/>
 
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="@string/cash_won"
             android:textSize="20sp"
-            android:layout_weight="1"
-            android:textColor="#0054FF"/>
+            android:width="50dp"
+            android:textColor="@color/colorBlue"/>
 
     </LinearLayout>
 

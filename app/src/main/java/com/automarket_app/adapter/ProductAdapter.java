@@ -81,13 +81,13 @@ public class ProductAdapter extends BaseAdapter {
             imageView.setImageBitmap(bitmap);
         }
 
-        final PopupWindow pw = new PopupWindow(
+        /*final PopupWindow pw = new PopupWindow(
                 inflater.inflate(R.layout.activity_order_popup, null, false),
                 LinearLayout.LayoutParams.MATCH_PARENT,
                 550,
                 true);
 
-        /*final View popupview = pw.getContentView();
+        final View popupview = pw.getContentView();
         view.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {

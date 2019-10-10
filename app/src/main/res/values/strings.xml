@@ -1,9 +1,6 @@
 <resources>
     <string name="app_name">automarket_app</string>
 
-    <!-- Server_URL -->
-    <string name="Server_URL">http://localhost:8080</string>
-
     <!-- 로그인 -->
     <string name="Email_hint">Email</string>
     <string name="Password_hint">Password</string>
@@ -43,7 +40,7 @@
 
     <!-- 장바구니 -->
     <string name="cart">장바구니</string>
-    <string name="total_price">총금액</string>
+    <string name="total_price">총 금액</string>
     <string name="minus">-</string>
     <string name="plus">+</string>
     <string name="delete">X</string>

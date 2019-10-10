@@ -56,7 +56,6 @@ public class OrderPopupActivity extends AppCompatActivity {
         pop_btnMinus.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                System.out.println("pop_btnMinus22");
                 Integer cnt = Integer.parseInt(pop_edtProdCnt.getText().toString());
                 if(cnt>1){
                     cnt -= 1;
@@ -68,7 +67,6 @@ public class OrderPopupActivity extends AppCompatActivity {
         pop_btnPlus.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                System.out.println("pop_btnPlus22");
                 Integer cnt = Integer.parseInt(pop_edtProdCnt.getText().toString());
                 cnt += 1;
                 pop_edtProdCnt.setText(String.valueOf(cnt));
@@ -87,10 +85,11 @@ public class OrderPopupActivity extends AppCompatActivity {
                 Cursor c = db.rawQuery("select * from cart where prodid=? ", new String[]{vo.getProdid()});
 
                 if(c.getCount()==0){
-                    db.execSQL("INSERT INTO cart VALUES (?,?,?,?) ",
-                            new Object[]{vo.getProdid(),pop_edtProdCnt.getText().toString(),vo.getProdnm(),vo.getProdprice()});
+                    db.execSQL("INSERT INTO cart VALUES (?,?,?,?,?) ",
+                            new Object[]{vo.getProdid(),pop_edtProdCnt.getText().toString(),vo.getProdnm(),vo.getProdprice(),vo.getImgpath()});
                 }else{
-                    db.execSQL("UPDATE cart SET prodcnt=? where prodid=?",new Object[]{pop_edtProdCnt.getText().toString(),vo.getProdid()});
+                    db.execSQL("UPDATE cart SET prodcnt=?,prodprice=? where prodid=?"
+                            ,new Object[]{pop_edtProdCnt.getText().toString(),vo.getProdprice(),vo.getProdid()});
                 }
 
                 while(c.moveToNext()){
