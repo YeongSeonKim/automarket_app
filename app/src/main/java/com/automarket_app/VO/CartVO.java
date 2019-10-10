@@ -72,10 +72,9 @@ public class CartVO {
     public  void byteFromURL(String apiurl){
         byte[] d= null;
         try{
-//            if(imgpath!=null)
-//                this.thumbnailimg = Helper.recoverImageFromUrl(apiurl+ imgpath);
-            this.thumbnailimg = Helper.recoverImageFromUrl(apiurl+ "/upload/apple.jpg");
-
+            if(imgpath!=null)
+                this.thumbnailimg = Helper.recoverImageFromUrl(apiurl+ imgpath);
+            //this.thumbnailimg = Helper.recoverImageFromUrl(apiurl+ "/upload/apple.jpg");
 
         }catch (Exception e){
             Log.e("automarket_app",e.toString());

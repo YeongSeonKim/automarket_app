@@ -4,6 +4,7 @@ import android.os.Parcel;
 import android.os.Parcelable;
 import android.util.Log;
 
+import com.automarket_app.util.Helper;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 
 import java.io.ByteArrayOutputStream;
@@ -73,16 +74,17 @@ public class ProductVO implements Parcelable {
     public  void byteFromURL(String apiurl){
         byte[] d= null;
         try{
-//            if(imgpath!=null)
-//                this.thumbnailimg = recoverImageFromUrl(imgpath);
-            this.thumbnailimg = recoverImageFromUrl(apiurl+ "/upload/apple.jpg");
-
+            if(imgpath!=null){
+                Log.i("automarket_app","imgpath: "+ apiurl+ imgpath);
+                this.thumbnailimg = Helper.recoverImageFromUrl(apiurl+ imgpath);
+            }
+            //this.thumbnailimg = recoverImageFromUrl(apiurl+ "/upload/apple.jpg");
 
         }catch (Exception e){
             Log.e("automarket_app",e.toString());
         }
     }
-    public byte[] recoverImageFromUrl(String urlText) {
+    /*public byte[] recoverImageFromUrl(String urlText) {
         ByteArrayOutputStream output = new ByteArrayOutputStream();
         try {
             URL url = new URL(urlText);
@@ -96,7 +98,7 @@ public class ProductVO implements Parcelable {
             Log.e("automarket_app","recoverImageFromUrl>>"+e.toString());
         }
         return output.toByteArray();
-    }
+    }*/
 
     public int getDiscount() {
         return discount;
