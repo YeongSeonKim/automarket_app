@@ -128,7 +128,7 @@ public class LoginActivity extends AppCompatActivity {
                         public void run() {
                             try {
                                 vo = sendGet(email, pwd);
-                                Log.i("automarket_app_login", vo.getEmail() + vo.getPwd());
+                                //Log.i("automarket_app_login", vo.getEmail() + vo.getPwd());
 
                                 if (vo.getEmail().equals("")) {
                                     DialogMessage();
@@ -243,7 +243,6 @@ public class LoginActivity extends AppCompatActivity {
         }
         receive_data = sb.toString();
         Log.i("automarket_app_login","receive_data :"+ receive_data);
-        Log.i("automarket_app_userid","userid :" + vo.getUserid());
 
         br.close();
 
@@ -261,6 +260,7 @@ public class LoginActivity extends AppCompatActivity {
         // 데이터 저장
         editor.putBoolean("SAVE_LOGIN_DATA", checkBox.isChecked());
         editor.putString("USERID", userObject.getUserid());
+        Log.i("automarket_app_login","userid :"+ userObject.getUserid());
         editor.putString("EMAIL", edEmail.getText().toString());
         editor.putString("myObject", json);
         // 최종 커밋 , apply 또는 commit 해야됨
