@@ -13,9 +13,14 @@ import android.os.Build;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
+import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.ImageButton;
 import android.widget.TextView;
+
+import net.daum.mf.map.api.MapPOIItem;
+import net.daum.mf.map.api.MapPoint;
+import net.daum.mf.map.api.MapView;
 
 public class OrderCarActivity extends AppCompatActivity  implements LocationListener{
     private LocationManager locationManager;
@@ -23,6 +28,13 @@ public class OrderCarActivity extends AppCompatActivity  implements LocationList
     private TextView txtResult;
     private ImageButton btnClose;
     private Location location;
+    class KakaoMapRunnable implements Runnable {
+
+        @Override
+        public void run() {
+
+        }
+    }
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -37,6 +49,9 @@ public class OrderCarActivity extends AppCompatActivity  implements LocationList
         if (ActivityCompat.checkSelfPermission(this, android.Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
             return;
         }
+
+        kakaomap_load();
+
 
         locationManager = (LocationManager)getSystemService(Context.LOCATION_SERVICE);
         Location lastKnownLocation = locationManager.getLastKnownLocation(LocationManager.GPS_PROVIDER);
@@ -157,5 +172,39 @@ public class OrderCarActivity extends AppCompatActivity  implements LocationList
         locationManager.requestLocationUpdates(LocationManager.GPS_PROVIDER, 0, 0, this);
         locationManager.requestLocationUpdates(LocationManager.NETWORK_PROVIDER, 0, 0, this);
         locationManager.requestLocationUpdates(LocationManager.PASSIVE_PROVIDER, 0, 0, this);
+    }
+
+    protected void kakaomap_load(){
+
+        MapView mapView = new MapView(OrderCarActivity.this);
+
+        ViewGroup mapViewContainer = (ViewGroup) findViewById(R.id.map_view);
+        mapViewContainer.addView(mapView);
+        // 중심점 변경
+        mapView.setMapCenterPoint(MapPoint.mapPointWithGeoCoord(37.53737528, 127.00557633), true);
+
+        // 줌 레벨 변경
+        mapView.setZoomLevel(7, true);
+
+        // 중심점 변경 + 줌 레벨 변경
+        mapView.setMapCenterPointAndZoomLevel(MapPoint.mapPointWithGeoCoord(33.41, 126.52), 9, true);
+
+        // 줌 인
+        mapView.zoomIn(true);
+
+        // 줌 아웃
+        mapView.zoomOut(true);
+
+        MapPOIItem customMarker = new MapPOIItem();
+        customMarker.setItemName("Custom Marker");
+        customMarker.setTag(1);
+        customMarker.setMapPoint(MapPoint.mapPointWithGeoCoord(37.537229, 127.005515));
+        customMarker.setMarkerType(MapPOIItem.MarkerType.CustomImage); // 마커타입을 커스텀 마커로 지정.
+        //customMarker.setCustomImageResourceId(R.drawable.custom_marker_red); // 마커 이미지.
+        customMarker.setMarkerType(MapPOIItem.MarkerType.BluePin); // 마커 이미지.
+        customMarker.setCustomImageAutoscale(false); // hdpi, xhdpi 등 안드로이드 플랫폼의 스케일을 사용할 경우 지도 라이브러리의 스케일 기능을 꺼줌.
+        customMarker.setCustomImageAnchor(0.5f, 1.0f); // 마커 이미지중 기준이 되는 위치(앵커포인트) 지정 - 마커 이미지 좌측 상단 기준 x(0.0f ~ 1.0f), y(0.0f ~ 1.0f) 값.
+
+        mapView.addPOIItem(customMarker);
     }
 }
