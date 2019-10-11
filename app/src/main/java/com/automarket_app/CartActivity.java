@@ -1,5 +1,6 @@
 package com.automarket_app;
 
+import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.app.AlertDialog;
@@ -8,8 +9,11 @@ import android.content.Intent;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.os.Bundle;
+import android.os.Handler;
+import android.os.Message;
 import android.util.Log;
 import android.view.View;
+import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.ImageButton;
 import android.widget.ListView;
@@ -27,15 +31,21 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class CartActivity extends AppCompatActivity {
-
+    private CartAdapter cartAdapter;
     private SQLiteDatabase db;
     List<CartVO> cartList = new ArrayList<CartVO>();
     String api_url="";
+    public CartActivity() {
+    }
+
     class CartDataRunnable implements Runnable {
         private CartAdapter cartAdapter;
+        private Handler handler;
+        TextView tvTotal;
         CartDataRunnable(){}
-        CartDataRunnable(CartAdapter cartAdapter){
+        CartDataRunnable(CartAdapter cartAdapter,Handler handler){
             this.cartAdapter = cartAdapter;
+            this.handler = handler;
         }
         @Override
         public void run() {
@@ -60,11 +70,14 @@ public class CartActivity extends AppCompatActivity {
                 cart_sum += prod_total;
             }
 
-
-            TextView tvTotal=(TextView)findViewById(R.id.cart_total_price);
             NumberFormat formatter = new DecimalFormat("#,###");
             String sumformat = formatter.format(cart_sum);
-            tvTotal.setText(sumformat);
+
+            Bundle bundle =new Bundle();
+            bundle.putString("PROD_SUM",sumformat);
+            Message msg = new Message();
+            msg.setData(bundle);
+            this.handler.sendMessage(msg);
 
         }
     }
@@ -73,7 +86,7 @@ public class CartActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_cart);
         api_url = Helper.getMetaData(this, "api_url");
-
+        final TextView tvTotal;
         MySqliteHelper helper = new MySqliteHelper(CartActivity.this);
         //helper를 통해서 database에 대한 Handle을 얻어 올 수 있다.
         db = helper.getWritableDatabase(); // 액티비티의 필드로 올림
@@ -87,16 +100,27 @@ public class CartActivity extends AppCompatActivity {
                 finish();
             }
         });
+        //final TextView
+        tvTotal=(TextView)findViewById(R.id.cart_total_price);
+        final ListView lv_cartlist = (ListView)findViewById(R.id.lv_cartlist);
 
-        TextView tvTotal=(TextView)findViewById(R.id.cart_total_price);
+        final Handler handler = new Handler(){
+            //handler에게 message가 전달되면 아래 method가 callback됨
+            @Override
+            public void handleMessage(@NonNull Message msg) {
+                super.handleMessage(msg);
+                Bundle bundle = msg.getData();
+                String result = bundle.getString("PROD_SUM");
+                tvTotal.setText(result);
 
-        // 주문하기에서 물건을 담은 장바구니 리스트
-        CartAdapter cartAdapter = new CartAdapter(db,tvTotal);
+                lv_cartlist.setAdapter(cartAdapter);
+            }
+        };
 
-        ListView lv_cartlist = (ListView)findViewById(R.id.lv_cartlist);
-        lv_cartlist.setAdapter(cartAdapter);
+        cartAdapter = new CartAdapter(handler,db);
 
-        CartDataRunnable runnable = new CartDataRunnable(cartAdapter);
+        //데이터 바인딩
+        CartDataRunnable runnable = new CartDataRunnable(cartAdapter,handler);
         Thread t = new Thread(runnable);
         t.start();
 
@@ -154,4 +178,5 @@ public class CartActivity extends AppCompatActivity {
 
 
     }
+
 }

@@ -5,6 +5,9 @@ import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
+import android.os.Bundle;
+import android.os.Handler;
+import android.os.Message;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -28,11 +31,13 @@ import java.util.ArrayList;
 public class CartAdapter extends BaseAdapter {
     ArrayList<CartVO> cart_list = new ArrayList<CartVO>();
     private SQLiteDatabase db;
-    TextView parent_tv;
+    //TextView parent_tv;
+    private Handler handler;
     public CartAdapter(){}
-    public CartAdapter(SQLiteDatabase db,TextView textView){
+    public CartAdapter(Handler handler,SQLiteDatabase db){
+        this.handler = handler;
         this.db = db;
-        this.parent_tv = textView;
+        //this.parent_tv = textView;
     }
 
     public void addItem(CartVO vo) {
@@ -101,7 +106,8 @@ public class CartAdapter extends BaseAdapter {
 
                 Integer cart_sum = prod_sum();
                 String sumformat = formatter.format(cart_sum);
-                parent_tv.setText(sumformat);
+                //parent_tv.setText(sumformat);
+                msg_handle(sumformat);
             }
         });
         btn_cart_minus.setOnClickListener(new View.OnClickListener() {
@@ -117,7 +123,8 @@ public class CartAdapter extends BaseAdapter {
 
                     Integer cart_sum = prod_sum();
                     String sumformat = formatter.format(cart_sum);
-                    parent_tv.setText(sumformat);
+                    //parent_tv.setText(sumformat);
+                    msg_handle(sumformat);
                 }
             }
         });
@@ -133,7 +140,8 @@ public class CartAdapter extends BaseAdapter {
 
                 Integer cart_sum = prod_sum();
                 String sumformat = formatter.format(cart_sum);
-                parent_tv.setText(sumformat);
+                //parent_tv.setText(sumformat);
+                msg_handle(sumformat);
             }
         });
 
@@ -150,5 +158,12 @@ public class CartAdapter extends BaseAdapter {
         }
         return  cart_sum;
     }
+    public void msg_handle(String send_msg){
+        Bundle bundle =new Bundle();
+        bundle.putString("PROD_SUM",send_msg);
 
+        Message msg = new Message();
+        msg.setData(bundle);
+        handler.sendMessage(msg);
+    }
 }
