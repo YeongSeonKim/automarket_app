@@ -145,9 +145,17 @@ public class CartActivity extends AppCompatActivity {
         btnOrder.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                
-                AlertDialog.Builder dialog = new AlertDialog.Builder(CartActivity.this);
-                dialog.setTitle("차량선택");
+
+                Intent intent = new Intent(getApplicationContext(), OrderCarActivity.class);
+
+                intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+                intent.addFlags(Intent.FLAG_ACTIVITY_SINGLE_TOP);
+                intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+
+                startActivity(intent);
+
+                /*AlertDialog.Builder dialog = new AlertDialog.Builder(CartActivity.this);
+                dialog.setTitle("주문하시겠습니까?");
 
                 dialog.setPositiveButton("주문하기", new DialogInterface.OnClickListener() {
                     @Override
@@ -161,7 +169,6 @@ public class CartActivity extends AppCompatActivity {
 
                         startActivity(intent);
 
-                        Toast.makeText(getApplicationContext(),"주문이 완료되었습니다.",Toast.LENGTH_SHORT).show();
                     }
                 });
                 dialog.setNegativeButton("취소", new DialogInterface.OnClickListener() {
@@ -170,9 +177,7 @@ public class CartActivity extends AppCompatActivity {
                         // 취소버튼을 눌렀을때 수행할 코드 작성
                     }
                 });
-
-
-                dialog.show();
+                dialog.show();*/
             }
         });
 
