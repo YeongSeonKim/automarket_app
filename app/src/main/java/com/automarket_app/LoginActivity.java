@@ -11,6 +11,7 @@ import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
+import android.widget.CheckBox;
 import android.widget.EditText;
 
 import androidx.appcompat.app.AppCompatActivity;
@@ -19,7 +20,6 @@ import com.automarket_app.VO.UserVO;
 import com.automarket_app.util.Helper;
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.google.gson.Gson;
 
 import java.io.BufferedReader;
 import java.io.InputStreamReader;
@@ -36,8 +36,18 @@ public class LoginActivity extends AppCompatActivity {
     private String api_url ="";
     private AlertDialog dialog;
 
-    List<UserVO> userList = new ArrayList<UserVO>();
+    private  EditText edEmail;
+    private  EditText edPassword;
+    private  Button btnRegister;
+    private  Button btnLogin;
+
     UserVO vo = null;
+
+    private boolean saveLoginData;
+    private String email;
+    private String pwd;
+    private String userid;
+    private CheckBox checkBox;
 
     public SharedPreferences login_info; // 로그인 정보 폰에 저장,가져오기
 
@@ -51,15 +61,24 @@ public class LoginActivity extends AppCompatActivity {
             NotConnected_showAlert();
         }
 
+        // api_url
         api_url = Helper.getMetaData(this, "api_url");
 
+        //설정 값 불러오기
+        login_info = getSharedPreferences("login_info", MODE_PRIVATE);
+        load();
+
         // 이메일, 비밀번호 입력
-        final EditText edEmail = (EditText)findViewById(R.id.edEmail_login);
-        final EditText edPassword = (EditText)findViewById(R.id.edPassword_login);
+        edEmail = (EditText)findViewById(R.id.edEmail_login);
+       edPassword = (EditText)findViewById(R.id.edPassword_login);
 
         // 회원가입, 로그인 버튼
-        Button btnRegister = (Button)findViewById(R.id.btnRegister);
-        Button btnLogin = (Button)findViewById(R.id.btnLogin);
+        btnRegister = (Button)findViewById(R.id.btnRegister);
+        btnLogin = (Button)findViewById(R.id.btnLogin);
+
+        // 로그인 정보 기억하기 checkbox
+        checkBox = (CheckBox)findViewById(R.id.checkBox);
+
 
         // 회원가입버튼
         btnRegister.setOnClickListener(new View.OnClickListener() {
@@ -77,13 +96,20 @@ public class LoginActivity extends AppCompatActivity {
             }
         });
 
+        // 이전에 로그인 정보를 저장시킨 기록이 있다면
+        if (saveLoginData) {
+            edEmail.setText(email);
+            edPassword.setText(pwd);
+            checkBox.setChecked(saveLoginData);
+        }
+
         // 로그인 버튼
         btnLogin.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
 
-                final String email = edEmail.getText().toString();
-                final String pwd = edPassword.getText().toString();
+                email = edEmail.getText().toString();
+                pwd = edPassword.getText().toString();
 
                 // 이메일이랑 비밀번호가 입력되지 않았을때
                 if (email.equals("")||pwd.equals("")){
@@ -118,8 +144,8 @@ public class LoginActivity extends AppCompatActivity {
                                     Log.i("automarket_app_login", "로그인 성공~~ 메인으로 넘어갓~");
                                 }
                             } catch (Exception e) {
-                                Log.e("err","문제");
-                                Log.i("err", e.toString());
+                                Log.e("err1","문제");
+                                Log.i("err1", e.toString());
                             }
                         }
                     };
@@ -128,12 +154,12 @@ public class LoginActivity extends AppCompatActivity {
                     try {
                         thread.join();
                     } catch (Exception e) {
-                        Log.e("err","문제");
-                        Log.i("err", e.toString());
+                        Log.e("err2","문제");
+                        Log.i("err2", e.toString());
                     }
                 } catch (Exception e) {
-                    Log.e("err","문제");
-                    Log.i("err", e.toString());
+                    Log.e("err3","문제");
+                    Log.i("err3", e.toString());
                 }
 
 //                    else {
@@ -153,6 +179,18 @@ public class LoginActivity extends AppCompatActivity {
             }
         });
     }
+
+    // 설정값을 불러오는 함수
+    private void load() {
+        // SharedPreferences 객체.get타입( 저장된 이름, 기본값 )
+        // 저장된 이름이 존재하지 않을 시 기본값
+        saveLoginData = login_info.getBoolean("SAVE_LOGIN_DATA", false);
+        email = login_info.getString("EMAIL", "");
+        //pwd = login_info.getString("PWD", "");
+        userid = login_info.getString("USERID","");
+
+    }
+
 
     private void DialogMessage() {
         AlertDialog.Builder builder = new AlertDialog.Builder(LoginActivity.this);
@@ -189,9 +227,9 @@ public class LoginActivity extends AppCompatActivity {
         ObjectMapper mapper = new ObjectMapper();
         String json = mapper.writeValueAsString(map);
 
-        Log.i("automarket_app","data : " + json);
+        Log.i("automarket_app_data","data : " + json);
 
-        Log.i("automarket_app", "response");
+        Log.i("automarket_app", "response 응답응답ㅎ해해ㅐㅎ");
 
         int responseCode = con.getResponseCode();
         Log.d("automarket_app_Debug","응답코드 : " + con.getResponseCode());
@@ -204,24 +242,28 @@ public class LoginActivity extends AppCompatActivity {
             sb.append(input_line);
         }
         receive_data = sb.toString();
-        Log.i("automarket_app_login", receive_data);
+        Log.i("automarket_app_login","receive_data :"+ receive_data);
+        Log.i("automarket_app_userid","userid :" + vo.getUserid());
 
         br.close();
 
+        //ArrayList<UserVO> maplist = mapper.readValue(sb.toString(), new TypeReference<List<UserVO>>() {});
         UserVO userObject = mapper.readValue(receive_data, new TypeReference<UserVO>() {});
 
         Log.i("automarket_app_login", userObject.getEmail());
 
         // 로그인 정보 폰에 저장,가져오기
         // 저장된 값을 불러오기 위해 같은 네임파일을 찾는닷
-        login_info = getSharedPreferences("login_info", MODE_PRIVATE);
-        // 저장을 하기 위해서 editor를 이용해 값을 저장 시켜준닷
+//        login_info = getSharedPreferences("login_info", MODE_PRIVATE);
+        // 저장을 하기 위해서 editor를 이용해 값을 저장 시켜준닷 , userid 저장하기
         SharedPreferences.Editor editor = login_info.edit();
-        // gson 이용해 userObject를 json형태로
-        Gson gson = new Gson();
-        String userinfojson = gson.toJson(userObject);
-        editor.putString("myObject", userinfojson);
-        // 최종 커밋
+
+        // 데이터 저장
+        editor.putBoolean("SAVE_LOGIN_DATA", checkBox.isChecked());
+        editor.putString("USERID", userObject.getUserid());
+        editor.putString("EMAIL", edEmail.getText().toString());
+        editor.putString("myObject", json);
+        // 최종 커밋 , apply 또는 commit 해야됨
         editor.commit();
         Log.i("automarket_app_save", "로그인 객체 저장 성공");
         return userObject;

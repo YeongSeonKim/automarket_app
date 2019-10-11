@@ -11,12 +11,14 @@ import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 @JsonIgnoreProperties(ignoreUnknown = true)
 public class UserVO implements Parcelable{
 
+    private String userid; // 유저 아이디
     private String email; // 이메일
-    private String name; // 이름
     private String pwd; // 비밀번호
-    private String adminflag; // 관리자 여부
-    private String deviceid; // 디바이스 mac 주소
     private int cashamt; // 캐시
+    private String adminflag; // 관리자 여부
+    private String regdate; // 가입일
+    private String deviceid; // 디바이스 mac 주소
+    private String name; // 이름
 
 
     // CREATOR 라고 불리는 static 상수를 반드시 정의
@@ -43,26 +45,31 @@ public class UserVO implements Parcelable{
     }
 
     // 모든 field를 인자로 받는 constructor
-    public UserVO(String email, String name, String pwd, String adminflag, String deviceid, int cashamt) {
-        this.email = email;
-        this.name = name;
-        this.pwd = pwd;
-        this.adminflag = adminflag;
-        this.deviceid = deviceid;
-        this.cashamt = cashamt;
-    }
 
+
+    public UserVO(String userid, String email, String pwd, int cashamt, String adminflag, String regdate, String deviceid, String name) {
+        this.userid = userid;
+        this.email = email;
+        this.pwd = pwd;
+        this.cashamt = cashamt;
+        this.adminflag = adminflag;
+        this.regdate = regdate;
+        this.deviceid = deviceid;
+        this.name = name;
+    }
 
     // 복원작업 할때 사용되는 생성자.
     // 복원시 제일 신경 써야되는 부분은 순서...
     // (마샬링 순서와 언마샬링 순서가 동일해야 한다.)
     protected UserVO(Parcel parcel){
+        userid = parcel.readString();
         email = parcel.readString();
-        name = parcel.readString();
         pwd = parcel.readString();
-        adminflag = parcel.readString();
-        deviceid = parcel.readString();
         cashamt = parcel.readInt();
+        adminflag = parcel.readString();
+        regdate = parcel.readString();
+        deviceid = parcel.readString();
+        name = parcel.readString();
     }
 
     // override method
@@ -80,18 +87,27 @@ public class UserVO implements Parcelable{
 
         try{
             // 순서 맞춰가면서 해야함!!
+            parcel.writeString(userid);
             parcel.writeString(email);
-            parcel.writeString(name);
             parcel.writeString(pwd);
+            parcel.writeInt(cashamt);
+            parcel.writeString(regdate);
             parcel.writeString(adminflag);
             parcel.writeString(deviceid);
-            parcel.writeInt(cashamt);
+            parcel.writeString(name);
 
         }catch (Exception e){
             Log.i("automarket_app", e.toString());
         }
     }
 
+    public String getUserid() {
+        return userid;
+    }
+
+    public void setUserid(String userid) {
+        this.userid = userid;
+    }
 
     public String getEmail() {
         return email;
@@ -99,14 +115,6 @@ public class UserVO implements Parcelable{
 
     public void setEmail(String email) {
         this.email = email;
-    }
-
-    public String getName() {
-        return name;
-    }
-
-    public void setName(String name) {
-        this.name = name;
     }
 
     public String getPwd() {
@@ -117,12 +125,28 @@ public class UserVO implements Parcelable{
         this.pwd = pwd;
     }
 
+    public int getCashamt() {
+        return cashamt;
+    }
+
+    public void setCashamt(int cashamt) {
+        this.cashamt = cashamt;
+    }
+
     public String getAdminflag() {
         return adminflag;
     }
 
     public void setAdminflag(String adminflag) {
         this.adminflag = adminflag;
+    }
+
+    public String getRegdate() {
+        return regdate;
+    }
+
+    public void setRegdate(String regdate) {
+        this.regdate = regdate;
     }
 
     public String getDeviceid() {
@@ -133,23 +157,29 @@ public class UserVO implements Parcelable{
         this.deviceid = deviceid;
     }
 
-    public int getCashamt() {
-        return cashamt;
+    public String getName() {
+        return name;
     }
 
-    public void setCashamt(int cashamt) {
-        this.cashamt = cashamt;
+    public void setName(String name) {
+        this.name = name;
+    }
+
+    public static Creator<UserVO> getCREATOR() {
+        return CREATOR;
     }
 
     @Override
     public String toString() {
         return "UserVO{" +
-                "email='" + email + '\'' +
-                ", name='" + name + '\'' +
+                "userid='" + userid + '\'' +
+                ", email='" + email + '\'' +
                 ", pwd='" + pwd + '\'' +
-                ", adminflag='" + adminflag + '\'' +
-                ", deviceid='" + deviceid + '\'' +
                 ", cashamt=" + cashamt +
+                ", adminflag='" + adminflag + '\'' +
+                ", regdate='" + regdate + '\'' +
+                ", deviceid='" + deviceid + '\'' +
+                ", name='" + name + '\'' +
                 '}';
     }
 }
