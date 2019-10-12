@@ -5,6 +5,7 @@
     <string name="Email_hint">Email</string>
     <string name="Password_hint">Password</string>
     <string name="login">로그인</string>
+    <string name="remember_check">로그인 정보 기억하기</string>
 
     <!-- 회원가입 -->
     <string name="Name_hint">이름</string>
@@ -18,6 +19,8 @@
     <!-- 주문하기 -->
     <string name="order">주문하기</string>
     <string name="proddetail">상품상세</string>
+    <string name="order2">주문서</string>
+    <string name="car_select">차량선택</string>
 
     <!-- 캐시충전하기 -->
     <string name="cash">캐시충전</string>

@@ -9,6 +9,10 @@ public class UserListVO {
     public UserListVO() {
     }
 
+    public UserListVO(List<UserVO> userList) {
+        this.userList = userList;
+    }
+
     public List<UserVO> getUserList() {
         return userList;
     }

@@ -4,8 +4,10 @@
 
     <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
     <uses-permission android:name="android.permission.INTERNET" />
+    <!--위치 LOCATION에 대한 보안해제 요청 설정-->
+    <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
+    <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION" />
 
-    <!-- 타이틀바 없애기 -->
     <application
         android:allowBackup="true"
         android:fullBackupContent="true"
@@ -15,7 +17,13 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.AppCompat.NoActionBar"
         android:usesCleartextTraffic="true">
-        <activity android:name=".OrderPopupActivity"/>
+
+        <meta-data
+            android:name="com.kakao.sdk.AppKey"
+            android:value="7a22bd5c3bf4d22957f87136a669f653" />
+
+        <activity android:name=".OrderCarActivity"></activity>
+        <activity android:name=".OrderPopupActivity" />
 
         <service
             android:name=".service.ProductService"
@@ -38,12 +46,19 @@
         <activity android:name=".RegisterActivity" />
         <activity android:name=".MainActivity" />
 
+
+        <!--<meta-data
+            android:name="api_url"
+            android:value="http://192.168.0.16:8081/automarket"/>-->
+
         <meta-data
             android:name="api_url"
             android:value="http://70.12.115.56:8080/automarket"/>
-      <!--<meta-data
+
+        <!--<meta-data
             android:name="api_url"
             android:value="http://70.12.115.69:8082/automarket" />-->
+
         <meta-data
             android:name="api_key"
             android:value="" />
