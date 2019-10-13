@@ -6,6 +6,7 @@ import androidx.core.content.ContextCompat;
 
 import android.Manifest;
 import android.app.AlertDialog;
+import android.content.ComponentName;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
@@ -23,6 +24,8 @@ import android.widget.ImageButton;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.automarket_app.util.Helper;
+
 import net.daum.mf.map.api.MapPOIItem;
 import net.daum.mf.map.api.MapPoint;
 import net.daum.mf.map.api.MapReverseGeoCoder;
@@ -37,7 +40,7 @@ public class OrderCarActivity extends AppCompatActivity  implements MapView.Curr
     private static final int GPS_ENABLE_REQUEST_CODE = 2001;
     private static final int PERMISSIONS_REQUEST_CODE = 100;
     String[] REQUIRED_PERMISSIONS  = {Manifest.permission.ACCESS_FINE_LOCATION};
-
+    String tcp_server_ip,tcp_server_port;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -80,6 +83,16 @@ public class OrderCarActivity extends AppCompatActivity  implements MapView.Curr
         customMarker.setCustomImageAnchor(0.5f, 1.0f); // 마커 이미지중 기준이 되는 위치(앵커포인트) 지정 - 마커 이미지 좌측 상단 기준 x(0.0f ~ 1.0f), y(0.0f ~ 1.0f) 값.
 
         mMapView.addPOIItem(customMarker);
+
+        tcp_server_ip = Helper.getMetaData(this, "tcp_server_ip");
+        tcp_server_port = Helper.getMetaData(this, "tcp_server_port");
+
+        Intent i = new Intent();
+        ComponentName cname = new ComponentName("com.automarket_app","com.automarket_app.service.TcpCarService");
+        i.setComponent(cname);
+        i.putExtra("tcp_server_ip",tcp_server_ip);
+        i.putExtra("tcp_server_port",Integer.parseInt(tcp_server_port));
+        startService(i);
 
     }
 
