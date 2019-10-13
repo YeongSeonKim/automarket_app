@@ -11,7 +11,8 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:weightSum="8"
-        android:orientation="horizontal">
+        android:orientation="horizontal"
+        android:background="@drawable/border_underline">
 
         <ImageButton
             android:id="@+id/btnBack"

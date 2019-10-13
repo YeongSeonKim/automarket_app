@@ -53,6 +53,6 @@
 
     <!--공통-->
     <string name="card_close">닫기</string>
-
+    <string name="setting">설정</string>
 
 </resources>
