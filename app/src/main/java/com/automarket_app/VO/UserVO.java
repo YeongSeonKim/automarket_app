@@ -45,8 +45,6 @@ public class UserVO implements Parcelable{
     }
 
     // 모든 field를 인자로 받는 constructor
-
-
     public UserVO(String userid, String email, String pwd, int cashamt, String adminflag, String regdate, String deviceid, String name) {
         this.userid = userid;
         this.email = email;
@@ -91,8 +89,8 @@ public class UserVO implements Parcelable{
             parcel.writeString(email);
             parcel.writeString(pwd);
             parcel.writeInt(cashamt);
-            parcel.writeString(regdate);
             parcel.writeString(adminflag);
+            parcel.writeString(regdate);
             parcel.writeString(deviceid);
             parcel.writeString(name);
 

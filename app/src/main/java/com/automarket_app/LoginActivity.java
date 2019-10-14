@@ -28,10 +28,17 @@ import java.io.OutputStreamWriter;
 import java.io.UnsupportedEncodingException;
 import java.net.HttpURLConnection;
 import java.net.URL;
+import java.security.InvalidAlgorithmParameterException;
+import java.security.InvalidKeyException;
+import java.security.NoSuchAlgorithmException;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+
+import javax.crypto.BadPaddingException;
+import javax.crypto.IllegalBlockSizeException;
+import javax.crypto.NoSuchPaddingException;
 
 public class LoginActivity extends AppCompatActivity {
 
@@ -51,10 +58,17 @@ public class LoginActivity extends AppCompatActivity {
 
     public SharedPreferences login_info; // 로그인 정보 폰에 저장,가져오기
 
+    private AES256Util aes256;
+    private String key = "";
+    String acs_pwd; // 암호화된 비밀번호
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_login);
+
+        // string에 있는 키 가져오는
+       key = this.getString(R.string.aes_key);
 
         // 네트워크 연결상태 체크
         if(NetworkConnection() == false){
@@ -78,7 +92,6 @@ public class LoginActivity extends AppCompatActivity {
 
         // 로그인 정보 기억하기 checkbox
         checkBox = (CheckBox)findViewById(R.id.checkBox);
-
 
         // 회원가입버튼
         btnRegister.setOnClickListener(new View.OnClickListener() {
@@ -120,6 +133,16 @@ public class LoginActivity extends AppCompatActivity {
                     dialog.show();
                     return;
                     //Toast.makeText(getApplicationContext(),"이메일과 비밀번호를 입력하지 않았군용. 다시 입력해 주세요!!",Toast.LENGTH_SHORT).show();
+                }
+
+                // 비밀번호 암호화
+                try {
+                    aes256 = new AES256Util(key);
+                    acs_pwd = aes256.aesEncode(pwd);
+                    Log.i("automarket_app_login","암호화 비밀번호 : " + acs_pwd); // db에 있는 비밀번호와 비교하기
+                } catch (UnsupportedEncodingException | NoSuchAlgorithmException | NoSuchPaddingException | InvalidKeyException | InvalidAlgorithmParameterException | IllegalBlockSizeException | BadPaddingException e) {
+                    Log.e("acs_err","문제");
+                    e.printStackTrace();
                 }
 
 
@@ -264,10 +287,13 @@ public class LoginActivity extends AppCompatActivity {
         editor.putString("USERID", userObject.getUserid());
         Log.i("automarket_app_login","userid :"+ userObject.getUserid());
         Log.i("automarket_app_login","email :"+ userObject.getEmail());
-        Log.i("automarket_app_login","pwd :"+ userObject.getPwd());
+        //Log.i("automarket_app_login","pwd :"+ userObject.getPwd());
         Log.i("automarket_app_login", "SharedPre(login_info) : " + login_info);
         editor.putString("EMAIL", edEmail.getText().toString());
         editor.putString("myObject", json);
+
+
+
         // 최종 커밋 , apply 또는 commit 해야됨
         editor.commit();
         Log.i("automarket_app_save", "로그인 객체 저장 성공");
