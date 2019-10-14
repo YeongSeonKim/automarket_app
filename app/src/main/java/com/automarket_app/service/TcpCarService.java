@@ -5,6 +5,9 @@ import android.content.Intent;
 import android.os.IBinder;
 import android.util.Log;
 
+import com.automarket_app.OrderActivity;
+import com.automarket_app.OrderCarActivity;
+
 import java.io.BufferedReader;
 import java.io.InputStreamReader;
 import java.io.PrintWriter;
@@ -23,6 +26,14 @@ public class TcpCarService extends Service {
     private void printMsg(String msg) {
         if(msg.contains("/10000101/")){
             Log.i("TcpCarService","차량선정:"+msg);
+            Intent i = new Intent(getApplicationContext(), OrderCarActivity.class);
+            i.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+            i.addFlags(Intent.FLAG_ACTIVITY_SINGLE_TOP);
+            i.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+
+            i.putExtra("carResultData",msg);
+            startActivity(i);
+
         }
         Log.i("TcpCarService",msg);
     }
@@ -62,6 +73,8 @@ public class TcpCarService extends Service {
                     printMsg(line);
                 }
                 printMsg("서버 연결해제");
+                sendmsg("/EXIT/");
+
             }catch(Exception e) {
                 e.getStackTrace();
             }
@@ -99,8 +112,7 @@ public class TcpCarService extends Service {
     public void onDestroy() {
         super.onDestroy();
         Log.i("automarket_app","onDestroy 호출");
-        out.println("/EXIT/");
-        out.flush();
+
         printMsg("접속 종료");
     }
 }

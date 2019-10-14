@@ -19,11 +19,15 @@ import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.AdapterView;
 import android.widget.Button;
+import android.widget.GridView;
 import android.widget.ImageButton;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.automarket_app.VO.ProductVO;
+import com.automarket_app.adapter.ProductAdapter;
 import com.automarket_app.util.Helper;
 
 import net.daum.mf.map.api.MapPOIItem;
@@ -31,12 +35,15 @@ import net.daum.mf.map.api.MapPoint;
 import net.daum.mf.map.api.MapReverseGeoCoder;
 import net.daum.mf.map.api.MapView;
 
+import java.util.ArrayList;
+
 public class OrderCarActivity extends AppCompatActivity  implements MapView.CurrentLocationEventListener, MapReverseGeoCoder.ReverseGeoCodingResultListener{
     private static final String LOG_TAG = "OrderCarActivity";
 
     private MapView mMapView;
     private TextView tv_location;
-
+    private TextView tv_car;
+    private TextView tv_msg;
     private static final int GPS_ENABLE_REQUEST_CODE = 2001;
     private static final int PERMISSIONS_REQUEST_CODE = 100;
     String[] REQUIRED_PERMISSIONS  = {Manifest.permission.ACCESS_FINE_LOCATION};
@@ -48,6 +55,8 @@ public class OrderCarActivity extends AppCompatActivity  implements MapView.Curr
         mMapView = (MapView) findViewById(R.id.map_view);
         tv_location = (TextView) findViewById(R.id.tv_location);
         ImageButton btnClose = (ImageButton)findViewById(R.id.btnClose);
+        tv_car = (TextView)findViewById(R.id.tv_car);
+        tv_msg = (TextView)findViewById(R.id.tv_msg);
         //mMapView.setDaumMapApiKey(MapApiConst.DAUM_MAPS_ANDROID_APP_API_KEY);
         mMapView.setCurrentLocationEventListener(this);
 
@@ -66,25 +75,8 @@ public class OrderCarActivity extends AppCompatActivity  implements MapView.Curr
         }
 
 
-        // 중심점 변경
-        mMapView.setMapCenterPoint(MapPoint.mapPointWithGeoCoord(37.541889, 127.095388), true);
 
-        // 줌 레벨 변경
-        mMapView.setZoomLevel(9, true);
-
-        MapPOIItem customMarker = new MapPOIItem();
-        customMarker.setItemName("Custom Marker");
-        customMarker.setTag(1);
-        customMarker.setMapPoint(MapPoint.mapPointWithGeoCoord(37.541889,127.095388));
-        customMarker.setMarkerType(MapPOIItem.MarkerType.CustomImage); // 마커타입을 커스텀 마커로 지정.
-        //customMarker.setCustomImageResourceId(R.drawable.truck); // 마커 이미지.
-        customMarker.setMarkerType(MapPOIItem.MarkerType.BluePin);
-        customMarker.setCustomImageAutoscale(false); // hdpi, xhdpi 등 안드로이드 플랫폼의 스케일을 사용할 경우 지도 라이브러리의 스케일 기능을 꺼줌.
-        customMarker.setCustomImageAnchor(0.5f, 1.0f); // 마커 이미지중 기준이 되는 위치(앵커포인트) 지정 - 마커 이미지 좌측 상단 기준 x(0.0f ~ 1.0f), y(0.0f ~ 1.0f) 값.
-
-        mMapView.addPOIItem(customMarker);
-
-        tcp_server_ip = Helper.getMetaData(OrderCarActivity.this, "tcp_server_ip");
+        tcp_server_ip = Helper.getMetaData(OrderCarActivity.this, "tcp.server.ip");
         tcp_server_port = Helper.getMetaData(OrderCarActivity.this, "tcp.server.port");
         if(tcp_server_port.equals(null)) tcp_server_port="0";
 
@@ -219,6 +211,48 @@ public class OrderCarActivity extends AppCompatActivity  implements MapView.Curr
 
     @Override
     public void onCurrentLocationUpdateCancelled(MapView mapView) {
+
+    }
+    @Override
+    protected void onNewIntent(Intent intent) {
+        super.onNewIntent(intent);
+        Log.i("automarket_app","데이터가 Activity에 도달");
+        String carResult = intent.getExtras().getString("carResultData");
+
+        if(carResult !=null && !carResult.equals("")){
+            String[] arr_msg;
+            arr_msg = carResult.split("/");
+            String carid = arr_msg[2];
+            double car_lati = Double.parseDouble(arr_msg[3]);
+            double car_long = Double.parseDouble(arr_msg[4]);
+
+            tv_car.setText(carid);
+            tv_msg.setText(String.format("[%s]차량을 찾았습니다.",carid));
+
+            // 중심점 변경
+            mMapView.setMapCenterPoint(MapPoint.mapPointWithGeoCoord(car_lati, car_long), true);
+
+            // 줌 레벨 변경
+            mMapView.setZoomLevel(9, true);
+
+            MapPOIItem customMarker = new MapPOIItem();
+            customMarker.setItemName(String.format("차량ID : %s",carid));
+            customMarker.setTag(1);
+            customMarker.setMapPoint(MapPoint.mapPointWithGeoCoord(car_lati,car_long));
+            customMarker.setMarkerType(MapPOIItem.MarkerType.CustomImage); // 마커타입을 커스텀 마커로 지정.
+            //customMarker.setCustomImageResourceId(R.drawable.truck); // 마커 이미지.
+            customMarker.setMarkerType(MapPOIItem.MarkerType.BluePin);
+            customMarker.setCustomImageAutoscale(false); // hdpi, xhdpi 등 안드로이드 플랫폼의 스케일을 사용할 경우 지도 라이브러리의 스케일 기능을 꺼줌.
+            customMarker.setCustomImageAnchor(0.5f, 1.0f); // 마커 이미지중 기준이 되는 위치(앵커포인트) 지정 - 마커 이미지 좌측 상단 기준 x(0.0f ~ 1.0f), y(0.0f ~ 1.0f) 값.
+
+            mMapView.addPOIItem(customMarker);
+
+
+        }else{
+            tv_car.setText("");
+            tv_msg.setText(String.format("대기중인 차량이 없습니다."));
+        }
+
 
     }
 }
