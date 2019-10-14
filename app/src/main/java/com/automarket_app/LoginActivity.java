@@ -17,6 +17,7 @@ import android.widget.EditText;
 import androidx.appcompat.app.AppCompatActivity;
 
 import com.automarket_app.VO.UserVO;
+import com.automarket_app.util.AES256Util;
 import com.automarket_app.util.Helper;
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -24,6 +25,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import java.io.BufferedReader;
 import java.io.InputStreamReader;
 import java.io.OutputStreamWriter;
+import java.io.UnsupportedEncodingException;
 import java.net.HttpURLConnection;
 import java.net.URL;
 import java.util.ArrayList;
@@ -44,9 +46,7 @@ public class LoginActivity extends AppCompatActivity {
     UserVO vo = null;
 
     private boolean saveLoginData;
-    private String email;
-    private String pwd;
-    private String userid;
+    private String email, pwd, userid;
     private CheckBox checkBox;
 
     public SharedPreferences login_info; // 로그인 정보 폰에 저장,가져오기
@@ -70,7 +70,7 @@ public class LoginActivity extends AppCompatActivity {
 
         // 이메일, 비밀번호 입력
         edEmail = (EditText)findViewById(R.id.edEmail_login);
-       edPassword = (EditText)findViewById(R.id.edPassword_login);
+        edPassword = (EditText)findViewById(R.id.edPassword_login);
 
         // 회원가입, 로그인 버튼
         btnRegister = (Button)findViewById(R.id.btnRegister);
@@ -122,6 +122,7 @@ public class LoginActivity extends AppCompatActivity {
                     //Toast.makeText(getApplicationContext(),"이메일과 비밀번호를 입력하지 않았군용. 다시 입력해 주세요!!",Toast.LENGTH_SHORT).show();
                 }
 
+
                 // Thread를 만들어서 처리해야됨...........UI 관련작업이 아닌이상.... 계속뭐했찌ㅣㅣㅣ
                 try {
                     Thread thread = new Thread() {
@@ -146,6 +147,7 @@ public class LoginActivity extends AppCompatActivity {
                             } catch (Exception e) {
                                 Log.e("err1","문제");
                                 Log.i("err1", e.toString());
+                                e.printStackTrace();
                             }
                         }
                     };
@@ -156,10 +158,12 @@ public class LoginActivity extends AppCompatActivity {
                     } catch (Exception e) {
                         Log.e("err2","문제");
                         Log.i("err2", e.toString());
+                        e.printStackTrace();
                     }
                 } catch (Exception e) {
                     Log.e("err3","문제");
                     Log.i("err3", e.toString());
+                    e.printStackTrace();
                 }
 
 //                    else {
@@ -207,7 +211,7 @@ public class LoginActivity extends AppCompatActivity {
 
     private UserVO sendGet(String email, String pwd) throws Exception {
 
-         String receive_data;
+        String receive_data;
 
         URL url = new URL(api_url + "/api/login.do?email=" + email);
 
@@ -217,22 +221,6 @@ public class LoginActivity extends AppCompatActivity {
         con.setRequestProperty("charset", "utf-8");
 
 //        Log.d("automarket_app_Debug","응답메세지 : " + con.getResponseMessage());
-
-        Map<String, String> map = new HashMap<String, String>();
-
-        map.put("email",email);
-        map.put("pwd",pwd);
-
-        //jackson library를 이용하여 json데이터 처리
-        ObjectMapper mapper = new ObjectMapper();
-        String json = mapper.writeValueAsString(map);
-
-        Log.i("automarket_app_data","data : " + json);
-
-        Log.i("automarket_app", "response 응답응답ㅎ해해ㅐㅎ");
-
-        int responseCode = con.getResponseCode();
-        Log.d("automarket_app_Debug","응답코드 : " + con.getResponseCode());
 
         //기본적으로 stream은 bufferedReader형태로 생성
         BufferedReader br = new BufferedReader(new InputStreamReader(con.getInputStream()));
@@ -246,10 +234,24 @@ public class LoginActivity extends AppCompatActivity {
 
         br.close();
 
+        Map<String, String> map = new HashMap<String, String>();
+
+        map.put("email",email);
+        map.put("pwd",pwd);
+
+        //jackson library를 이용하여 json데이터 처리
+        ObjectMapper mapper = new ObjectMapper();
+        String json = mapper.writeValueAsString(map);
+
+        Log.i("automarket_app_data","data : " + json);
+
+        Log.i("automarket_app_data", "response 응답응답ㅎ해해ㅐㅎ");
+
+        int responseCode = con.getResponseCode();
+        Log.d("automarket_app_Debug","응답코드 : " + responseCode);
+
         //ArrayList<UserVO> maplist = mapper.readValue(sb.toString(), new TypeReference<List<UserVO>>() {});
         UserVO userObject = mapper.readValue(receive_data, new TypeReference<UserVO>() {});
-
-        Log.i("automarket_app_login", userObject.getEmail());
 
         // 로그인 정보 폰에 저장,가져오기
         // 저장된 값을 불러오기 위해 같은 네임파일을 찾는닷
@@ -261,11 +263,16 @@ public class LoginActivity extends AppCompatActivity {
         editor.putBoolean("SAVE_LOGIN_DATA", checkBox.isChecked());
         editor.putString("USERID", userObject.getUserid());
         Log.i("automarket_app_login","userid :"+ userObject.getUserid());
+        Log.i("automarket_app_login","email :"+ userObject.getEmail());
+        Log.i("automarket_app_login","pwd :"+ userObject.getPwd());
+        Log.i("automarket_app_login", "SharedPre(login_info) : " + login_info);
         editor.putString("EMAIL", edEmail.getText().toString());
         editor.putString("myObject", json);
         // 최종 커밋 , apply 또는 commit 해야됨
         editor.commit();
         Log.i("automarket_app_save", "로그인 객체 저장 성공");
+//        Log.i("automarket_app","aes256 : " + aes256.aesDecode(userObject.getPwd()));
+//        Log.i("automarket_app","aes256 : " + aes256.aesEncode(userObject.getPwd()));
         return userObject;
     }
 
