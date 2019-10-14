@@ -40,7 +40,7 @@ public class OrderCarActivity extends AppCompatActivity  implements MapView.Curr
     private static final int GPS_ENABLE_REQUEST_CODE = 2001;
     private static final int PERMISSIONS_REQUEST_CODE = 100;
     String[] REQUIRED_PERMISSIONS  = {Manifest.permission.ACCESS_FINE_LOCATION};
-    String tcp_server_ip,tcp_server_port;
+    String tcp_server_ip="",tcp_server_port="";
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -84,8 +84,9 @@ public class OrderCarActivity extends AppCompatActivity  implements MapView.Curr
 
         mMapView.addPOIItem(customMarker);
 
-        tcp_server_ip = Helper.getMetaData(this, "tcp_server_ip");
-        tcp_server_port = Helper.getMetaData(this, "tcp_server_port");
+        tcp_server_ip = Helper.getMetaData(OrderCarActivity.this, "tcp_server_ip");
+        tcp_server_port = Helper.getMetaData(OrderCarActivity.this, "tcp.server.port");
+        if(tcp_server_port.equals(null)) tcp_server_port="0";
 
         Intent i = new Intent();
         ComponentName cname = new ComponentName("com.automarket_app","com.automarket_app.service.TcpCarService");

@@ -49,23 +49,10 @@
         <activity android:name=".RegisterActivity" />
         <activity android:name=".MainActivity" />
 
-        <meta-data
-            android:name="api_url"
-            android:value="http://192.168.0.15:9090/automarket" />
-        <!--
-<meta-data
-            android:name="api_url"
-            android:value="http://70.12.115.69:8082/automarket" />
-        -->
-        <meta-data
-            android:name="api_key"
-            android:value="" />
-        <meta-data
-            android:name="tcp_server_ip"
-            android:value="192.168.0.15" />
-        <meta-data
-            android:name="tcp_server_port"
-            android:value="6789" />
+        <meta-data android:name="api_url" android:value="@string/api_url" />
+        <meta-data android:name="api_key" android:value="@string/api_key" />
+        <meta-data android:name="tcp.server.ip" android:value="@string/tcp_server_ip" />
+        <meta-data android:name="tcp.server.port" android:value="@string/tcp_server_port" />
     </application>
 
 </manifest>
