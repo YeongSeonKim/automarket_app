@@ -317,12 +317,10 @@ public class OrderCarActivity extends AppCompatActivity  implements MapView.Curr
                 Toast.makeText(OrderCarActivity.this,"주문처리 되었습니다.",Toast.LENGTH_LONG).show();
                 Intent i_order = new Intent(getApplicationContext(), OrderActivity.class);
 
-//                i_order.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
-//                i_order.addFlags(Intent.FLAG_ACTIVITY_SINGLE_TOP);
-//                i_order.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
 
                 startActivity(i_order);
-            }else{
+            }
+            else{
                 Toast.makeText(OrderCarActivity.this,"주문실패",Toast.LENGTH_LONG).show();
 
             }
@@ -345,7 +343,7 @@ public class OrderCarActivity extends AppCompatActivity  implements MapView.Curr
                 mMapView.setMapCenterPoint(MapPoint.mapPointWithGeoCoord(car_lati, car_long), true);
 
                 // 줌 레벨 변경
-                mMapView.setZoomLevel(7, true);
+                mMapView.setZoomLevel(6, true);
 
                 MapPOIItem customMarker = new MapPOIItem();
                 customMarker.setItemName(String.format("차량ID : %s",carid));

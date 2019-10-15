@@ -32,6 +32,7 @@ public class TcpCarService extends Service {
             i.addFlags(Intent.FLAG_ACTIVITY_SINGLE_TOP);
             i.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
 
+            i.setAction("car");
             i.putExtra("carResultData",msg);
             startActivity(i);
 
