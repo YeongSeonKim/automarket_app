@@ -13,6 +13,7 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.CheckBox;
 import android.widget.EditText;
+import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
 
@@ -53,7 +54,8 @@ public class LoginActivity extends AppCompatActivity {
     UserVO vo = null;
 
     private boolean saveLoginData;
-    private String email, not_aes_pwd, userid;
+    private String email, not_aes_pwd;
+    private String save_email,save_pwd,save_userid;
     private CheckBox checkBox;
 
     public SharedPreferences login_info; // 로그인 정보 폰에 저장,가져오기
@@ -116,14 +118,36 @@ public class LoginActivity extends AppCompatActivity {
             checkBox.setChecked(saveLoginData);
         }
 
-//        if (saveLoginData.equals("")){
-//            Intent intent = new Intent(getApplicationContext(), LoginActivity.class);
+        Log.i("automarket_app_data","saveLoginData : " + saveLoginData );
+
+        if (!(this.save_userid.equals(""))){
+
+            Intent intent = new Intent(getApplicationContext(), MainActivity.class);
+
+            intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+            intent.addFlags(Intent.FLAG_ACTIVITY_SINGLE_TOP);
+            intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+
+            startActivity(intent);
+            finish();
+        }
+
+//        if(email == null && pwd == null) {
+//            // call Login Activity
+//            Intent intent = new Intent(LoginActivity.this, LoginActivity.class);
+//            intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+//            intent.addFlags(Intent.FLAG_ACTIVITY_SINGLE_TOP);
+//            intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
 //            startActivity(intent);
-//
-//        }else {
-//            Intent intent = new Intent(getApplicationContext(), MainActivity.class);
+//            this.finish();
+//        } else if(email != null && pwd != null) {
+//            // Call Next Activity
+//            Intent intent = new Intent(LoginActivity.this, MainActivity.class);
+//            intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+//            intent.addFlags(Intent.FLAG_ACTIVITY_SINGLE_TOP);
+//            intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
 //            startActivity(intent);
-//
+//            this.finish();
 //        }
 
         // 로그인 버튼
@@ -138,39 +162,32 @@ public class LoginActivity extends AppCompatActivity {
                 try {
                     aes256 = new AES256Util(key);
                     pwd = aes256.aesEncode(not_aes_pwd);
-                    Log.i("automarket_app_login","암호화 비밀번호 : " + pwd); // db에 있는 비밀번호와 비교하기
+                    Log.i("automarket_app_login","암호화 비밀번호 : " + pwd);
                 } catch (UnsupportedEncodingException | NoSuchAlgorithmException | NoSuchPaddingException | InvalidKeyException | InvalidAlgorithmParameterException | IllegalBlockSizeException | BadPaddingException e) {
                     Log.e("acs_err","문제");
                     e.printStackTrace();
                 }
 
-                // 비밀번호창에 비밀번호가 입력되지 않았을때
-                if (not_aes_pwd.isEmpty()){
-                    AlertDialog.Builder builder = new AlertDialog.Builder(LoginActivity.this);
-                    dialog = builder.setMessage("비밀번호입력창이 비어있습니다. 비밀번호를 입력해 주세요...!")
-                            .setNegativeButton("OK", null)
-                            .create();
-                    dialog.show();
-                    return;
-                    //Toast.makeText(getApplicationContext(),"이메일과 비밀번호를 입력하지 않았군용. 다시 입력해 주세요!!",Toast.LENGTH_SHORT).show();
+                // 입력창에 비어있을 때
+                if (email.equals("") || not_aes_pwd.equals("")){
+                    Toast.makeText(getApplicationContext(),"입력창이 비었습니다..! 이메일과 비밀번호 입력 부탁",Toast.LENGTH_SHORT).show();
                 }
-
 
                 // Thread를 만들어서 처리해야됨...........UI 관련작업이 아닌이상.... 계속뭐했찌ㅣㅣㅣ
                 try {
                     Thread thread = new Thread() {
                         public void run() {
                             try {
+                                //jackson library를 이용하여 json데이터 처리
+                                ObjectMapper mapper = new ObjectMapper();
+                                String json = mapper.writeValueAsString(vo);
+
                                 vo = sendPostRequest(email, pwd); // get방식에서 post방식으로 변경
-                                Log.i("automarket_app_login", "email : " + vo.getEmail() +"\n"+ "pwd :" +  vo.getPwd());
+                                Log.i("automarket_app_login", "save_email : " + vo.getEmail() +"\n"+ "save_pwd :" +  vo.getPwd() +"\n"+ "save_userid_ :" +  vo.getUserid());
 
                                 if (!(email.equals(vo.getEmail()))||(pwd.equals(vo.getPwd()))) {
-                                    DialogMessage();
+                                    Toast.makeText(getApplicationContext(),"로그인 정보가 일치하지 않아요~~! 다시 로그인 해주세요...!",Toast.LENGTH_SHORT).show();
                                 } else {
-                                    //jackson library를 이용하여 json데이터 처리
-                                    ObjectMapper mapper = new ObjectMapper();
-                                    String json = mapper.writeValueAsString(vo);
-
                                     // 로그인 하기, 첫 로드시 데이터 바인딩
                                     Intent intent = new Intent();
                                     ComponentName cname = new ComponentName("com.automarket_app", "com.automarket_app.MainActivity");
@@ -201,22 +218,6 @@ public class LoginActivity extends AppCompatActivity {
                     Log.i("err3", e.toString());
                     e.printStackTrace();
                 }
-
-//                    서비스 이용한 로그인처리
-//                    else {
-//                   // 로그인 하기, 첫 로드시 데이터 바인딩
-//                    Intent intent = new Intent();
-//                    ComponentName cname = new ComponentName("com.automarket_app","com.automarket_app.service.LoginService");
-//                    intent.setComponent(cname);
-//                    intent.putExtra("email",email);
-////                    intent.putExtra("pwd",pwd);
-//                    intent.putExtra("api_url",api_url);
-//
-//                    startService(intent);
-//
-//                    Log.i("automarket_app", "로그인 페이지로 이동!");
-//
-//                }
             }
         });
     }
@@ -226,24 +227,9 @@ public class LoginActivity extends AppCompatActivity {
         // SharedPreferences 객체.get타입( 저장된 이름, 기본값 )
         // 저장된 이름이 존재하지 않을 시 기본값
         saveLoginData = login_info.getBoolean("SAVE_LOGIN_DATA", false);
-        email = login_info.getString("EMAIL", "");
-        pwd = login_info.getString("PWD", "");
-        userid = login_info.getString("USERID","");
-
-    }
-
-    // 정보가 일치하지 않았을떄 뜨는 dialogmessage
-    private void DialogMessage() {
-        AlertDialog.Builder builder = new AlertDialog.Builder(LoginActivity.this);
-        builder.setPositiveButton("확인", new DialogInterface.OnClickListener() {
-            @Override
-            public void onClick(DialogInterface dialog, int which) {
-                dialog.dismiss();
-            }
-        });
-        builder.setMessage("로그인 정보가 일치하지 않아요~~! 다시 로그인 해주세요!!");
-        builder.show();
-
+        save_email = login_info.getString("EMAIL", "");
+        save_pwd = login_info.getString("PWD", "");
+        save_userid = login_info.getString("USERID","");
     }
 
     // http 통신 post
@@ -306,6 +292,11 @@ public class LoginActivity extends AppCompatActivity {
         UserVO userObject = mapper.readValue(receive_data, new TypeReference<UserVO>() {});
         Log.i("automarket_app_uservo" , "userObject : " + userObject);
 
+//        if (userObject.getUserid() == null){
+//            Toast.makeText(getApplicationContext(),"로그인에 실패했다요요용",Toast.LENGTH_SHORT).show();
+//            return null;
+//        }
+
         // 자동로그인
         // 로그인 정보 폰에 저장,가져오기
         // 저장된 값을 불러오기 위해 같은 네임파일을 찾는닷
@@ -327,8 +318,6 @@ public class LoginActivity extends AppCompatActivity {
         // 최종 커밋 , apply 또는 commit 해야됨
         editor.commit();
         Log.i("automarket_app_save", "로그인 정보 저장 성공");
-//        Log.i("automarket_app","aes256 : " + aes256.aesDecode(userObject.getPwd()));
-//        Log.i("automarket_app","aes256 : " + aes256.aesEncode(userObject.getPwd()));
         return userObject;
     }
 

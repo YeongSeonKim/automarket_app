@@ -8,7 +8,9 @@
 
     <LinearLayout
         android:layout_width="wrap_content"
-        android:layout_height="wrap_content">
+        android:layout_height="wrap_content"
+        android:padding="5dp"
+        android:background="@drawable/border_underline">
 
     <ImageView
         android:layout_width="80dp"
@@ -90,14 +92,14 @@
     <LinearLayout
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginLeft="10dp"
-        android:layout_gravity="end">
+        android:layout_marginLeft="10dp">
 
         <ImageButton
             android:id="@+id/btn_cart_delete"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:background="@color/btn_bg"
+            android:layout_marginTop="5dp"
             android:src="@drawable/cancel"/>
 
     </LinearLayout>
