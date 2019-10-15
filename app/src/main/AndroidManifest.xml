@@ -21,7 +21,7 @@
         <service
             android:name=".service.TcpCarService"
             android:enabled="true"
-            android:exported="true"></service>
+            android:exported="true"/>
 
         <meta-data
             android:name="com.kakao.sdk.AppKey"

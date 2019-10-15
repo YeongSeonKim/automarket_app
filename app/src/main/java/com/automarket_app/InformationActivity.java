@@ -2,6 +2,7 @@ package com.automarket_app;
 
 import androidx.appcompat.app.AppCompatActivity;
 
+import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
@@ -13,15 +14,13 @@ import android.widget.TextView;
 
 public class InformationActivity extends AppCompatActivity {
 
-    public SharedPreferences login_info; // 로그인 정보 폰에 저장,가져오기
+    private SharedPreferences appData;
+    String login_email;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_information);
-
-        login_info = getSharedPreferences("login_info", MODE_PRIVATE);
-        Log.i("automarket_app","login_info : " + login_info);
 
         ImageButton btnBack = (ImageButton)findViewById(R.id.btnBack);
 
@@ -36,14 +35,31 @@ public class InformationActivity extends AppCompatActivity {
                 intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
 
                 startActivity(intent);
-               //finish();
+                //finish();
             }
         });
 
+        // 자동로그인 - 설정 값 불러오기
+        appData = getSharedPreferences("login_info",MODE_PRIVATE);
+        login_email = appData.getString("EMAIL","");
+
+        Log.i("automarket_app","login_email : " + login_email);
+
         TextView nowEmail = (TextView)findViewById(R.id.nowEmail);
 
+        nowEmail.setText(login_email);
+
+        Log.i("automarket_app","login_email : " + nowEmail);
 
         Button btnLogout = (Button)findViewById(R.id.btnLogout);
+        btnLogout.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                // value 값을 null로 할당
+
+
+            }
+        });
 
     }
 }
