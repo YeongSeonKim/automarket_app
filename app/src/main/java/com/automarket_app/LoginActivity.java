@@ -59,7 +59,7 @@ public class LoginActivity extends AppCompatActivity {
     public SharedPreferences login_info; // 로그인 정보 폰에 저장,가져오기
 
     private AES256Util aes256;
-    private String key = "";
+    private String key;
     String pwd; // 암호화된 비밀번호
 
     @Override
@@ -109,12 +109,22 @@ public class LoginActivity extends AppCompatActivity {
             }
         });
 
-        // 이전에 로그인 정보를 저장시킨 기록이 있다면
+        // 이전에 로그인 정보를 저장시킨 기록이 있다면 - 화면에 띄워주는 역할
         if (saveLoginData) {
             edEmail.setText(email);
             edPassword.setText(pwd);
             checkBox.setChecked(saveLoginData);
         }
+
+//        if (saveLoginData.equals("")){
+//            Intent intent = new Intent(getApplicationContext(), LoginActivity.class);
+//            startActivity(intent);
+//
+//        }else {
+//            Intent intent = new Intent(getApplicationContext(), MainActivity.class);
+//            startActivity(intent);
+//
+//        }
 
         // 로그인 버튼
         btnLogin.setOnClickListener(new View.OnClickListener() {
@@ -134,10 +144,10 @@ public class LoginActivity extends AppCompatActivity {
                     e.printStackTrace();
                 }
 
-                // 이메일이랑 비밀번호가 입력되지 않았을때
-                if (email.equals("")||pwd.equals("")){
+                // 비밀번호창에 비밀번호가 입력되지 않았을때
+                if (not_aes_pwd.isEmpty()){
                     AlertDialog.Builder builder = new AlertDialog.Builder(LoginActivity.this);
-                    dialog = builder.setMessage("이메일과 비밀번호를 입력하지 않았군용. 다시 입력해 주세요!!")
+                    dialog = builder.setMessage("비밀번호입력창이 비어있습니다. 비밀번호를 입력해 주세요...!")
                             .setNegativeButton("OK", null)
                             .create();
                     dialog.show();
@@ -152,17 +162,21 @@ public class LoginActivity extends AppCompatActivity {
                         public void run() {
                             try {
                                 vo = sendPostRequest(email, pwd); // get방식에서 post방식으로 변경
-                                Log.i("automarket_app_login", "email : " + vo.getEmail() +"\n"+ "psw :" +  vo.getPwd());
+                                Log.i("automarket_app_login", "email : " + vo.getEmail() +"\n"+ "pwd :" +  vo.getPwd());
 
                                 if (!(email.equals(vo.getEmail()))||(pwd.equals(vo.getPwd()))) {
                                     DialogMessage();
                                 } else {
+                                    //jackson library를 이용하여 json데이터 처리
+                                    ObjectMapper mapper = new ObjectMapper();
+                                    String json = mapper.writeValueAsString(vo);
+
                                     // 로그인 하기, 첫 로드시 데이터 바인딩
                                     Intent intent = new Intent();
                                     ComponentName cname = new ComponentName("com.automarket_app", "com.automarket_app.MainActivity");
                                     intent.setComponent(cname);
                                     intent.putExtra("api_url",api_url);
-                                    intent.putExtra("data", vo);
+                                    intent.putExtra("data", json); // json string으로 변환해서 넘기기
                                     startActivity(intent);
                                     Log.i("automarket_app_login", "로그인 성공~~ 메인으로 넘어갓~");
                                 }
@@ -213,7 +227,7 @@ public class LoginActivity extends AppCompatActivity {
         // 저장된 이름이 존재하지 않을 시 기본값
         saveLoginData = login_info.getBoolean("SAVE_LOGIN_DATA", false);
         email = login_info.getString("EMAIL", "");
-        //pwd = login_info.getString("PWD", "");
+        pwd = login_info.getString("PWD", "");
         userid = login_info.getString("USERID","");
 
     }
@@ -304,9 +318,10 @@ public class LoginActivity extends AppCompatActivity {
         editor.putString("USERID", userObject.getUserid());
         Log.i("automarket_app_login","userid :"+ userObject.getUserid());
         Log.i("automarket_app_login","email :"+ userObject.getEmail());
-        //Log.i("automarket_app_login","pwd :"+ userObject.getPwd());
+        Log.i("automarket_app_login","pwd :"+ userObject.getPwd());
         Log.i("automarket_app_login", "SharedPre(login_info) : " + login_info);
         editor.putString("EMAIL", edEmail.getText().toString());
+        editor.putString("PWD", edPassword.getText().toString());
         editor.putString("myObject", json);
 
         // 최종 커밋 , apply 또는 commit 해야됨

@@ -51,7 +51,7 @@ public class AES256Util {
         //String enStr = new String(Base64.encodeBase64(encrypted));
         String enStr = new String(Base64.encode(encrypted,Base64.DEFAULT));
 
-        return enStr;
+        return enStr.replace("\n","");
     }
 
     //복호화
