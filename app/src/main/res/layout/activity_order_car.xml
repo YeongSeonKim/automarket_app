@@ -5,8 +5,7 @@
     android:orientation="vertical"
     xmlns:android="http://schemas.android.com/apk/res/android"
     android:background="@color/bg_color"
-    android:id="@+id/linearLayout_order"
-    >
+    android:id="@+id/linearLayout_order">
 
     <LinearLayout
         android:layout_width="match_parent"
@@ -16,12 +15,13 @@
         android:background="@drawable/border_underline">
 
         <ImageButton
-            android:id="@+id/btnBack"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_gravity="center"
+            android:background="@color/btn_bg"
+            android:src="@drawable/btn_cart"
             android:layout_weight="2"
-            android:background="@color/btn_bg" />
+            android:visibility="invisible" />
 
         <TextView
             android:layout_width="wrap_content"
@@ -46,12 +46,17 @@
     </LinearLayout>
 
     <LinearLayout
-    android:layout_width="match_parent"
-    android:layout_height="wrap_content"
-    android:layout_gravity="center_vertical"
-        android:layout_margin="5dp"
-    android:orientation="horizontal">
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:layout_margin="10dp">
 
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center_vertical"
+        android:layout_marginBottom="5dp"
+        android:orientation="horizontal">
 
     <TextView
         android:layout_width="wrap_content"
@@ -64,15 +69,14 @@
         android:textColor="@color/colorBlack"
         android:id="@+id/tv_location"/>
 
+    </LinearLayout>
 
-</LinearLayout>
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_gravity="center_vertical"
-        android:layout_margin="5dp"
+        android:layout_marginBottom="5dp"
         android:orientation="horizontal">
-
 
         <TextView
             android:layout_width="wrap_content"
@@ -85,11 +89,11 @@
             android:textColor="@color/colorBlack"
             android:id="@+id/tv_car"/>
     </LinearLayout>
+
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_gravity="center_vertical"
-        android:layout_margin="5dp"
         android:orientation="horizontal">
         <TextView
             android:layout_width="wrap_content"
@@ -97,6 +101,8 @@
             android:textColor="@color/colorBlack"
             android:id="@+id/tv_msg"
             android:text="인근 차량 찾는중.."/>
+    </LinearLayout>
+
     </LinearLayout>
 
     <net.daum.mf.map.api.MapView
