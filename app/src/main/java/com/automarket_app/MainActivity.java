@@ -10,6 +10,7 @@ import android.view.View;
 import android.view.WindowManager;
 import android.widget.Button;
 import android.widget.ImageButton;
+import android.widget.Toast;
 
 public class MainActivity extends AppCompatActivity {
 
@@ -20,6 +21,8 @@ public class MainActivity extends AppCompatActivity {
         // 상태바 없애기
         // getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN, WindowManager.LayoutParams.FLAG_FULLSCREEN);
         setContentView(R.layout.activity_main);
+
+        //Toast.makeText(getApplicationContext(),"로그인성공",Toast.LENGTH_SHORT).show();
 
         ImageButton btnOrder = (ImageButton)findViewById(R.id.btnOrder);
         ImageButton btnCash = (ImageButton)findViewById(R.id.btnCash);
@@ -84,9 +87,3 @@ public class MainActivity extends AppCompatActivity {
 
     }
 }
-
-/*
-* mReceiveIntent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
-* mReceiveIntent.addFlags(Intent.FLAG_ACTIVITY_SINGLE_TOP);
-* mReceiveIntent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-* */
