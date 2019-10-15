@@ -7,7 +7,6 @@ import android.util.Log;
 
 import com.automarket_app.OrderCarActivity;
 import com.automarket_app.VO.OrderVO;
-import com.automarket_app.VO.ProductVO;
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
@@ -17,9 +16,6 @@ import java.io.InputStreamReader;
 import java.io.OutputStreamWriter;
 import java.net.HttpURLConnection;
 import java.net.URL;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
 
 public class OrderService extends Service {
     public OrderService() {

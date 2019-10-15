@@ -7,7 +7,6 @@ import android.util.Log;
 
 import com.automarket_app.OrderActivity;
 import com.automarket_app.VO.ProductVO;
-import com.automarket_app.util.Helper;
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
@@ -17,9 +16,6 @@ import java.net.HttpURLConnection;
 import java.net.URL;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Map;
-
-import javax.net.ssl.HttpsURLConnection;
 
 public class ProductService extends Service {
     private String api_url;

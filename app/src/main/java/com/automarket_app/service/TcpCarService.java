@@ -6,7 +6,6 @@ import android.content.SharedPreferences;
 import android.os.IBinder;
 import android.util.Log;
 
-import com.automarket_app.OrderActivity;
 import com.automarket_app.OrderCarActivity;
 
 import java.io.BufferedReader;
