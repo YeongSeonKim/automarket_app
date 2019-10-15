@@ -10,6 +10,7 @@ import android.content.ComponentName;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
 import android.location.Location;
 import android.location.LocationListener;
@@ -26,16 +27,26 @@ import android.widget.ImageButton;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.automarket_app.VO.CartVO;
+import com.automarket_app.VO.OrderDetailVO;
+import com.automarket_app.VO.OrderVO;
 import com.automarket_app.VO.ProductVO;
+import com.automarket_app.VO.UserVO;
 import com.automarket_app.adapter.ProductAdapter;
 import com.automarket_app.util.Helper;
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.core.type.TypeReference;
+import com.fasterxml.jackson.databind.ObjectMapper;
 
 import net.daum.mf.map.api.MapPOIItem;
 import net.daum.mf.map.api.MapPoint;
 import net.daum.mf.map.api.MapReverseGeoCoder;
 import net.daum.mf.map.api.MapView;
 
+import java.io.IOException;
 import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
 
 public class OrderCarActivity extends AppCompatActivity  implements MapView.CurrentLocationEventListener, MapReverseGeoCoder.ReverseGeoCodingResultListener{
     private static final String LOG_TAG = "OrderCarActivity";
@@ -44,21 +55,93 @@ public class OrderCarActivity extends AppCompatActivity  implements MapView.Curr
     private TextView tv_location;
     private TextView tv_car;
     private TextView tv_msg;
+    private ImageButton btnClose;
+    private Button btnOrder,btnCancel;
     private static final int GPS_ENABLE_REQUEST_CODE = 2001;
     private static final int PERMISSIONS_REQUEST_CODE = 100;
     String[] REQUIRED_PERMISSIONS  = {Manifest.permission.ACCESS_FINE_LOCATION};
     String tcp_server_ip="",tcp_server_port="";
+    double user_lati=0.0,user_long=0.0;
+    private LocationManager locationManager;
+    private String carid="",login_userid="";
+    private SharedPreferences appData;
+    private List<OrderDetailVO> o_list;
+    private String api_url;
+    private List<CartVO> cartlist;
+    private Integer cart_sum=0;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_order_car);
         mMapView = (MapView) findViewById(R.id.map_view);
         tv_location = (TextView) findViewById(R.id.tv_location);
-        ImageButton btnClose = (ImageButton)findViewById(R.id.btnClose);
+        btnClose = (ImageButton)findViewById(R.id.btnClose);
         tv_car = (TextView)findViewById(R.id.tv_car);
         tv_msg = (TextView)findViewById(R.id.tv_msg);
+        btnOrder = (Button)findViewById(R.id.btnOrder);
+        btnCancel = (Button)findViewById(R.id.btnCancel);
         //mMapView.setDaumMapApiKey(MapApiConst.DAUM_MAPS_ANDROID_APP_API_KEY);
         mMapView.setCurrentLocationEventListener(this);
+
+        api_url = Helper.getMetaData(this, "api_url");
+        appData = getSharedPreferences("login_info", MODE_PRIVATE);
+        login_userid= appData.getString("USERID","");
+
+        Intent i_this = getIntent();
+        cart_sum = (Integer)i_this.getExtras().get("cart_sum");
+        String cart_prod_list = (String)i_this.getExtras().get("cart_prod_list");
+
+        final ObjectMapper mapper = new ObjectMapper();
+        try {
+            cartlist = mapper.readValue(cart_prod_list, new TypeReference<List<CartVO>>() {});
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        btnOrder.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                //주문하기
+                if(carid.equals("")) {
+                    Toast.makeText(OrderCarActivity.this,"차량정보가 없습니다.",Toast.LENGTH_LONG).show();
+                    return;
+                }
+                try {
+                    o_list = new ArrayList<OrderDetailVO>();
+                    for(CartVO vo :cartlist){
+                        o_list.add(new OrderDetailVO(vo.getProdid(),vo.getProdcnt()));
+                    }
+                    OrderVO vo = new OrderVO();
+                    vo.setCarid(carid);
+                    vo.setUserid(login_userid);
+                    vo.setTotalprice(cart_sum);
+                    vo.setReceiptaddr("");
+                    vo.setReceiptlati(user_lati);
+                    vo.setReceiptlong(user_long);
+                    vo.setOrderdetail(o_list);
+
+                    String json = mapper.writeValueAsString(vo);
+
+                    Intent i = new Intent();
+                    ComponentName cname = new ComponentName("com.automarket_app","com.automarket_app.service.OrderService");
+                    i.setComponent(cname);
+                    i.putExtra("order_vo",json);
+                    i.putExtra("api_url",api_url);
+                    startService(i);
+
+                } catch (JsonProcessingException e) {
+                    e.printStackTrace();
+                }catch (Exception e) {
+                    e.printStackTrace();
+                }
+
+            }
+        });
+        btnCancel.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                finish();
+            }
+        });
 
         btnClose.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -66,15 +149,20 @@ public class OrderCarActivity extends AppCompatActivity  implements MapView.Curr
                 finish();
             }
         });
-        if (!checkLocationServicesStatus()) {
 
+        if (!checkLocationServicesStatus()) {
             showDialogForLocationServiceSetting();
         }else {
-
             checkRunTimePermission();
         }
 
+        locationManager = (LocationManager)getSystemService(Context.LOCATION_SERVICE);
 
+        Location lastKnownLocation = locationManager.getLastKnownLocation(LocationManager.NETWORK_PROVIDER);
+        if (lastKnownLocation != null) {
+            user_lati = lastKnownLocation.getLatitude();
+            user_long = lastKnownLocation.getLongitude();
+        }
 
         tcp_server_ip = Helper.getMetaData(OrderCarActivity.this, "tcp.server.ip");
         tcp_server_port = Helper.getMetaData(OrderCarActivity.this, "tcp.server.port");
@@ -85,6 +173,8 @@ public class OrderCarActivity extends AppCompatActivity  implements MapView.Curr
         i.setComponent(cname);
         i.putExtra("tcp_server_ip",tcp_server_ip);
         i.putExtra("tcp_server_port",Integer.parseInt(tcp_server_port));
+        i.putExtra("user_lati",user_lati);
+        i.putExtra("user_long",user_long);
         startService(i);
 
     }
@@ -196,7 +286,9 @@ public class OrderCarActivity extends AppCompatActivity  implements MapView.Curr
         MapPoint.GeoCoordinate mapPointGeo = currentLocation.getMapPointGeoCoord();
         String location = String.format("위도:%f, 경도:%f", mapPointGeo.latitude, mapPointGeo.longitude);
         tv_location.setText(location);
-        Log.i(LOG_TAG, String.format("MapView onCurrentLocationUpdate (%f,%f) accuracy (%f)", mapPointGeo.latitude, mapPointGeo.longitude, accuracyInMeters));
+        user_lati = mapPointGeo.latitude;
+        user_long = mapPointGeo.longitude;
+        //Log.i(LOG_TAG, String.format("MapView onCurrentLocationUpdate (%f,%f) accuracy (%f)", mapPointGeo.latitude, mapPointGeo.longitude, accuracyInMeters));
     }
 
     @Override
@@ -217,40 +309,61 @@ public class OrderCarActivity extends AppCompatActivity  implements MapView.Curr
     protected void onNewIntent(Intent intent) {
         super.onNewIntent(intent);
         Log.i("automarket_app","데이터가 Activity에 도달");
-        String carResult = intent.getExtras().getString("carResultData");
+        if(intent.getAction()!=null && intent.getAction().equals("order")){
+            String ordermap = intent.getExtras().getString("orderResultData");
 
-        if(carResult !=null && !carResult.equals("")){
-            String[] arr_msg;
-            arr_msg = carResult.split("/");
-            String carid = arr_msg[2];
-            double car_lati = Double.parseDouble(arr_msg[3]);
-            double car_long = Double.parseDouble(arr_msg[4]);
+            if(ordermap!=null && !ordermap.equals("")){
+                System.out.println("ordermap:"+ordermap);
+                Toast.makeText(OrderCarActivity.this,"주문처리 되었습니다.",Toast.LENGTH_LONG).show();
+                Intent i_order = new Intent(getApplicationContext(), OrderActivity.class);
 
-            tv_car.setText(carid);
-            tv_msg.setText(String.format("[%s]차량을 찾았습니다.",carid));
+//                i_order.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+//                i_order.addFlags(Intent.FLAG_ACTIVITY_SINGLE_TOP);
+//                i_order.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
 
-            // 중심점 변경
-            mMapView.setMapCenterPoint(MapPoint.mapPointWithGeoCoord(car_lati, car_long), true);
+                startActivity(i_order);
+            }else{
+                Toast.makeText(OrderCarActivity.this,"주문실패",Toast.LENGTH_LONG).show();
 
-            // 줌 레벨 변경
-            mMapView.setZoomLevel(9, true);
-
-            MapPOIItem customMarker = new MapPOIItem();
-            customMarker.setItemName(String.format("차량ID : %s",carid));
-            customMarker.setTag(1);
-            customMarker.setMapPoint(MapPoint.mapPointWithGeoCoord(car_lati,car_long));
-            customMarker.setMarkerType(MapPOIItem.MarkerType.CustomImage); // 마커타입을 커스텀 마커로 지정.
-            //customMarker.setCustomImageResourceId(R.drawable.truck); // 마커 이미지.
-            customMarker.setMarkerType(MapPOIItem.MarkerType.BluePin);
-            customMarker.setCustomImageAutoscale(false); // hdpi, xhdpi 등 안드로이드 플랫폼의 스케일을 사용할 경우 지도 라이브러리의 스케일 기능을 꺼줌.
-            customMarker.setCustomImageAnchor(0.5f, 1.0f); // 마커 이미지중 기준이 되는 위치(앵커포인트) 지정 - 마커 이미지 좌측 상단 기준 x(0.0f ~ 1.0f), y(0.0f ~ 1.0f) 값.
-
-            mMapView.addPOIItem(customMarker);
+            }
 
 
         }else{
-            tv_car.setText("");
-            tv_msg.setText(String.format("대기중인 차량이 없습니다."));
+            String carResult = intent.getExtras().getString("carResultData");
+
+            if(carResult !=null && !carResult.equals("")){
+                String[] arr_msg;
+                arr_msg = carResult.split("/");
+                carid = arr_msg[2];
+                double car_lati = Double.parseDouble(arr_msg[3]);
+                double car_long = Double.parseDouble(arr_msg[4]);
+
+                tv_car.setText(carid);
+                tv_msg.setText(String.format("[%s]차량을 찾았습니다.",carid));
+
+                // 중심점 변경
+                mMapView.setMapCenterPoint(MapPoint.mapPointWithGeoCoord(car_lati, car_long), true);
+
+                // 줌 레벨 변경
+                mMapView.setZoomLevel(7, true);
+
+                MapPOIItem customMarker = new MapPOIItem();
+                customMarker.setItemName(String.format("차량ID : %s",carid));
+                customMarker.setTag(1);
+                customMarker.setMapPoint(MapPoint.mapPointWithGeoCoord(car_lati,car_long));
+                customMarker.setMarkerType(MapPOIItem.MarkerType.CustomImage); // 마커타입을 커스텀 마커로 지정.
+                //customMarker.setCustomImageResourceId(R.drawable.truck); // 마커 이미지.
+                customMarker.setMarkerType(MapPOIItem.MarkerType.RedPin);
+                customMarker.setCustomImageAutoscale(false); // hdpi, xhdpi 등 안드로이드 플랫폼의 스케일을 사용할 경우 지도 라이브러리의 스케일 기능을 꺼줌.
+                customMarker.setCustomImageAnchor(0.5f, 1.0f); // 마커 이미지중 기준이 되는 위치(앵커포인트) 지정 - 마커 이미지 좌측 상단 기준 x(0.0f ~ 1.0f), y(0.0f ~ 1.0f) 값.
+
+                mMapView.addPOIItem(customMarker);
+
+
+            }else{
+                tv_car.setText("");
+                tv_msg.setText(String.format("대기중인 차량이 없습니다."));
+            }
         }
 
 

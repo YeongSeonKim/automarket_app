@@ -42,13 +42,6 @@ import java.util.List;
             btnBack.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
-//                    Intent intent = new Intent(getApplicationContext(), MainActivity.class);
-//
-//                    intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
-//                    intent.addFlags(Intent.FLAG_ACTIVITY_SINGLE_TOP);
-//                    intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-//
-//                    startActivity(intent);
                     finish();
                 }
             });
@@ -117,6 +110,9 @@ import java.util.List;
 
          gridView = (GridView) findViewById(R.id.griview);
          ProductAdapter adapter = new ProductAdapter();
+
+         if(productList==null)
+             return;
 
          for(ProductVO vo : productList){
              adapter.addItem(vo);

@@ -2,6 +2,7 @@ package com.automarket_app.service;
 
 import android.app.Service;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.IBinder;
 import android.util.Log;
 
@@ -42,15 +43,22 @@ public class TcpCarService extends Service {
         private BufferedReader br;
         public String tcp_server_ip;
         public int tcp_server_port;
+        private double user_lati;
+        private double user_long;
+        private SharedPreferences appData;
+        String login_userid="";
         public ReceiveRunnable(BufferedReader br) {
             super();
             this.br = br;
         }
-        public ReceiveRunnable(BufferedReader br,String tcp_server_ip,Integer tcp_server_port) {
+        public ReceiveRunnable(BufferedReader br,String tcp_server_ip,Integer tcp_server_port
+                ,double user_lati,double user_long) {
             super();
             this.br = br;
             this.tcp_server_ip = tcp_server_ip;
             this.tcp_server_port = tcp_server_port;
+            this.user_lati = user_lati;
+            this.user_long = user_long;
         }
         public void sendmsg(String msg){
             out.println(msg);
@@ -60,20 +68,27 @@ public class TcpCarService extends Service {
         public void run() {
             String line = "";
             try {
+                appData = getSharedPreferences("login_info", MODE_PRIVATE);
+                login_userid= appData.getString("USERID","");
+
                 socket = new Socket(tcp_server_ip,tcp_server_port);
                 br = new BufferedReader(new InputStreamReader(socket.getInputStream()));
                 out = new PrintWriter(socket.getOutputStream());
                 printMsg("서버 접속 성공");
+                String msg = "";
 
-                sendmsg("U/10000100/1000020");
+                sendmsg(String.format("U/10000100/%s",login_userid));
                 Thread.sleep(1000);
-                sendmsg("U/10000101/1000020/37.541889/127.095388");
+                msg = String.format("U/10000101/%s/%f/%f",login_userid,user_lati,user_long);
+
+                sendmsg(msg);
+                sendmsg("/EXIT/");
 
                 while((line=br.readLine())!=null) {
                     printMsg(line);
                 }
                 printMsg("서버 연결해제");
-                sendmsg("/EXIT/");
+
 
             }catch(Exception e) {
                 e.getStackTrace();
@@ -98,8 +113,13 @@ public class TcpCarService extends Service {
         try {
             String tcp_server_ip = intent.getExtras().getString("tcp_server_ip");
             Integer tcp_server_port = intent.getExtras().getInt("tcp_server_port");
+            double user_lati = intent.getExtras().getDouble("user_lati");
+            double user_long = intent.getExtras().getDouble("user_long");
 
-            ReceiveRunnable runnable = new ReceiveRunnable(br,tcp_server_ip,tcp_server_port);
+            System.out.println("user_lati:"+user_lati);
+            System.out.println("user_long:"+user_long);
+
+            ReceiveRunnable runnable = new ReceiveRunnable(br,tcp_server_ip,tcp_server_port,user_lati,user_long);
             executorService.execute(runnable);
         }catch(Exception e) {
             System.out.println(e);

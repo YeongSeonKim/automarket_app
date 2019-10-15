@@ -21,10 +21,15 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.automarket_app.VO.CartVO;
+import com.automarket_app.VO.OrderVO;
 import com.automarket_app.adapter.CartAdapter;
 import com.automarket_app.database.MySqliteHelper;
 import com.automarket_app.util.Helper;
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.core.type.TypeReference;
+import com.fasterxml.jackson.databind.ObjectMapper;
 
+import java.io.IOException;
 import java.text.DecimalFormat;
 import java.text.NumberFormat;
 import java.util.ArrayList;
@@ -35,6 +40,7 @@ public class CartActivity extends AppCompatActivity {
     private SQLiteDatabase db;
     List<CartVO> cartList = new ArrayList<CartVO>();
     String api_url="";
+    Integer cart_sum=0;
     public CartActivity() {
     }
 
@@ -53,9 +59,11 @@ public class CartActivity extends AppCompatActivity {
             Cursor c = db.rawQuery("SELECT * FROM cart ", null);
             String result = "" ;
             CartVO vo = new CartVO();
-            Integer cart_sum=0,prod_total=0;
+            Integer prod_total=0;
+            cart_sum = 0;
+            cartList = new ArrayList<CartVO>();
             while (c.moveToNext()) {
-                System.out.println("cart >> "+ c.getColumnName(0));
+                //System.out.println("cart >> "+ c.getColumnName(0));
 
                 vo = new CartVO();
                 vo.setProdid(c.getString(0));
@@ -66,6 +74,7 @@ public class CartActivity extends AppCompatActivity {
 
                 vo.byteFromURL(api_url);
                 cartAdapter.addItem(vo);
+                cartList.add(vo);
                 prod_total = c.getInt(3) * c.getInt(1);
                 cart_sum += prod_total;
             }
@@ -146,12 +155,22 @@ public class CartActivity extends AppCompatActivity {
             @Override
             public void onClick(View view) {
 
+                ObjectMapper mapper = new ObjectMapper();
+                String listStr = null;
+                try {
+                    listStr = mapper.writeValueAsString(cartList);
+                } catch (JsonProcessingException e) {
+                    e.printStackTrace();
+                }
+
                 Intent intent = new Intent(getApplicationContext(), OrderCarActivity.class);
 
                 intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
                 intent.addFlags(Intent.FLAG_ACTIVITY_SINGLE_TOP);
                 intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
 
+                intent.putExtra("cart_sum",cart_sum);
+                intent.putExtra("cart_prod_list",listStr);
                 startActivity(intent);
 
                 /*AlertDialog.Builder dialog = new AlertDialog.Builder(CartActivity.this);
