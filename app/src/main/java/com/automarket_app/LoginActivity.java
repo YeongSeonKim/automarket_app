@@ -84,6 +84,8 @@ public class LoginActivity extends AppCompatActivity {
         login_info = getSharedPreferences("login_info", MODE_PRIVATE);
         load();
 
+        Log.i("automarket_app","login_info" + login_info);
+
         // 이메일, 비밀번호 입력
         edEmail = (EditText)findViewById(R.id.edEmail_login);
         edPassword = (EditText)findViewById(R.id.edPassword_login);
@@ -120,35 +122,30 @@ public class LoginActivity extends AppCompatActivity {
 
         Log.i("automarket_app_data","saveLoginData : " + saveLoginData );
 
-        if (!(this.save_userid.equals(""))){
+        if (save_userid == null){
 
-            Intent intent = new Intent(getApplicationContext(), MainActivity.class);
+            Intent intent = new Intent(LoginActivity.this, LoginActivity.class);
 
             intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
             intent.addFlags(Intent.FLAG_ACTIVITY_SINGLE_TOP);
             intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
 
             startActivity(intent);
-            finish();
-        }
 
-//        if(email == null && pwd == null) {
-//            // call Login Activity
-//            Intent intent = new Intent(LoginActivity.this, LoginActivity.class);
-//            intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
-//            intent.addFlags(Intent.FLAG_ACTIVITY_SINGLE_TOP);
-//            intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-//            startActivity(intent);
-//            this.finish();
-//        } else if(email != null && pwd != null) {
-//            // Call Next Activity
-//            Intent intent = new Intent(LoginActivity.this, MainActivity.class);
-//            intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
-//            intent.addFlags(Intent.FLAG_ACTIVITY_SINGLE_TOP);
-//            intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-//            startActivity(intent);
-//            this.finish();
-//        }
+            this.finish();
+
+        } else if(save_userid != null && !save_userid.equals("")){
+
+            Intent intent = new Intent(LoginActivity.this, MainActivity.class);
+
+            intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+            intent.addFlags(Intent.FLAG_ACTIVITY_SINGLE_TOP);
+            intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+
+            startActivity(intent);
+
+            this.finish();
+        }
 
         // 로그인 버튼
         btnLogin.setOnClickListener(new View.OnClickListener() {
