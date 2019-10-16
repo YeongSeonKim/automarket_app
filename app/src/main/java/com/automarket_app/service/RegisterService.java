@@ -9,11 +9,9 @@ import androidx.annotation.Nullable;
 
 import com.automarket_app.RegisterActivity;
 import com.automarket_app.VO.UserVO;
-import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
 import java.io.BufferedReader;
-import java.io.IOException;
 import java.io.InputStreamReader;
 import java.io.OutputStreamWriter;
 import java.net.HttpURLConnection;
@@ -22,10 +20,12 @@ import java.net.URL;
 public class RegisterService extends Service {
 
     private String api_url;
+    String receive_data;
     private UserVO userVO;
 
     class RegisterRunnable implements Runnable {
         private UserVO userVO;
+        String email, name, pwd, deviceid, adminflag;
 
         public RegisterRunnable() {
         }
@@ -34,12 +34,20 @@ public class RegisterService extends Service {
             this.userVO = userVO;
         }
 
+        public RegisterRunnable(String email, String name, String pwd, String deviceid, String adminflag) {
+            this.email = email;
+            this.name = name;
+            this.pwd = pwd;
+            this.deviceid = deviceid;
+            this.adminflag = adminflag;
+        }
+
         @Override
         public void run() {
 
-            // http://localhost:8080/automarket/register.do
-            //  String url = "http://localhost:8080/automarket/register.do";
-            String url = api_url + "/register.do";
+            // http://localhost:8080/automarket/api/register.do
+            //  String url = "http://localhost:8080/automarket/api/register.do";
+            String url = api_url + "api/register.do";
 
             try{
                 URL urlObj = new URL(url);
@@ -53,37 +61,60 @@ public class RegisterService extends Service {
 
                 OutputStreamWriter out = new OutputStreamWriter(con.getOutputStream());
 
+//                Map<String, Object> map = new HashMap<String, Object>();
+
+//                map.put("email", email);
+//                map.put("name", name);
+//                map.put("pwd", pwd);
+//                map.put("deviceid",deviceid);
+//                map.put("adminflag", adminflag);
+
                 ObjectMapper mapper = new ObjectMapper();
                 String json = mapper.writeValueAsString(userVO);
+
+                Log.i("automarket_app_data","data : " + json);
+                System.out.println(json);
+
                 out.write(json);
                 out.flush();
                 out.close();
 
-                int responseCode=con.getResponseCode();
-                StringBuffer sb=null;
+                int responseCode = con.getResponseCode();
+
+                Log.i("automarket_app_data", "response 응답응답ㅎ해해ㅐㅎ");
+                Log.d("automarket_app_Debug","응답코드 : " + responseCode); // 200 : 연결성공
+
+                StringBuffer sb = null;
                 if (responseCode == HttpURLConnection.HTTP_OK) {
 
-                    BufferedReader in=new BufferedReader( new InputStreamReader(con.getInputStream()));
+                    BufferedReader br = new BufferedReader( new InputStreamReader(con.getInputStream()));
                     sb = new StringBuffer("");
-                    String line="";
-                    while((line = in.readLine()) != null) {
+                    String line = "";
+                    while((line = br.readLine()) != null) {
                         sb.append(line);
                         break;
                     }
-                    in.close();
+                    receive_data = sb.toString();
+                    Log.i("automarket_app_login","receive_data :"+ receive_data);
+
+                    br.close();
                 }
+
                 Intent i = new Intent(getApplicationContext(), RegisterActivity.class);
+
                 i.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
                 i.addFlags(Intent.FLAG_ACTIVITY_SINGLE_TOP);
                 i.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
 
-                //i.putParcelableArrayListExtra("resultData",maplist);
+                i.putExtra("register_data",  receive_data);
+                i.setAction("register");
 
                 startActivity(i);
 
 
             }catch (Exception e){
                 Log.e("automarket_app",e.toString());
+                e.printStackTrace();
             }
         }
     }
@@ -110,20 +141,24 @@ public class RegisterService extends Service {
     public int onStartCommand(Intent intent, int flags, int startId) {
         Log.i("automarket_app","onStartCommand 호출");
 
-        String order_vo = intent.getExtras().getString("user_vo");
-        api_url = intent.getExtras().getString("api_url");
-
-        ObjectMapper mapper = new ObjectMapper();
+        //String user_vo = intent.getExtras().getString("user_vo");
         try {
-            userVO = mapper.readValue(order_vo, new TypeReference<UserVO>() {});
-        } catch (IOException e) {
-            e.printStackTrace();
+            String email = intent.getExtras().getString("re_email");
+            String pwd = intent.getExtras().getString("re_name");
+            String name = intent.getExtras().getString("re_pwd");
+            String deviceid = intent.getExtras().getString("re_pwd");
+            String adminflag = intent.getExtras().getString("re_pwd");
+
+            api_url = intent.getExtras().getString("api_url");
+
+            // Thread를 만들기 위한 Runnable 객체부터 생성
+            RegisterService.RegisterRunnable runnable = new RegisterService.RegisterRunnable(email, pwd, name, deviceid, adminflag);
+            Thread t = new Thread(runnable);
+            t.start();
+
+        }catch(Exception e) {
+            System.out.println(e);
         }
-
-        RegisterService.RegisterRunnable runnable =new RegisterService.RegisterRunnable(userVO);
-        Thread t = new Thread(runnable);
-        t.start();
-
         return super.onStartCommand(intent, flags, startId);
     }
 

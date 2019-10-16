@@ -265,6 +265,7 @@ public class LoginActivity extends AppCompatActivity {
         // request json
         out.write(json);
         out.flush();
+        out.close();
 
         //기본적으로 stream은 bufferedReader형태로 생성
         BufferedReader br = new BufferedReader(new InputStreamReader(con.getInputStream()));
