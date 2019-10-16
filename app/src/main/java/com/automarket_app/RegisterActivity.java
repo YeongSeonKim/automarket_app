@@ -19,6 +19,7 @@ import androidx.appcompat.app.AppCompatActivity;
 import com.automarket_app.VO.UserVO;
 import com.automarket_app.util.AES256Util;
 import com.automarket_app.util.Helper;
+import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
@@ -58,7 +59,7 @@ public class RegisterActivity extends AppCompatActivity {
     String pwd; // 암호화된 비밀번호
 
     private List<UserVO> re_user_list;
-    private UserVO vo;
+    private UserVO userVO;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -140,6 +141,7 @@ public class RegisterActivity extends AppCompatActivity {
             }
         });
 
+
         // 가입버튼
         btnDone.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -184,17 +186,33 @@ public class RegisterActivity extends AppCompatActivity {
                     dialog.show();
                     return;
                 }
-                HashMap<String,Object> map = new HashMap<String,Object>();
-                map.put("email",re_email);
-                map.put("name",re_name);
-                map.put("pwd",re_pwd);
-                ObjectMapper mapper = new ObjectMapper();
-                String json="";
-                try{
-                    json = mapper.writeValueAsString(map);
-                }catch (Exception e){
-                    System.out.println(e.getStackTrace());
+
+                Intent i_this = getIntent();
+                String register_userList = i_this.getExtras().getString("register_data");
+
+                final ObjectMapper mapper = new ObjectMapper();
+
+                try {
+                    re_user_list = mapper.readValue(register_userList, new TypeReference<List<UserVO>>() {});
+
+                }catch (IOException e){
+                    e.printStackTrace();
                 }
+
+                String json = "";
+                try {
+                    json = mapper.writeValueAsString(re_user_list);
+
+                    Log.i("automarket_app_data","data : " + json);
+
+                } catch (JsonProcessingException e) {
+                    e.printStackTrace();
+                }
+
+//                HashMap<String,Object> map = new HashMap<String,Object>();
+//                map.put("email",re_email);
+//                map.put("name",re_name);
+//                map.put("pwd",re_pwd);
 
                 // 회원가입 시작 - 서비스
                 Intent intent = new Intent();
@@ -257,19 +275,25 @@ public class RegisterActivity extends AppCompatActivity {
 
             final ObjectMapper mapper = new ObjectMapper();
             try {
-                HashMap<String,Object> map = mapper.readValue(register_userList, new TypeReference<HashMap<String,Object>>() {});
-                map.put("email", re_email);
-                map.put("name", re_name);
-                map.put("pwd", pwd);
-                map.put("deviceid",re_deviceid);
-                map.put("adminflag", re_adminflag);
+//                HashMap<String,Object> map = mapper.readValue(register_userList, new TypeReference<HashMap<String,Object>>() {});
+//                map.put("email", re_email);
+//                map.put("name", re_name);
+//                map.put("pwd", pwd);
+//                map.put("deviceid",re_deviceid);
+//                map.put("adminflag", re_adminflag);
+//
+////               final String json = mapper.writeValueAsString(map);
+//
+//                Log.i("automarket_app_map","hashmap : "+ map);
+//
+//                map.get("status"); // json key,value값 ("msg","status")들어오는데 ststus는 int형
+//                                   // status가 1이면 회원가입 성공 , 토스트메세지
 
-//               final String json = mapper.writeValueAsString(map);
+                userVO = mapper.readValue(register_userList, new TypeReference<UserVO>() {});
 
-                Log.i("automarket_app_map","hashmap : "+ map);
+               final String json = mapper.writeValueAsString(userVO);
 
-                map.get("status"); // json key,value값 ("msg","status")들어오는데 ststus는 int형
-                                   // status가 1이면 회원가입 성공 , 토스트메세지
+                Log.i("automarket_app","json : " + json);
 
             } catch (IOException e) {
                 e.printStackTrace();

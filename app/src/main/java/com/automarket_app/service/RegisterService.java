@@ -8,7 +8,6 @@ import android.util.Log;
 import androidx.annotation.Nullable;
 
 import com.automarket_app.RegisterActivity;
-import com.automarket_app.VO.CartVO;
 import com.automarket_app.VO.UserVO;
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -18,7 +17,6 @@ import java.io.InputStreamReader;
 import java.io.OutputStreamWriter;
 import java.net.HttpURLConnection;
 import java.net.URL;
-import java.util.List;
 
 public class RegisterService extends Service {
 
@@ -145,7 +143,7 @@ public class RegisterService extends Service {
 
         String register_vo = intent.getExtras().getString("register_vo");
         ObjectMapper mapper = new ObjectMapper();
-        UserVO userVO=null;
+
         try{
             userVO = mapper.readValue(register_vo, new TypeReference<UserVO>() {});
 
