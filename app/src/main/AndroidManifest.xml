@@ -25,7 +25,7 @@
             android:name=".service.OrderInfoService"
             android:enabled="true"
             android:exported="true" />
-        android:usesCleartextTraffic="true">
+
         <service
             android:name=".service.UserInfoService"
             android:enabled="true"
