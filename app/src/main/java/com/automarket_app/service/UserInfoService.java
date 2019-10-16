@@ -7,6 +7,7 @@ import android.os.IBinder;
 import android.util.Log;
 
 import com.automarket_app.CartActivity;
+import com.automarket_app.CashActivity;
 import com.automarket_app.VO.UserVO;
 
 import java.io.BufferedReader;
@@ -18,7 +19,7 @@ public class UserInfoService extends Service {
     private String api_url = "", login_userid = "";
     private SharedPreferences appData;
     private UserVO userVO;
-
+    private String action_name="";
     public UserInfoService() {
     }
 
@@ -46,17 +47,22 @@ public class UserInfoService extends Service {
                 }
                 br.close();
 
+                Intent i;
                 //intent를 통해 activity에 전달
-                Intent i = new Intent(getApplicationContext(), CartActivity.class);
+                if(action_name.equals("cashform_call")){
+                    i = new Intent(getApplicationContext(), CashActivity.class);
+                }else {
+                    i = new Intent(getApplicationContext(), CartActivity.class);
+
+                }
                 i.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
                 i.addFlags(Intent.FLAG_ACTIVITY_SINGLE_TOP);
                 i.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
 
-                //전달되는 데이터는 직렬화가 가능한 형태로 구성되어야 함
-                //컴포넌트간 객체전달 마셜링 작업필요
                 i.putExtra("userResultData", sb.toString());
                 i.setAction("userinfo");
                 startActivity(i);
+
 
             } catch (Exception e) {
                 Log.e("automarket_app", e.toString());
@@ -82,6 +88,7 @@ public class UserInfoService extends Service {
     public int onStartCommand(Intent intent, int flags, int startId) {
         Log.i("automarket_app", "onStartCommand 호출");
 
+        action_name = intent.getAction();
         api_url = intent.getExtras().getString("api_url");
 
         UserInfoRunnable runnable = new UserInfoRunnable();

@@ -67,9 +67,11 @@
                android:layout_width="match_parent"
                android:layout_height="wrap_content"
                android:layout_weight="1"
-               android:textAlignment="center"
                android:textSize="20dp"
-               android:id="@+id/nowCash"/>
+               android:id="@+id/nowCash"
+               android:text="0"
+               android:textColor="@color/colorBlue"
+               android:gravity="right"/>
 
             <TextView
                 android:layout_width="wrap_content"
@@ -88,7 +90,10 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:hint="@string/cash_hint"
-                android:textColor="@color/colorBlack"/>
+                android:textColor="@color/colorBlack"
+                android:layout_weight="1"
+                android:width="1dp"
+                />
 
             <Button
                 android:layout_width="wrap_content"
