@@ -25,10 +25,18 @@
                 android:layout_margin="5dp">
 
                 <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="@string/order_num"
+                    android:textColor="@color/colorBlack"
+                    android:textSize="20sp" />
+
+                <TextView
                     android:id="@+id/order_id"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:text="@string/order_id"
+                    android:layout_marginLeft="10dp"
                     android:textColor="@color/colorBlack"
                     android:textSize="20sp" />
             </LinearLayout>
