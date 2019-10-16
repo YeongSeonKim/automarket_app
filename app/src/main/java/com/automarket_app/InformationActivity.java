@@ -109,13 +109,13 @@ public class InformationActivity extends AppCompatActivity {
         login_userid = appData.getString("USERID",""); // userid값 불러오기
         Log.i("automarket_app_appdata" ,"login_userid : " + login_userid);
 
-//                //첫 로드시 데이터 바인딩
-//                Intent i = new Intent();
-//                ComponentName cname = new ComponentName("com.automarket_app", "com.automarket_app.service.OrderInfoService");
-//                i.setComponent(cname);
-////                i.putExtra("userid","1000007");
-//                i.putExtra("api_url", api_url);
-//                startService(i);
+                //첫 로드시 데이터 바인딩
+                Intent i = new Intent();
+                ComponentName cname = new ComponentName("com.automarket_app", "com.automarket_app.service.OrderInfoService");
+                i.setComponent(cname);
+//                i.putExtra("userid","1000007");
+                i.putExtra("api_url", api_url);
+                startService(i);
 
     }
 

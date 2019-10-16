@@ -30,79 +30,60 @@ public class OrderInfoService extends Service {
         private SharedPreferences appData;
         String login_userid="";
 
-        public OrderInfoRunnable(String userid) {
-            this.userid = userid;
-        }
+        public OrderInfoRunnable() {       }
 
-    @Override
-    public void run() {
+        @Override
+        public void run() {
 
             appData = getSharedPreferences("login_info", MODE_PRIVATE);
             login_userid= appData.getString("USERID","");
 
-            userid = login_userid;
+            // http://localhost:8080/automarket/api/order/info.do?uid=1000007
+            String url = api_url + "/api/order/info.do?uid=" + login_userid;
 
-        // http://localhost:8080/automarket/api/order/info.do?uid=1000007
-        String url = api_url + "/api/order/info.do?uid=" + userid;
-
-        try{
-            URL urlObj = new URL(url);
-            HttpURLConnection con = (HttpURLConnection) urlObj.openConnection();
-            con.setRequestMethod("GET");
+            try{
+                URL urlObj = new URL(url);
+                HttpURLConnection con = (HttpURLConnection) urlObj.openConnection();
+                con.setRequestMethod("GET");
 //            con.setRequestProperty("Content-Type", "application/json");
 //            con.setRequestProperty("charset", "utf-8");
 
 
-            //기본적으로 stream은 bufferedReader형태로 생성
-            BufferedReader br = new BufferedReader(new InputStreamReader(con.getInputStream()));
-            String line = null;
-            StringBuffer sb = new StringBuffer();
-            while ((line = br.readLine()) != null){
-                sb.append(line);
+                //기본적으로 stream은 bufferedReader형태로 생성
+                BufferedReader br = new BufferedReader(new InputStreamReader(con.getInputStream()));
+                String line = null;
+                StringBuffer sb = new StringBuffer();
+                while ((line = br.readLine()) != null){
+                    sb.append(line);
+                }
+
+                receive_data = sb.toString();
+                Log.i("automarket_app_order","receive_data :"+ receive_data);
+
+                br.close();
+
+                //jackson library를 이용하여 json데이터 처리
+                ObjectMapper mapper = new ObjectMapper();
+                ArrayList<OrderInfoVO> orderObject = mapper.readValue(sb.toString(), new TypeReference<List<OrderInfoVO>>() {});
+
+                Log.i("automarket_app_order","orderObject :"+ orderObject);
+
+                Intent i = new Intent(getApplicationContext(), InformationActivity.class);
+
+                i.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+                i.addFlags(Intent.FLAG_ACTIVITY_SINGLE_TOP);
+                i.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+
+                i.putParcelableArrayListExtra("resultData", orderObject);
+
+                startActivity(i);
+
+
+            }catch (Exception e){
+                Log.e("automarket_app",e.toString());
             }
-
-            receive_data = sb.toString();
-            Log.i("automarket_app_order","receive_data :"+ receive_data);
-
-            br.close();
-
-            //jackson library를 이용하여 json데이터 처리
-            ObjectMapper mapper = new ObjectMapper();
-
-            //OrderInfoVO orderObject = mapper.readValue(receive_data, new TypeReference<OrderInfoVO>() {});
-            //Map<String, Object> map = mapper.readValue(sb.toString(), new TypeReference<Map<String,Object>>() {});
-            //Log.i("automarket_app_order","map :"+ map);
-
-            //String json = mapper.writeValueAsString(map);
-
-            //Log.i("automarket_app_order","json :"+ json);
-
-            ArrayList<OrderInfoVO> orderObject = mapper.readValue(sb.toString(), new TypeReference<List<OrderInfoVO>>() {});
-
-
-//            for(OrderInfoVO vo: orderObject){
-//                    vo.getOrderid();
-//                    vo.getOrderdate();
-//                }
-
-            Log.i("automarket_app_order","orderObject :"+ orderObject);
-
-            Intent i = new Intent(getApplicationContext(), InformationActivity.class);
-
-            i.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
-            i.addFlags(Intent.FLAG_ACTIVITY_SINGLE_TOP);
-            i.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-
-            i.putParcelableArrayListExtra("resultData", orderObject);
-
-            startActivity(i);
-
-
-        }catch (Exception e){
-            Log.e("automarket_app",e.toString());
         }
     }
-}
 
     public OrderInfoService() {
     }
@@ -128,11 +109,11 @@ public class OrderInfoService extends Service {
 
         // 전달된 키워드를 이용해서 외부 네트워크 접속을 위한
         // Thread를 하나 생성해야 한다.
-        String keyword = intent.getExtras().getString("userid");
+
         api_url = intent.getExtras().getString("api_url");
 
         // Thread를 만들기 위한 Runnable 객체부터 생성
-        OrderInfoService.OrderInfoRunnable runnable = new OrderInfoService.OrderInfoRunnable(keyword);
+        OrderInfoService.OrderInfoRunnable runnable = new OrderInfoService.OrderInfoRunnable();
         Thread t = new Thread(runnable);
         t.start();
 
