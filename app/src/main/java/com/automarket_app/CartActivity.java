@@ -4,6 +4,7 @@ import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.app.AlertDialog;
+import android.content.ComponentName;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.database.Cursor;
@@ -22,12 +23,15 @@ import android.widget.Toast;
 
 import com.automarket_app.VO.CartVO;
 import com.automarket_app.VO.OrderVO;
+import com.automarket_app.VO.UserVO;
 import com.automarket_app.adapter.CartAdapter;
 import com.automarket_app.database.MySqliteHelper;
 import com.automarket_app.util.Helper;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
+
+import org.w3c.dom.Text;
 
 import java.io.IOException;
 import java.text.DecimalFormat;
@@ -41,6 +45,9 @@ public class CartActivity extends AppCompatActivity {
     List<CartVO> cartList = new ArrayList<CartVO>();
     String api_url="";
     Integer cart_sum=0;
+    TextView cart_cash_now;
+    TextView cart_total_price;
+    ImageButton btnBack;
     public CartActivity() {
     }
 
@@ -94,13 +101,17 @@ public class CartActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_cart);
+
         api_url = Helper.getMetaData(this, "api_url");
         final TextView tvTotal;
+        cart_cash_now = (TextView)findViewById(R.id.cart_cash_now);
+        cart_total_price = (TextView)findViewById(R.id.cart_total_price);
+        btnBack = (ImageButton)findViewById(R.id.btnBack);
+        tvTotal=(TextView)findViewById(R.id.cart_total_price);
+
         MySqliteHelper helper = new MySqliteHelper(CartActivity.this);
         //helper를 통해서 database에 대한 Handle을 얻어 올 수 있다.
         db = helper.getWritableDatabase(); // 액티비티의 필드로 올림
-
-        ImageButton btnBack = (ImageButton)findViewById(R.id.btnBack);
 
         // btnBack
         btnBack.setOnClickListener(new View.OnClickListener() {
@@ -109,8 +120,7 @@ public class CartActivity extends AppCompatActivity {
                 finish();
             }
         });
-        //final TextView
-        tvTotal=(TextView)findViewById(R.id.cart_total_price);
+
         final ListView lv_cartlist = (ListView)findViewById(R.id.lv_cartlist);
 
         final Handler handler = new Handler(){
@@ -133,6 +143,13 @@ public class CartActivity extends AppCompatActivity {
         Thread t = new Thread(runnable);
         t.start();
 
+        //회원정보 조회
+        Intent i = new Intent();
+        ComponentName cname = new ComponentName("com.automarket_app","com.automarket_app.service.UserInfoService");
+        i.setComponent(cname);
+        i.putExtra("api_url",api_url);
+        startService(i);
+
         // 캐시충전
         Button btnAddCash_Page = (Button)findViewById(R.id.btnAddCash_Page);
         btnAddCash_Page.setOnClickListener(new View.OnClickListener() {
@@ -150,10 +167,22 @@ public class CartActivity extends AppCompatActivity {
 
         // 주문하기, 다이어로그 이용해서 차량선택창 띄우기
         Button btnOrder = (Button)findViewById(R.id.btnOrder);
-
         btnOrder.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+
+                if(cartList.size()==0){
+                    Toast.makeText(CartActivity.this,"선택된 상품이 없습니다.",Toast.LENGTH_LONG).show();
+
+                    return ;
+                }
+                int price = Integer.parseInt(cart_total_price.getText().toString());
+                int cash_now = Integer.parseInt(cart_cash_now.getText().toString());
+                if(price > cash_now){
+                    Toast.makeText(CartActivity.this,"캐시금액이 부족합니다.",Toast.LENGTH_LONG).show();
+
+                    return ;
+                }
 
                 ObjectMapper mapper = new ObjectMapper();
                 String listStr = null;
@@ -203,4 +232,25 @@ public class CartActivity extends AppCompatActivity {
 
     }
 
+    @Override
+    protected void onNewIntent(Intent intent) {
+        super.onNewIntent(intent);
+        Log.i("automarket_app", "데이터가 Activity에 도달");
+        if (intent.getAction() != null && intent.getAction().equals("userinfo")) {
+            String usermap = intent.getExtras().getString("userResultData");
+
+            try {
+                final ObjectMapper mapper = new ObjectMapper();
+                UserVO userVO = mapper.readValue(usermap, new TypeReference<UserVO>() {});
+
+                NumberFormat formatter = new DecimalFormat("#,###");
+                String cashamtformat = formatter.format(userVO.getCashamt());
+                cart_cash_now.setText(cashamtformat);
+                System.out.println("cashamtformat:"+cashamtformat);
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+        }
+
+    }
 }
