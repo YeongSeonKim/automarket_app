@@ -184,13 +184,23 @@ public class RegisterActivity extends AppCompatActivity {
                     dialog.show();
                     return;
                 }
-
+                HashMap<String,Object> map = new HashMap<String,Object>();
+                map.put("email",re_email);
+                map.put("name",re_name);
+                map.put("pwd",re_pwd);
+                ObjectMapper mapper = new ObjectMapper();
+                String json="";
+                try{
+                    json = mapper.writeValueAsString(map);
+                }catch (Exception e){
+                    System.out.println(e.getStackTrace());
+                }
 
                 // 회원가입 시작 - 서비스
                 Intent intent = new Intent();
                 ComponentName cname = new ComponentName("com.automarket_app","com.automarket_app.service.RegisterService");
                 intent.setComponent(cname);
-//                intent.putExtra("register_vo",json);
+                intent.putExtra("register_vo",json);
                 intent.putExtra("api_url",api_url);
                 startService(intent);
 

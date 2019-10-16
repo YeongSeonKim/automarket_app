@@ -8,7 +8,9 @@ import android.util.Log;
 import androidx.annotation.Nullable;
 
 import com.automarket_app.RegisterActivity;
+import com.automarket_app.VO.CartVO;
 import com.automarket_app.VO.UserVO;
+import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
 import java.io.BufferedReader;
@@ -16,6 +18,7 @@ import java.io.InputStreamReader;
 import java.io.OutputStreamWriter;
 import java.net.HttpURLConnection;
 import java.net.URL;
+import java.util.List;
 
 public class RegisterService extends Service {
 
@@ -34,13 +37,13 @@ public class RegisterService extends Service {
             this.userVO = userVO;
         }
 
-        public RegisterRunnable(String email, String name, String pwd, String deviceid, String adminflag) {
-            this.email = email;
-            this.name = name;
-            this.pwd = pwd;
-            this.deviceid = deviceid;
-            this.adminflag = adminflag;
-        }
+//        public RegisterRunnable(String email, String name, String pwd, String deviceid, String adminflag) {
+//            this.email = email;
+//            this.name = name;
+//            this.pwd = pwd;
+//            this.deviceid = deviceid;
+//            this.adminflag = adminflag;
+//        }
 
         @Override
         public void run() {
@@ -108,7 +111,6 @@ public class RegisterService extends Service {
 
                 i.putExtra("register_data",  receive_data);
                 i.setAction("register");
-
                 startActivity(i);
 
 
@@ -141,18 +143,22 @@ public class RegisterService extends Service {
     public int onStartCommand(Intent intent, int flags, int startId) {
         Log.i("automarket_app","onStartCommand 호출");
 
-        //String user_vo = intent.getExtras().getString("user_vo");
-        try {
-            String email = intent.getExtras().getString("re_email");
-            String pwd = intent.getExtras().getString("re_name");
-            String name = intent.getExtras().getString("re_pwd");
-            String deviceid = intent.getExtras().getString("re_pwd");
-            String adminflag = intent.getExtras().getString("re_pwd");
+        String register_vo = intent.getExtras().getString("register_vo");
+        ObjectMapper mapper = new ObjectMapper();
+        UserVO userVO=null;
+        try{
+            userVO = mapper.readValue(register_vo, new TypeReference<UserVO>() {});
+
+//            String email = userVO.getEmail();
+//            String pwd = userVO.getPwd();
+//            String name = userVO.getName();
+//            String deviceid ="";
+//            String adminflag = "0";
 
             api_url = intent.getExtras().getString("api_url");
 
             // Thread를 만들기 위한 Runnable 객체부터 생성
-            RegisterService.RegisterRunnable runnable = new RegisterService.RegisterRunnable(email, pwd, name, deviceid, adminflag);
+            RegisterService.RegisterRunnable runnable = new RegisterService.RegisterRunnable(userVO);
             Thread t = new Thread(runnable);
             t.start();
 
