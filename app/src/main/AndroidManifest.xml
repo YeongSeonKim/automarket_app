@@ -18,22 +18,25 @@
         android:theme="@style/Theme.AppCompat.NoActionBar"
         android:usesCleartextTraffic="true">
         <service
+            android:name=".service.CarMoveService"
+            android:enabled="true"
+            android:exported="true"></service>
+        <service
             android:name=".service.RegisterService"
             android:enabled="true"
-            android:exported="true"/>
+            android:exported="true" />
         <service
             android:name=".service.OrderInfoService"
             android:enabled="true"
             android:exported="true" />
-
         <service
             android:name=".service.UserInfoService"
             android:enabled="true"
-            android:exported="true"/>
+            android:exported="true" />
         <service
             android:name=".service.TcpCarService"
             android:enabled="true"
-            android:exported="true"/>
+            android:exported="true" />
 
         <meta-data
             android:name="com.kakao.sdk.AppKey"
@@ -49,7 +52,7 @@
         <service
             android:name=".service.OrderService"
             android:enabled="true"
-            android:exported="true"/>
+            android:exported="true" />
 
         <activity android:name=".CartActivity" />
         <activity android:name=".InformationActivity" />
@@ -67,10 +70,18 @@
         <activity android:name=".RegisterActivity" />
         <activity android:name=".MainActivity" />
 
-        <meta-data android:name="api_url" android:value="@string/api_url" />
-        <meta-data android:name="api_key" android:value="@string/api_key" />
-        <meta-data android:name="tcp.server.ip" android:value="@string/tcp_server_ip" />
-        <meta-data android:name="tcp.server.port" android:value="@string/tcp_server_port" />
+        <meta-data
+            android:name="api_url"
+            android:value="@string/api_url" />
+        <meta-data
+            android:name="api_key"
+            android:value="@string/api_key" />
+        <meta-data
+            android:name="tcp.server.ip"
+            android:value="@string/tcp_server_ip" />
+        <meta-data
+            android:name="tcp.server.port"
+            android:value="@string/tcp_server_port" />
     </application>
 
 </manifest>

@@ -63,9 +63,9 @@
     <string name="setting">설정</string>
 
     <!--<string name="api_url">http://70.12.115.69:8082/automarket</string>-->
-    <string name="api_url">http://70.12.115.56:8080/automarket</string>
+    <string name="api_url">http://70.12.115.61:8080/automarket</string>
     <string name="api_key"></string>
-    <string name="tcp_server_ip">70.12.115.56</string>
+    <string name="tcp_server_ip">70.12.115.50</string>
     <string name="tcp_server_port">6789</string>
 
 </resources>

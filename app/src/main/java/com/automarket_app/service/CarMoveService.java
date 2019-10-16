@@ -15,13 +15,13 @@ import java.net.Socket;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 
-public class TcpCarService extends Service {
+public class CarMoveService extends Service {
     Socket socket;
     BufferedReader br ;
     PrintWriter out;
     ExecutorService executorService = Executors.newCachedThreadPool();
 
-    public TcpCarService() {
+    public CarMoveService() {
     }
     private void printMsg(String msg) {
         if(msg.contains("/10000101/")){
@@ -39,26 +39,24 @@ public class TcpCarService extends Service {
         Log.i("TcpCarService",msg);
     }
     //서버로부터 들어오는 메시지를 계속 받는부분
-    class ReceiveRunnable implements Runnable {
+    class CarMoveRunnable implements Runnable {
         private BufferedReader br;
         public String tcp_server_ip;
         public int tcp_server_port;
-        private double user_lati;
-        private double user_long;
         private SharedPreferences appData;
-        String login_userid="";
-        public ReceiveRunnable(BufferedReader br) {
+        String login_userid="",carid="";
+
+        public CarMoveRunnable(BufferedReader br) {
             super();
             this.br = br;
         }
-        public ReceiveRunnable(BufferedReader br,String tcp_server_ip,Integer tcp_server_port
-                ,double user_lati,double user_long) {
+        public CarMoveRunnable(BufferedReader br,String tcp_server_ip,Integer tcp_server_port
+                ,String carid) {
             super();
             this.br = br;
             this.tcp_server_ip = tcp_server_ip;
             this.tcp_server_port = tcp_server_port;
-            this.user_lati = user_lati;
-            this.user_long = user_long;
+            this.carid = carid;
         }
         public void sendmsg(String msg){
             out.println(msg);
@@ -77,11 +75,11 @@ public class TcpCarService extends Service {
                 printMsg("서버 접속 성공");
                 String msg = "";
 
-                //tcp server에 사용자등록
+                //tcp server에 차량등록
                 sendmsg(String.format("U/10000100/%s",login_userid));
                 Thread.sleep(1000);
                 //인근차량 요청
-                msg = String.format("U/10000101/%s/%f/%f",login_userid,user_lati,user_long);
+                msg = String.format("U/10000102/%s/%s",login_userid,carid);
 
                 sendmsg(msg);
                 sendmsg("/EXIT/");
@@ -115,13 +113,9 @@ public class TcpCarService extends Service {
         try {
             String tcp_server_ip = intent.getExtras().getString("tcp_server_ip");
             Integer tcp_server_port = intent.getExtras().getInt("tcp_server_port");
-            double user_lati = intent.getExtras().getDouble("user_lati");
-            double user_long = intent.getExtras().getDouble("user_long");
+            String carid = intent.getExtras().getString("carid");
 
-            System.out.println("user_lati:"+user_lati);
-            System.out.println("user_long:"+user_long);
-
-            ReceiveRunnable runnable = new ReceiveRunnable(br,tcp_server_ip,tcp_server_port,user_lati,user_long);
+            CarMoveRunnable runnable = new CarMoveRunnable(br,tcp_server_ip,tcp_server_port,carid);
             executorService.execute(runnable);
         }catch(Exception e) {
             System.out.println(e);
