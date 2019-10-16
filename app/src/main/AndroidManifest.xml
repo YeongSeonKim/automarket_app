@@ -20,7 +20,7 @@
         <service
             android:name=".service.RegisterService"
             android:enabled="true"
-            android:exported="true"></service>
+            android:exported="true"/>
         <service
             android:name=".service.OrderInfoService"
             android:enabled="true"
@@ -29,7 +29,7 @@
         <service
             android:name=".service.UserInfoService"
             android:enabled="true"
-            android:exported="true"></service>
+            android:exported="true"/>
         <service
             android:name=".service.TcpCarService"
             android:enabled="true"
