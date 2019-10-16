@@ -71,17 +71,12 @@ import java.util.List;
             TabHost tabHost = (TabHost) findViewById(R.id.tabHost);
             tabHost.setup();
 
-            // 첫 번째 Tab. (탭 표시 텍스트:"과일"), (페이지 뷰:"tab1")
+            // Tab 정의
             tabHost.addTab(tabHost.newTabSpec("1").setContent(R.id.content1).setIndicator("과일"));
-            // 두 번째 Tab. (탭 표시 텍스트:"채소"), (페이지 뷰:"tab2")
             tabHost.addTab(tabHost.newTabSpec("2").setContent(R.id.content2).setIndicator("채소"));
-            // 세 번째 Tab. (탭 표시 텍스트:"쌀 / 잡곡"), (페이지 뷰:"tab3")
-            tabHost.addTab(tabHost.newTabSpec("3").setContent(R.id.content3).setIndicator("쌀 / 잡곡"));
-            // 네 번째 Tab. (탭 표시 텍스트:"정육"), (페이지 뷰:"tab4")
-            tabHost.addTab(tabHost.newTabSpec("4").setContent(R.id.content3).setIndicator("정육"));
-            // 다섯 번째 Tab. (탭 표시 텍스트:"해산물"), (페이지 뷰:"tab5")
+            tabHost.addTab(tabHost.newTabSpec("3").setContent(R.id.content3).setIndicator("정육"));
+            tabHost.addTab(tabHost.newTabSpec("4").setContent(R.id.content3).setIndicator("쌀 / 잡곡"));
             tabHost.addTab(tabHost.newTabSpec("5").setContent(R.id.content3).setIndicator("해산물"));
-            // 여섯 번째 Tab. (탭 표시 텍스트:"유제품"), (페이지 뷰:"tab6")
             tabHost.addTab(tabHost.newTabSpec("6").setContent(R.id.content3).setIndicator("유제품"));
 
             tabHost.setOnTabChangedListener(new TabHost.OnTabChangeListener() {
