@@ -109,15 +109,14 @@ public class InformationActivity extends AppCompatActivity {
         login_userid = appData.getString("USERID",""); // userid값 불러오기
         Log.i("automarket_app_appdata" ,"login_userid : " + login_userid);
 
-            if (login_userid.equals(login_userid)) {
-                //첫 로드시 데이터 바인딩
-                Intent i = new Intent();
-                ComponentName cname = new ComponentName("com.automarket_app", "com.automarket_app.service.OrderInfoService");
-                i.setComponent(cname);
-//                i.putExtra("userid","1000007");
-                i.putExtra("api_url", api_url);
-                startService(i);
-            }
+//                //첫 로드시 데이터 바인딩
+//                Intent i = new Intent();
+//                ComponentName cname = new ComponentName("com.automarket_app", "com.automarket_app.service.OrderInfoService");
+//                i.setComponent(cname);
+////                i.putExtra("userid","1000007");
+//                i.putExtra("api_url", api_url);
+//                startService(i);
+
     }
 
     @Override
@@ -139,10 +138,5 @@ public class InformationActivity extends AppCompatActivity {
         for (OrderInfoVO vo : order_InfoList){
             adapter.addList(vo);
         }
-        // intent에서 데이터 추출해서 ListView에 출력하는 작업을 진행
-        // 만약 그림까지 포함하려면 추가적인 작업이 더 들어가야 한다.
-        // ListView에 도서 제목만 일단 먼저 출력해보고
-        // 성공하면 CustomListView를 이용해서 이미지,제목,저자,가격 등의 데이터를 출력
-
     }
 }
