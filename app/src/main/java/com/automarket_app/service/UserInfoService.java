@@ -49,7 +49,7 @@ public class UserInfoService extends Service {
 
                 Intent i;
                 //intent를 통해 activity에 전달
-                if(action_name.equals("cashform_call")){
+                if(action_name!=null && action_name.equals("cashform_call")){
                     i = new Intent(getApplicationContext(), CashActivity.class);
                 }else {
                     i = new Intent(getApplicationContext(), CartActivity.class);
