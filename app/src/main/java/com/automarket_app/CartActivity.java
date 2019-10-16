@@ -176,8 +176,8 @@ public class CartActivity extends AppCompatActivity {
 
                     return ;
                 }
-                int price = Integer.parseInt(cart_total_price.getText().toString());
-                int cash_now = Integer.parseInt(cart_cash_now.getText().toString());
+                int price = Integer.parseInt(cart_total_price.getText().toString().replace(",",""));
+                int cash_now = Integer.parseInt(cart_cash_now.getText().toString().replace(",",""));
                 if(price > cash_now){
                     Toast.makeText(CartActivity.this,"캐시금액이 부족합니다.",Toast.LENGTH_LONG).show();
 
