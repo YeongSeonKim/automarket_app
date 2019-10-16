@@ -18,9 +18,13 @@
         android:theme="@style/Theme.AppCompat.NoActionBar"
         android:usesCleartextTraffic="true">
         <service
-            android:name=".service.OrderInfoService"
+            android:name=".service.RegisterService"
             android:enabled="true"
             android:exported="true"></service>
+        <service
+            android:name=".service.OrderInfoService"
+            android:enabled="true"
+            android:exported="true" />
         <service
             android:name=".service.TcpCarService"
             android:enabled="true"

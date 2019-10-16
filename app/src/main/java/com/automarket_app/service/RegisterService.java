@@ -134,6 +134,4 @@ public class RegisterService extends Service {
         Log.i("automarket_app","onDestroy 호출");
         super.onDestroy();
     }
-
-
-    }
+}
