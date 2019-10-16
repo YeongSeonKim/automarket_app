@@ -32,9 +32,7 @@ import java.net.URL;
 import java.security.InvalidAlgorithmParameterException;
 import java.security.InvalidKeyException;
 import java.security.NoSuchAlgorithmException;
-import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
 
 import javax.crypto.BadPaddingException;
@@ -237,7 +235,7 @@ public class LoginActivity extends AppCompatActivity {
         String receive_data;
 
         // 로그인 api url
-//        URL url = new URL(api_url + "/login.do");
+        // http://localhost:8080/automarket/api/login.do
         URL url = new URL(api_url + "/api/login.do");
 
 

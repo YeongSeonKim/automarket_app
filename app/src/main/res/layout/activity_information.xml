@@ -65,7 +65,6 @@
                 android:layout_height="wrap_content"
                 android:text="@string/Email_nim"
                 android:textSize="20sp"
-
                 android:textColor="@color/colorBlack"/>
 
                 <Button
@@ -93,7 +92,7 @@
         <ListView
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:id="@+id/orderHistoryList">
+            android:id="@+id/orderInfoList">
 
         </ListView>
 

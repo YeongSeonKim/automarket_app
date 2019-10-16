@@ -7,6 +7,7 @@ import android.util.Log;
 
 import androidx.annotation.Nullable;
 
+import com.automarket_app.LoginActivity;
 import com.automarket_app.RegisterActivity;
 import com.automarket_app.VO.UserVO;
 import com.fasterxml.jackson.core.type.TypeReference;
@@ -19,27 +20,26 @@ import java.io.OutputStreamWriter;
 import java.net.HttpURLConnection;
 import java.net.URL;
 
-public class RegisterService extends Service {
-
+public class LoginService extends Service {
     private String api_url;
     private UserVO userVO;
 
-    class RegisterRunnable implements Runnable {
+    class LoginRunnable implements Runnable {
         private UserVO userVO;
 
-        public RegisterRunnable() {
+        public LoginRunnable() {
         }
 
-        public RegisterRunnable(UserVO userVO) {
+        public LoginRunnable(UserVO userVO) {
             this.userVO = userVO;
         }
 
         @Override
         public void run() {
 
-            // http://localhost:8080/automarket/register.do
-            //  String url = "http://localhost:8080/automarket/register.do";
-            String url = api_url + "/register.do";
+            // // http://localhost:8080/automarket/api/login.do
+            //  String url = "// http://localhost:8080/automarket/api/login.do";
+            String url = api_url + "/api/login.do";
 
             try{
                 URL urlObj = new URL(url);
@@ -72,7 +72,7 @@ public class RegisterService extends Service {
                     }
                     in.close();
                 }
-                Intent i = new Intent(getApplicationContext(), RegisterActivity.class);
+                Intent i = new Intent(getApplicationContext(), LoginActivity.class);
                 i.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
                 i.addFlags(Intent.FLAG_ACTIVITY_SINGLE_TOP);
                 i.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
@@ -88,7 +88,7 @@ public class RegisterService extends Service {
         }
     }
 
-    public RegisterService() {
+    public LoginService() {
     }
 
     @Nullable
@@ -120,7 +120,7 @@ public class RegisterService extends Service {
             e.printStackTrace();
         }
 
-        RegisterService.RegisterRunnable runnable =new RegisterService.RegisterRunnable(userVO);
+        LoginService.LoginRunnable runnable =new LoginService.LoginRunnable(userVO);
         Thread t = new Thread(runnable);
         t.start();
 
@@ -136,4 +136,4 @@ public class RegisterService extends Service {
     }
 
 
-    }
+}

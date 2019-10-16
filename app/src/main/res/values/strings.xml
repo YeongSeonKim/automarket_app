@@ -52,14 +52,19 @@
     <string name="prod_name">상품이름</string>
     <string name="card_add">장바구니 담기</string>
 
+    <!-- 주문내역 -->
+    <string name="order_id">주문 ID</string>
+    <string name="order_date">주문 날짜</string>
+    <string name="order_total_price">총 가격</string>
+
     <!--공통-->
     <string name="card_close">닫기</string>
     <string name="setting">설정</string>
 
     <!--<string name="api_url">http://70.12.115.69:8082/automarket</string>-->
-    <string name="api_url">http://70.12.115.56:8080/automarket</string>
+    <string name="api_url">http://192.168.0.16:8081/automarket</string>
     <string name="api_key"></string>
-    <string name="tcp_server_ip">70.12.115.56</string>
+    <string name="tcp_server_ip">192.168.0.16</string>
     <string name="tcp_server_port">6789</string>
 
 </resources>
