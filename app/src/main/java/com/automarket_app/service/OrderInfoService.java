@@ -17,7 +17,6 @@ import java.net.HttpURLConnection;
 import java.net.URL;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Map;
 
 public class OrderInfoService extends Service {
 
@@ -64,7 +63,7 @@ public class OrderInfoService extends Service {
 
                 //jackson library를 이용하여 json데이터 처리
                 ObjectMapper mapper = new ObjectMapper();
-                ArrayList<OrderInfoVO> orderObject = mapper.readValue(sb.toString(), new TypeReference<List<OrderInfoVO>>() {});
+                ArrayList<OrderInfoVO> orderObject = mapper.readValue(receive_data, new TypeReference<List<OrderInfoVO>>() {});
 
                 Log.i("automarket_app_order","orderObject :"+ orderObject);
 
