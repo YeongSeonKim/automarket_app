@@ -24,18 +24,18 @@ public class CarMoveService extends Service {
     public CarMoveService() {
     }
     private void printMsg(String msg) {
-        if(msg.contains("/10000101/")){
-            Log.i("TcpCarService","차량선정:"+msg);
-            Intent i = new Intent(getApplicationContext(), OrderCarActivity.class);
-            i.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
-            i.addFlags(Intent.FLAG_ACTIVITY_SINGLE_TOP);
-            i.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-
-            i.setAction("car");
-            i.putExtra("carResultData",msg);
-            startActivity(i);
-
-        }
+//        if(msg.contains("/10000101/")){
+//            Log.i("TcpCarService","차량선정:"+msg);
+//            Intent i = new Intent(getApplicationContext(), OrderCarActivity.class);
+//            i.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+//            i.addFlags(Intent.FLAG_ACTIVITY_SINGLE_TOP);
+//            i.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+//
+//            i.setAction("car_move");
+//            i.putExtra("carResultData",msg);
+//            startActivity(i);
+//
+//        }
         Log.i("TcpCarService",msg);
     }
     //서버로부터 들어오는 메시지를 계속 받는부분
