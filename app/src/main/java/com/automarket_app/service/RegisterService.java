@@ -13,15 +13,18 @@ import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
 import java.io.BufferedReader;
+import java.io.IOException;
 import java.io.InputStreamReader;
 import java.io.OutputStreamWriter;
 import java.net.HttpURLConnection;
 import java.net.URL;
+import java.util.ArrayList;
+import java.util.List;
 
 public class RegisterService extends Service {
 
     private String api_url;
-    String receive_data;
+    private String receive_data;
     private UserVO userVO;
 
     class RegisterRunnable implements Runnable {
@@ -62,23 +65,12 @@ public class RegisterService extends Service {
 
                 OutputStreamWriter out = new OutputStreamWriter(con.getOutputStream());
 
-//                Map<String, Object> map = new HashMap<String, Object>();
-
-//                map.put("email", email);
-//                map.put("name", name);
-//                map.put("pwd", pwd);
-//                map.put("deviceid",deviceid);
-//                map.put("adminflag", adminflag);
-
                 ObjectMapper mapper = new ObjectMapper();
                 String json = mapper.writeValueAsString(userVO);
 
-                Log.i("automarket_app_data","data : " + json);
-                System.out.println(json);
-
                 out.write(json);
                 out.flush();
-                out.close();
+                //out.close();
 
                 int responseCode = con.getResponseCode();
 
@@ -93,13 +85,14 @@ public class RegisterService extends Service {
                     String line = "";
                     while((line = br.readLine()) != null) {
                         sb.append(line);
-                        break;
-                    }
-                    receive_data = sb.toString();
-                    Log.i("automarket_app_login","receive_data :"+ receive_data);
 
+                    }
                     br.close();
                 }
+
+                receive_data = sb.toString();
+                Log.i("automarket_app_login","receive_data :"+ receive_data);
+
 
                 Intent i = new Intent(getApplicationContext(), RegisterActivity.class);
 
@@ -107,7 +100,7 @@ public class RegisterService extends Service {
                 i.addFlags(Intent.FLAG_ACTIVITY_SINGLE_TOP);
                 i.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
 
-                i.putExtra("register_data",  receive_data);
+                i.putExtra("RegisterUserdata",  receive_data);
                 i.setAction("register");
                 startActivity(i);
 
@@ -141,28 +134,23 @@ public class RegisterService extends Service {
     public int onStartCommand(Intent intent, int flags, int startId) {
         Log.i("automarket_app","onStartCommand 호출");
 
-        String register_vo = intent.getExtras().getString("register_vo");
+        String register_user_vo = intent.getExtras().getString("register_user_vo");
+        api_url = intent.getExtras().getString("api_url");
+
         ObjectMapper mapper = new ObjectMapper();
 
         try{
-            userVO = mapper.readValue(register_vo, new TypeReference<UserVO>() {});
+            userVO = mapper.readValue(register_user_vo, new TypeReference<UserVO>() {});
 
-//            String email = userVO.getEmail();
-//            String pwd = userVO.getPwd();
-//            String name = userVO.getName();
-//            String deviceid ="";
-//            String adminflag = "0";
-
-            api_url = intent.getExtras().getString("api_url");
-
-            // Thread를 만들기 위한 Runnable 객체부터 생성
-            RegisterService.RegisterRunnable runnable = new RegisterService.RegisterRunnable(userVO);
-            Thread t = new Thread(runnable);
-            t.start();
-
-        }catch(Exception e) {
-            System.out.println(e);
+        } catch (IOException e) {
+            e.printStackTrace();
         }
+
+        // Thread를 만들기 위한 Runnable 객체부터 생성
+        RegisterService.RegisterRunnable runnable = new RegisterService.RegisterRunnable(userVO);
+        Thread t = new Thread(runnable);
+        t.start();
+
         return super.onStartCommand(intent, flags, startId);
     }
 

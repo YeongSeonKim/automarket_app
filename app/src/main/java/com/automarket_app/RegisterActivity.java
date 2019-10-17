@@ -13,6 +13,7 @@ import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
 
@@ -51,8 +52,9 @@ public class RegisterActivity extends AppCompatActivity {
     private AlertDialog dialog;
     private boolean validate = false;
 
-    private String re_email, re_name, re_pwd, re_RepeatPwd, re_deviceid;
-    private String re_adminflag = "";
+    private String re_email, re_name, re_pwd, re_RepeatPwd;
+    private String re_deviceid = "";
+    private String re_adminflag = "0";
 
     private AES256Util aes256;
     private String key;
@@ -70,26 +72,26 @@ public class RegisterActivity extends AppCompatActivity {
         key = this.getString(R.string.aes_key);
 
         // 네트워크 연결상태 체크
-        if(NetworkConnection() == false){
+        if (NetworkConnection() == false) {
             NotConnected_showAlert();
         }
 
         api_url = Helper.getMetaData(this, "api_url");
 
         // 이메일 입력, 중복체크
-        etEmail = (EditText)findViewById(R.id.etEmail_register);
-        btn_email_check = (Button)findViewById(R.id.btn_email_check);
+        etEmail = (EditText) findViewById(R.id.etEmail_register);
+        btn_email_check = (Button) findViewById(R.id.btn_email_check);
 
         // 이름입력
-        etName = (EditText)findViewById(R.id.etName_register);
+        etName = (EditText) findViewById(R.id.etName_register);
 
         // 비밀번호, 비밀번호 재입력
-        etPassword = (EditText)findViewById(R.id.etPassword_register);
-        etRepeatPassword = (EditText)findViewById(R.id.etRepeatPassword_register);
+        etPassword = (EditText) findViewById(R.id.etPassword_register);
+        etRepeatPassword = (EditText) findViewById(R.id.etRepeatPassword_register);
 
         // 가입, 취소 버튼
-        btnDone = (Button)findViewById(R.id.btnDone);
-        btnCancel = (Button)findViewById(R.id.btnCancel);
+        btnDone = (Button) findViewById(R.id.btnDone);
+        btnCancel = (Button) findViewById(R.id.btnCancel);
 
 
         // 1. 이메일 중복체크버튼
@@ -97,11 +99,18 @@ public class RegisterActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 re_email = etEmail.getText().toString();
-                if(validate){
+                if (validate) {
                     return;//검증 완료
+//                    final ObjectMapper mapper = new ObjectMapper();
+//                    Intent intent = new Intent();
+//                    ComponentName cname = new ComponentName("com.automarket_app", "com.automarket_app.service.RegisterEmailCheckService");
+//                    intent.setComponent(cname);
+//                    //intent.putExtra("emailData", json);
+//                    intent.putExtra("api_url", api_url);
+//                    startService(intent);
                 }
                 //ID 값을 입력하지 않았다면
-                if(re_email.equals("")){
+                if (re_email.equals("")) {
                     AlertDialog.Builder builder = new AlertDialog.Builder(RegisterActivity.this);
                     dialog = builder.setMessage("이메일 입력칸이 비었습니다.")
                             .setPositiveButton("OK", null)
@@ -141,33 +150,23 @@ public class RegisterActivity extends AppCompatActivity {
             }
         });
 
+        // 회원가입 시작
+            // 가입버튼
+            btnDone.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
 
-        // 가입버튼
-        btnDone.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
+                    // 입력 회원정보 가져오기
+                    re_email = etEmail.getText().toString();
+                    re_name = etName.getText().toString();
+                    re_pwd = etPassword.getText().toString();
+                    re_RepeatPwd = etRepeatPassword.getText().toString();
 
-                // 입력 회원정보 가져오기
-                re_email = etEmail.getText().toString();
-                re_name = etName.getText().toString();
-                re_pwd = etPassword.getText().toString();
-                re_RepeatPwd = etRepeatPassword.getText().toString();
+                    // MAC주소
+                    re_deviceid = getMacAddress();
+                    Log.i("automarket_app", "deviceid : " + re_deviceid);
 
-                // MAC주소
-                re_deviceid = getMacAddress();
-                Log.i("automarket_app", "deviceid : " + re_deviceid);
-
-                // 비밀번호 암호화
-                try {
-                    aes256 = new AES256Util(key);
-                    pwd = aes256.aesEncode(re_pwd);
-                    Log.i("automarket_app_login","암호화 비밀번호 : " + pwd);
-                } catch (UnsupportedEncodingException | NoSuchAlgorithmException | NoSuchPaddingException | InvalidKeyException | InvalidAlgorithmParameterException | IllegalBlockSizeException | BadPaddingException e) {
-                    Log.e("acs_err","문제");
-                    e.printStackTrace();
-                }
-
-                // Email 중복체크 했는지 확인
+                    // 중복버튼 체크 했는지 안했는지 확인
 //                if (!validate){
 //                    AlertDialog.Builder builder = new AlertDialog.Builder(RegisterActivity.this);
 //                    dialog = builder.setMessage("이메일 중복체크를 해주세용~~")
@@ -177,64 +176,76 @@ public class RegisterActivity extends AppCompatActivity {
 //                    return;
 //                }
 
-                // 입력 칸 한칸이라도 비어있을 경우
-                if(re_email.equals("")||re_name.equals("")||re_pwd.equals("")||re_RepeatPwd.equals("")){
-                    AlertDialog.Builder builder = new AlertDialog.Builder(RegisterActivity.this);
-                    dialog = builder.setMessage("빈칸을 채워서 입력해주세요!!!")
-                            .setNegativeButton("OK", null)
-                            .create();
-                    dialog.show();
-                    return;
-                }
+                    // 입력 칸 한칸이라도 비어있을 경우
+                    if (re_email.length() == 0 || re_name.length() == 0 || re_pwd.length() == 0 || re_RepeatPwd.length() == 0) {
+                        AlertDialog.Builder builder = new AlertDialog.Builder(RegisterActivity.this);
+                        dialog = builder.setMessage("빈칸을 채워서 입력해주세요!!!")
+                                .setNegativeButton("OK", null)
+                                .create();
+                        dialog.show();
+                        return;
+                    }
 
-                Intent i_this = getIntent();
-                String register_userList = i_this.getExtras().getString("register_data");
+                    // 비밀번호 암호화
+                    try {
+                        aes256 = new AES256Util(key);
+                        pwd = aes256.aesEncode(re_pwd);
+                        Log.i("automarket_app_login", "암호화 비밀번호 : " + pwd);
+                    } catch (UnsupportedEncodingException | NoSuchAlgorithmException | NoSuchPaddingException | InvalidKeyException | InvalidAlgorithmParameterException | IllegalBlockSizeException | BadPaddingException e) {
+                        Log.e("acs_err", "문제");
+                        e.printStackTrace();
+                    }
+
+               try {
+                // 입력한 값 json 형태로.. Service에 값 전달
+                HashMap<String,Object> map = new HashMap<String,Object>();
+
+                    map.put("email",re_email);
+                    map.put("name",re_name);
+                    map.put("pwd",re_pwd);
+                    map.put("deviceid",re_deviceid);
+                    map.put("adminflag",re_adminflag);
 
                 final ObjectMapper mapper = new ObjectMapper();
 
-                try {
-                    re_user_list = mapper.readValue(register_userList, new TypeReference<List<UserVO>>() {});
+                String json="";
+                try{
+                    json = mapper.writeValueAsString(map);
 
-                }catch (IOException e){
+                    Log.i("automarket_app_data", "data : " + json);
+                }catch (Exception e) {
                     e.printStackTrace();
+                    Log.e("err", "에러발생이다" + e);
                 }
 
-                String json = "";
-                try {
-                    json = mapper.writeValueAsString(re_user_list);
+                    // 서비스 시작
+                    Intent intent = new Intent();
+                    ComponentName cname = new ComponentName("com.automarket_app", "com.automarket_app.service.RegisterService");
+                    intent.setComponent(cname);
+                    intent.putExtra("register_user_vo", json);
+                    intent.putExtra("api_url", api_url);
+                    startService(intent);
 
-                    Log.i("automarket_app_data","data : " + json);
+               } catch (Exception e) {
+                   e.printStackTrace();
+               }
 
-                } catch (JsonProcessingException e) {
-                    e.printStackTrace();
+                    Toast.makeText(getApplicationContext(),"회원가입성공!!",Toast.LENGTH_SHORT).show();
+                    Log.i("automarket_app_register", "회원가입됬다아아ㅏ아ㅏㅏ");
                 }
+            });
 
-//                HashMap<String,Object> map = new HashMap<String,Object>();
-//                map.put("email",re_email);
-//                map.put("name",re_name);
-//                map.put("pwd",re_pwd);
 
-                // 회원가입 시작 - 서비스
-                Intent intent = new Intent();
-                ComponentName cname = new ComponentName("com.automarket_app","com.automarket_app.service.RegisterService");
-                intent.setComponent(cname);
-                intent.putExtra("register_vo",json);
-                intent.putExtra("api_url",api_url);
-                startService(intent);
+            // 취소버튼
+            btnCancel.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
 
-                Log.i("automarket_app_register","회원가입됬다아아ㅏ아ㅏㅏ");
-            }
-        });
+                    finish();
+                }
+            });
+        }
 
-        // 취소버튼
-        btnCancel.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-
-                finish();
-            }
-        });
-    }
 
     // MAC Address 가져오기
     public static String getMacAddress() {
@@ -271,7 +282,7 @@ public class RegisterActivity extends AppCompatActivity {
         super.onNewIntent(intent);
         Log.i("automarket_app", "데이터가 Activity에 도달");
         if (intent.getAction() != null && intent.getAction().equals("register")) {
-            String register_userList = intent.getExtras().getString("register_data");
+            String register_userList = intent.getExtras().getString("RegisterUserdata");
 
             final ObjectMapper mapper = new ObjectMapper();
             try {
