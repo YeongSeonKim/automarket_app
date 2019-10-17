@@ -2,6 +2,7 @@ package com.automarket_app.adapter;
 
 import android.content.Context;
 import android.os.Handler;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -52,6 +53,7 @@ public class OrderInfoAdapter extends BaseAdapter {
 
             // 출력할 view Component의 reference 를 획득.
             TextView order_id = (TextView) view.findViewById(R.id.order_id);
+            TextView order_receiptkey = (TextView)view.findViewById(R.id.order_receiptkey);
             TextView order_date = (TextView) view.findViewById(R.id.order_date);
             TextView order_total_price = (TextView) view.findViewById(R.id.order_total_price);
 
@@ -60,7 +62,8 @@ public class OrderInfoAdapter extends BaseAdapter {
             // 화면에 출력할 데이터를 가져와요!!
             final OrderInfoVO vo = orderInfo_list.get(position);
 
-            order_id.setText(vo.getOrderid());
+            order_id.setText(vo.getOrderid()); // 1000003
+            order_receiptkey.setText(vo.getReceiptkey());
             order_date.setText(vo.getOrderdate()); //2019-10-02 15:38:29
                 NumberFormat formatter = new DecimalFormat("#,###");
                 String total_orderPrice = formatter.format(vo.getTotalprice());
