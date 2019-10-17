@@ -22,6 +22,7 @@
     <string name="proddetail">상품상세</string>
     <string name="order2">주문서</string>
     <string name="car_select">차량선택</string>
+    <string name="order_submit">주문완료</string>
 
     <!-- 캐시충전하기 -->
     <string name="cash">캐시충전</string>

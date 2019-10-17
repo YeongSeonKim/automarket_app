@@ -313,12 +313,21 @@ public class OrderCarActivity extends AppCompatActivity  implements MapView.Curr
             String ordermap = intent.getExtras().getString("orderResultData");
 
             if(ordermap!=null && !ordermap.equals("")){
-                System.out.println("ordermap:"+ordermap);
-                Toast.makeText(OrderCarActivity.this,"주문처리 되었습니다.",Toast.LENGTH_LONG).show();
-                Intent i_order = new Intent(getApplicationContext(), OrderActivity.class);
 
+                //차량이동 요청
+                Intent i = new Intent();
+                ComponentName cname = new ComponentName("com.automarket_app","com.automarket_app.service.CarMoveService");
+                i.setComponent(cname);
+                i.putExtra("tcp_server_ip",tcp_server_ip);
+                i.putExtra("tcp_server_port",Integer.parseInt(tcp_server_port));
+                i.putExtra("carid",carid);
+                startService(i);
+
+                Toast.makeText(OrderCarActivity.this,"주문처리 되었습니다.",Toast.LENGTH_LONG).show();
+                Intent i_order = new Intent(getApplicationContext(), InformationActivity.class);
 
                 startActivity(i_order);
+
             }
             else{
                 Toast.makeText(OrderCarActivity.this,"주문실패",Toast.LENGTH_LONG).show();
@@ -326,7 +335,12 @@ public class OrderCarActivity extends AppCompatActivity  implements MapView.Curr
             }
 
 
-        }else{
+        }else if(intent.getAction()!=null && intent.getAction().equals("car_move")){
+
+
+
+        }else if(intent.getAction()!=null && intent.getAction().equals("car")){
+
             String carResult = intent.getExtras().getString("carResultData");
 
             if(carResult !=null && !carResult.equals("")){
